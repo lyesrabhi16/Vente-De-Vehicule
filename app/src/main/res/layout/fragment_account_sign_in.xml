@@ -7,9 +7,6 @@
     tools:context=".MainActivity">
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,8 +19,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:gravity="center"
-                android:text="Bienvenue"
-                android:textSize="22dp"
+                android:text="@string/welcome"
+                android:textSize="32sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -33,10 +30,11 @@
                 android:layout_marginStart="-10dp"
                 android:layout_marginLeft="-10dp"
                 android:gravity="bottom"
+                android:paddingStart="9dp"
                 android:paddingLeft="9dp"
                 android:paddingBottom="10dp"
-                android:text="Authentifiez-vous"
-                android:textSize="16dp" />
+                android:text="@string/login"
+                android:textSize="16sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -47,7 +45,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#00FFFFFF"
-                    android:hint="Identifiant" />
+                    app:textInputLayoutFocusedRectEnabled="false"
+                    android:hint="@string/identifier" />
 
                 <requestFocus
                     android:layout_width="wrap_content"
@@ -63,7 +62,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#00FFF7F7"
-                        android:hint="Mot de pass"
+                        android:hint="@string/password"
                         android:inputType="textPassword"
                         app:textInputLayoutFocusedRectEnabled="false" />
 
@@ -78,5 +77,4 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-    </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
