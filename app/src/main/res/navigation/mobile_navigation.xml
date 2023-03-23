@@ -28,4 +28,11 @@
         android:name="com.example.miniprojet.ui.messages.MessagesFragment"
         android:label="@string/title_messages"
         tools:layout="@layout/fragment_messages" />
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.example.miniprojet.ui.account.AccountFragment"
+        android:label="AccountFragment" />
+    <action
+        android:id="@+id/accountToHome"
+        app:destination="@id/accountFragment" />
 </navigation>
