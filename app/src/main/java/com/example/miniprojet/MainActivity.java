@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         navView.setSelectedItemId(R.id.accountFragment);
+
                     }
 
                 }

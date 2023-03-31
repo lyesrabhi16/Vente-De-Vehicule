@@ -19,17 +19,11 @@ import java.util.ArrayList;
 
 public class DBConnection{
     private static String urlBDD   = "http://10.2.60.180/miniprojet";//chemin de la base de donnees
-    private static boolean loggedin = false;
-    private boolean isConnected = false;
     private static String urlLogin = urlBDD + "/login.php";
+    private static  String urlRegister = urlBDD + "/register.php";
 
-    public static boolean isLoggedin() {
-        return loggedin;
-    }
 
-    public static void setLoggedin(boolean loggedin) {
-        DBConnection.loggedin = loggedin;
-    }
+
 
     public static String getUrlLogin() {
         return urlLogin;
@@ -52,5 +46,12 @@ public class DBConnection{
     }
 
 
+    public static String getUrlRegister() {
+        return urlRegister;
+    }
+
+    public static void setUrlRegister(String urlRegister) {
+        DBConnection.urlRegister = urlRegister;
+    }
 }
 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/accountRegisterFragment"
+            android:title="@string/register"
+            android:visible="true"
+            />
+        <item
+            android:id="@+id/accountSignInFragment"
+            android:title="@string/login"
+            android:visible="true"
+            />
+    </group>
+</menu>

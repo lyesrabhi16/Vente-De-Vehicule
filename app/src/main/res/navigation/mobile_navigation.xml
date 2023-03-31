@@ -32,7 +32,5 @@
         android:id="@+id/accountFragment"
         android:name="com.example.miniprojet.ui.account.AccountFragment"
         android:label="@string/title_account" />
-    <action
-        android:id="@+id/accountToHome"
-        app:destination="@id/accountFragment" />
+
 </navigation>

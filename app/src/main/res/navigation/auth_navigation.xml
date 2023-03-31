@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/auth_navigation"
+    app:startDestination="@id/accountSignInFragment">
+    <fragment
+        android:id="@+id/accountSignInFragment"
+        android:name="com.example.miniprojet.ui.account.AccountSignInFragment"
+        android:label="fragment_account_sign_in"
+        tools:layout="@layout/fragment_account_sign_in" />
+    <fragment
+        android:id="@+id/accountRegisterFragment"
+        android:name="com.example.miniprojet.ui.account.AccountRegisterFragment"
+        android:label="fragment_account_register"
+        tools:layout="@layout/fragment_account_register" />
+</navigation>

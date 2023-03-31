@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,7 +14,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -28,7 +34,10 @@ import com.example.miniprojet.R;
 import com.example.miniprojet.databinding.ActivityMainBinding;
 import com.example.miniprojet.databinding.FragmentAccountBinding;
 import com.example.miniprojet.databinding.FragmentAccountSignInBinding;
+import com.example.miniprojet.databinding.FragmentAuthBinding;
 import com.example.miniprojet.databinding.FragmentDashboardBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,19 +45,20 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class AccountFragment extends Fragment {
 
     private FragmentAccountSignInBinding SignInbinding;
     private FragmentAccountBinding AccountBinding;
     private ActivityMainBinding MainBinding;
+    private FragmentAuthBinding AuthBinding;
     private DBConnection dbc;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root;
         User user = User.getInstance(getContext());
-        Handler handlerUI = new Handler();
         if ( user.isLoggedin() ){
             AccountBinding = FragmentAccountBinding.inflate(inflater, container, false);
             root = AccountBinding.getRoot();
@@ -59,106 +69,50 @@ public class AccountFragment extends Fragment {
                         logout();
                         Intent i = new Intent(getContext(), MainActivity.class);
                         startActivity(i);
+                        getActivity().finish();
                 }
             });
 
         }
         else {
-            SignInbinding = FragmentAccountSignInBinding.inflate(inflater, container, false);
-            root = SignInbinding.getRoot();
-            SignInbinding.buttonLogin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    login();
+            AuthBinding = FragmentAuthBinding.inflate(inflater, container, false);
+            root = AuthBinding.getRoot();
 
-                }
-            });
+
+
+
         }
 
         return root;
 
     }
 
-    public void login(){
-        String ident = SignInbinding.edittextId.getText().toString().trim();
-        String pass = SignInbinding.edittextPassword.getText().toString().trim();
-        String email = "";
-        String numTel = "";
-        boolean success;
-        if(ident.contains("@")) email = ident;
-        else numTel = ident;
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if (!User.getInstance(getContext()).isLoggedin()) {
+            super.onViewCreated(view, savedInstanceState);
+            AuthBinding.navControllerAuth.setSelectedItemId(R.id.accountSignInFragment);
 
-        String finalEmail = email;
-        ProgressDialog prgrs = new ProgressDialog(getContext());
-        prgrs.setMessage("login in progress...");
-        prgrs.show();
-        String finalNumTel = numTel;
-        StringRequest req = new StringRequest(Request.Method.POST, dbc.getUrlLogin(),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject res = new JSONObject(response);
+            AccountSignInFragment SignInFragment = new AccountSignInFragment();
+            AccountRegisterFragment RegFragment = new AccountRegisterFragment();
 
-                            if(res.has("error")){
-                                Toast.makeText(getContext(),"login failed. "+res.getString("message"), Toast.LENGTH_LONG).show();
-                            }
+            getActivity().getSupportFragmentManager().beginTransaction().replace(AuthBinding.navHostFragmentAuth.getId(), SignInFragment).commitNow();
 
-                            else{
-                                User user = User.getInstance(getContext());
-                                user.userLogin(
-                                        res.getInt("idClient"),
-                                        res.getString("email").toLowerCase(),
-                                        res.getString("numTel"),
-                                        res.getString("nomClient")
-                                );
-                                if(user.isLoggedin()) {
-                                    Toast.makeText(getContext(), "login successful.", Toast.LENGTH_SHORT).show();
-                                    Intent i = new Intent(getContext(), MainActivity.class);
-                                    startActivity(i);
-                                }
-                                else{
-                                    Toast.makeText(getContext(),"login failed, try again.", Toast.LENGTH_LONG).show();
-                                }
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getContext(),"an error occurred.", Toast.LENGTH_SHORT).show();
-                        }
-
+            AuthBinding.navControllerAuth.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.accountRegisterFragment:
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(AuthBinding.navHostFragmentAuth.getId(), RegFragment).commitNow();
+                            return true;
+                        case R.id.accountSignInFragment:
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(AuthBinding.navHostFragmentAuth.getId(), SignInFragment).commitNow();
+                            return true;
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        prgrs.dismiss();
-                        Toast.makeText(getContext(),"login failed.", Toast.LENGTH_SHORT).show();
-                    }
-                }){
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String,String>();
-                if(finalEmail != "") params.put("email", finalEmail);
-                else params.put("numTel", finalNumTel);
-                params.put("password", pass);
-                return params;
-
-            }
-
-            @Override
-            public Priority getPriority() {
-                return Priority.HIGH;
-            }
-        };
-
-        RequestQueue reqQ = Volley.newRequestQueue(getContext());
-        reqQ.add(req);
-        prgrs.dismiss();
-
-
-
+                    return false;
+                }
+            });
+        }
     }
 
     public void logout(){
