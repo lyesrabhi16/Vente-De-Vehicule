@@ -32,5 +32,10 @@
         android:id="@+id/accountFragment"
         android:name="com.example.miniprojet.ui.account.AccountFragment"
         android:label="@string/title_account" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.miniprojet.ui.search.SearchFragment"
+        android:label="fragment_search_list"
+        tools:layout="@layout/fragment_search_list" />
 
 </navigation>

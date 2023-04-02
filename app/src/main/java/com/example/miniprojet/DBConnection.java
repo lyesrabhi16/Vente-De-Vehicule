@@ -18,9 +18,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class DBConnection{
-    private static String urlBDD   = "http://10.2.60.180/miniprojet";//chemin de la base de donnees
+    private static String urlBDD   = "http://10.2.60.82/miniprojet";//chemin de la base de donnees
     private static String urlLogin = urlBDD + "/login.php";
     private static  String urlRegister = urlBDD + "/register.php";
+    private static  String urlSearch = urlBDD + "/search.php";
+
 
 
 
@@ -52,6 +54,14 @@ public class DBConnection{
 
     public static void setUrlRegister(String urlRegister) {
         DBConnection.urlRegister = urlRegister;
+    }
+
+    public static String getUrlSearch() {
+        return urlSearch;
+    }
+
+    public static void setUrlSearch(String urlSearch) {
+        DBConnection.urlSearch = urlSearch;
     }
 }
 
