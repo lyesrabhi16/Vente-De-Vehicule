@@ -85,7 +85,6 @@ public class SearchFragment extends Fragment {
                 @Override
                 public void onResponse(String response) {
                     try {
-
                         JSONObject res = new JSONObject(response);
                         if (res.has("error")){
                             Toast.makeText(getContext(), "search failed. "+res.get("message"), Toast.LENGTH_LONG).show();
@@ -95,9 +94,10 @@ public class SearchFragment extends Fragment {
                         else {
                             JSONArray result = res.getJSONArray("result");
                             for (int i=0; i<result.length(); i++){
+                                JSONObject obj = result.getJSONObject(i);
                                 searchResultItem item = new searchResultItem();
-                                item.setTitle(result.getJSONArray(i).getString(1) +" "+ result.getJSONArray(i).getString(2)+" ");
-                                item.setSubTitle(result.getJSONArray(i).getString(3));
+                                item.setTitle(obj.getString("nomClient") +" "+ obj.getString("prenomClient") +" ");
+                                item.setSubTitle(obj.getString("email") );
 
                                 list.add(item);
                             }

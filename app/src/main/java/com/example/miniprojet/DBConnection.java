@@ -18,10 +18,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class DBConnection{
-    private static String urlBDD   = "http://10.2.60.82/miniprojet";//chemin de la base de donnees
-    private static String urlLogin = urlBDD + "/login.php";
-    private static  String urlRegister = urlBDD + "/register.php";
-    private static  String urlSearch = urlBDD + "/search.php";
+    private static String urlServer   = "http://192.168.43.147:5000";//chemin du serveur
+    private static String urlLogin = urlServer + "/signin";
+    private static  String urlRegister = urlServer + "/signup";
+    private static  String urlSearch = urlServer + "/search";
 
 
 
@@ -35,12 +35,12 @@ public class DBConnection{
         DBConnection.urlLogin = urlLogin;
     }
 
-    public static String getUrlBDD() {
-        return urlBDD;
+    public static String getUrlServer() {
+        return urlServer;
     }
 
-    public static void setUrlBDD(String urlBDD) {
-        DBConnection.urlBDD = urlBDD;
+    public static void setUrlServer(String urlServer) {
+        DBConnection.urlServer = urlServer;
     }
 
     public DBConnection(){
