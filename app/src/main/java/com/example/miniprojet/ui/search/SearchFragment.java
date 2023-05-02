@@ -1,20 +1,13 @@
 package com.example.miniprojet.ui.search;
 
-import android.app.ProgressDialog;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
-import androidx.core.graphics.drawable.IconCompat;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -24,10 +17,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.miniprojet.DBConnection;
-import com.example.miniprojet.R;
-import com.example.miniprojet.databinding.ActivityMainBinding;
+import com.example.miniprojet.Server;
 import com.example.miniprojet.databinding.FragmentSearchListBinding;
+import com.example.miniprojet.ui.account.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -81,7 +73,7 @@ public class SearchFragment extends Fragment {
             List<searchResultItem> list = new ArrayList<>();
 
 
-            StringRequest Sreq = new StringRequest(Request.Method.POST, DBConnection.getUrlSearch(), new Response.Listener<String>() {
+            StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlSearch(), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
@@ -95,6 +87,11 @@ public class SearchFragment extends Fragment {
                             JSONArray result = res.getJSONArray("result");
                             for (int i=0; i<result.length(); i++){
                                 JSONObject obj = result.getJSONObject(i);
+                                if (User.getInstance(getContext()).isLoggedin()){
+                                    if (obj.getInt("idClient") == User.getInstance(getContext()).getID())
+                                        continue;
+                                }
+
                                 searchResultItem item = new searchResultItem();
                                 item.setTitle(obj.getString("nomClient") +" "+ obj.getString("prenomClient") +" ");
                                 item.setSubTitle(obj.getString("email") );

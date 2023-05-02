@@ -26,10 +26,24 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.miniprojet.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationBarView;
 
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private static boolean keepConnected = false;
     private int nav;
+    private Socket client;
+
+    public static boolean isKeepConnected() {
+        return keepConnected;
+    }
+
+    public static void setKeepConnected(boolean keepConnected) {
+        MainActivity.keepConnected = keepConnected;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +51,24 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         updateBtnAccount(binding, 0);
+        User user = User.getInstance(getApplicationContext());
+        if (user.isLoggedin()){
+
+            client = SocketClient.connectSocket();
+            client.on("request-init", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SocketClient.getSocket().emit("init", user.getID());
+                        }
+                    });
+                }
+            });
+        }
+
+
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -102,10 +134,14 @@ public class MainActivity extends AppCompatActivity {
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                if (query.isEmpty()){
+                    navView.setSelectedItemId(R.id.navigation_home);
+                    return false;
+                }
                 SearchFragment.setSearchTerm(binding.searchView.getQuery().toString());
                 nav = R.id.searchFragment;
                 navView.setSelectedItemId(R.id.accountFragment);
-                return false;
+                return true;
             }
 
             @Override
@@ -139,5 +175,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (keepConnected){
+            setKeepConnected(false);
+            return;
+        }
+        SocketClient.closeSocket();
+    }
 }

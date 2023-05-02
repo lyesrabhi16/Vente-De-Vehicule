@@ -2,50 +2,25 @@ package com.example.miniprojet.ui.account;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.miniprojet.DBConnection;
 import com.example.miniprojet.MainActivity;
 import com.example.miniprojet.R;
+import com.example.miniprojet.Server;
+import com.example.miniprojet.SocketClient;
 import com.example.miniprojet.databinding.ActivityMainBinding;
 import com.example.miniprojet.databinding.FragmentAccountBinding;
 import com.example.miniprojet.databinding.FragmentAccountSignInBinding;
 import com.example.miniprojet.databinding.FragmentAuthBinding;
-import com.example.miniprojet.databinding.FragmentDashboardBinding;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 public class AccountFragment extends Fragment {
 
@@ -53,7 +28,7 @@ public class AccountFragment extends Fragment {
     private FragmentAccountBinding AccountBinding;
     private ActivityMainBinding MainBinding;
     private FragmentAuthBinding AuthBinding;
-    private DBConnection dbc;
+    private Server dbc;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,10 +38,23 @@ public class AccountFragment extends Fragment {
             AccountBinding = FragmentAccountBinding.inflate(inflater, container, false);
             root = AccountBinding.getRoot();
 
+            AccountBinding.nom.setText(user.getNom());
+            AccountBinding.prenom.setText(user.getPrenom());
+            AccountBinding.age.setText(user.getAge()+"");
+            AccountBinding.email.setText(user.getEmail());
+            AccountBinding.numTel.setText(user.getNumtel());
+
+            AccountBinding.buttonChangePassword.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getContext(), "to be implemented later.", Toast.LENGTH_SHORT).show();
+                }
+            });
             AccountBinding.buttonLogout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                         logout();
+                        SocketClient.closeSocket();
                         Intent i = new Intent(getContext(), MainActivity.class);
                         startActivity(i);
                         getActivity().finish();

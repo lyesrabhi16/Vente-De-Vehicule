@@ -2,7 +2,11 @@ import { DBC } from "./DBConnection";
 import express from 'express';
 import cors from 'cors';
 import { sign } from "crypto";
-
+import { ClientMessage, clients, connection, disconnection, init } from "./socket";
+import { Server, Socket } from "socket.io";
+import http from "http";
+import { io } from "socket.io-client";
+import socket from 'socket.io';
 /* DB connection */
 
 const dbc : DBC  = new DBC();
@@ -193,7 +197,18 @@ APP.post("/search", (_req : express.Request , _res : express.Response) => {
     
 })
 
-APP.listen(PORT, ()=>{
+const server = http.createServer(APP);
+
+server.listen(PORT, ()=>{
     console.info("Server listening on Port : 5000");
+})
+
+const socketServer = new Server(server);
+
+socketServer.on("connect", (socket : Socket ) =>{
+    connection(socket)
+    socket.on("init", (id : number) => init(id, socket) );
+    socket.on("client-message", (msg : string) => ClientMessage(msg, socket));    
+    socket.on("disconnect", () => disconnection(socket) );
 });
 

@@ -23,6 +23,7 @@
         <item>Vente</item>
         <item>Location</item>
     </string-array>
+    <string name="changePassword">Change Password</string>
     <string name="login_button">login</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <!--  Remove or change this placeholder text -->

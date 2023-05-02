@@ -19,10 +19,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.miniprojet.DBConnection;
+import com.example.miniprojet.Server;
 import com.example.miniprojet.MainActivity;
-import com.example.miniprojet.R;
-import com.example.miniprojet.databinding.FragmentAccountBinding;
 import com.example.miniprojet.databinding.FragmentAccountRegisterBinding;
 
 import org.json.JSONException;
@@ -77,7 +75,7 @@ public class AccountRegisterFragment extends Fragment {
         prgrs.setMessage("registering...");
         prgrs.show();
 
-        StringRequest str_req = new StringRequest(Request.Method.POST, DBConnection.getUrlRegister(), new Response.Listener<String>() {
+        StringRequest str_req = new StringRequest(Request.Method.POST, Server.getUrlRegister(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -93,7 +91,9 @@ public class AccountRegisterFragment extends Fragment {
                                 res.getInt("idClient"),
                                 res.getString("email"),
                                 res.getString("numTel"),
-                                res.getString("nomClient")
+                                res.getString("nomClient"),
+                                res.getString("prenomClient"),
+                                res.getInt("ageClient")
                         );
                         if (user.isLoggedin()){
                             Toast.makeText(getContext(), "registration successful.", Toast.LENGTH_SHORT).show();

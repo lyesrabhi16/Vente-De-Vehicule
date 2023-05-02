@@ -19,9 +19,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.miniprojet.DBConnection;
+import com.example.miniprojet.Server;
 import com.example.miniprojet.MainActivity;
-import com.example.miniprojet.R;
 import com.example.miniprojet.databinding.FragmentAccountSignInBinding;
 
 import org.json.JSONException;
@@ -33,7 +32,7 @@ import java.util.Map;
 public class AccountSignInFragment extends Fragment {
 
     private FragmentAccountSignInBinding SignInbinding;
-    private DBConnection dbc;
+    private Server dbc;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -82,14 +81,18 @@ public class AccountSignInFragment extends Fragment {
                                         res.getInt("idClient"),
                                         res.getString("email").toLowerCase(),
                                         res.getString("numTel"),
-                                        res.getString("nomClient")
+                                        res.getString("nomClient"),
+                                        res.getString("prenomClient"),
+                                        res.getInt("ageClient")
                                 );
                                 if(user.isLoggedin()) {
                                     Toast.makeText(getContext(), "login successful.", Toast.LENGTH_SHORT).show();
                                     prgrs.dismiss();
                                     Intent i = new Intent(getContext(), MainActivity.class);
+                                    MainActivity.setKeepConnected(true);
                                     startActivity(i);
                                     getActivity().finish();
+
                                 }
                                 else{
                                     Toast.makeText(getContext(),"login failed, try again.", Toast.LENGTH_LONG).show();

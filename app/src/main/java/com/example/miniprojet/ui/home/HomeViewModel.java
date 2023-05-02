@@ -4,15 +4,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.miniprojet.DBConnection;
+import com.example.miniprojet.Server;
 
 public class HomeViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
-    private DBConnection DBC;
+    private Server DBC;
 
     public HomeViewModel() {
-        DBC = new DBConnection();
+        DBC = new Server();
         mText = new MutableLiveData<>();
         mText.setValue("This is home fragment");
     }
