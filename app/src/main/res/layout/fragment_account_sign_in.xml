@@ -15,7 +15,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="20dp"
+            >
+
 
             <TextView
                 android:id="@+id/textView2"
@@ -37,6 +39,7 @@
                 android:paddingLeft="9dp"
                 android:paddingBottom="10dp"
                 android:text="@string/login"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -47,7 +50,8 @@
                     android:id="@+id/edittext_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#00FFFFFF"
+                    android:textColor="@color/black"
+                    android:background="#00FFF7F7"
                     android:hint="@string/identifier"
                     app:textInputLayoutFocusedRectEnabled="false" />
 
@@ -78,7 +82,7 @@
                 android:layout_marginTop="25dp"
                 android:padding="4dp"
                 android:text="@string/login_button"
-                app:backgroundTint="@color/design_default_color_primary" />
+                app:backgroundTint="@color/bleu_clair" />
         </LinearLayout>
     </ScrollView>
 

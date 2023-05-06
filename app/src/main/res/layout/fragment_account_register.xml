@@ -164,7 +164,7 @@
                 android:layout_marginTop="25dp"
                 android:padding="4dp"
                 android:text="@string/register"
-                app:backgroundTint="@color/design_default_color_primary" />
+                app:backgroundTint="@color/bleu_clair" />
         </LinearLayout>
     </ScrollView>
 

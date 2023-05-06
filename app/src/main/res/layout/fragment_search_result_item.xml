@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@drawable/ic_account_circle_48"
-        app:tint="@color/design_default_color_primary_variant" />
+        app:tint="@color/bleu_clair" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
