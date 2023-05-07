@@ -1,4 +1,4 @@
-package com.example.miniprojet.ui.notifications;
+package com.example.miniprojet.models;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

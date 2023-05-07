@@ -1,4 +1,4 @@
-package com.example.miniprojet.ui.search;
+package com.example.miniprojet.models;
 
 import android.widget.ImageView;
 

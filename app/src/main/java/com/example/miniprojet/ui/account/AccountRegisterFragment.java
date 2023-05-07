@@ -22,6 +22,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.miniprojet.Server;
 import com.example.miniprojet.MainActivity;
 import com.example.miniprojet.databinding.FragmentAccountRegisterBinding;
+import com.example.miniprojet.models.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;

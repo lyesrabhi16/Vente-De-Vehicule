@@ -18,8 +18,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.miniprojet.Server;
+import com.example.miniprojet.adapters.searchResultRecyclerViewAdapter;
 import com.example.miniprojet.databinding.FragmentSearchListBinding;
-import com.example.miniprojet.ui.account.User;
+import com.example.miniprojet.models.User;
+import com.example.miniprojet.models.searchResultItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;

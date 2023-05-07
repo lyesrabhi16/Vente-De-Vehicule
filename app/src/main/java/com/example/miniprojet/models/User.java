@@ -1,4 +1,4 @@
-package com.example.miniprojet.ui.account;
+package com.example.miniprojet.models;
 
 import android.content.Context;
 import android.content.SharedPreferences;

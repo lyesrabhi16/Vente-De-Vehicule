@@ -1,10 +1,8 @@
-import { Socket } from "socket.io"
+import { Socket } from "socket.io";
+import { SocketClient as Client, } from "./interfaces";
 
 
-interface Client {
-    socket : Socket,
-    userID : number
-}
+
 
 export const clients : Set<Client> = new Set<Client>();
 

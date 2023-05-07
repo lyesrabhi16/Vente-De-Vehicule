@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.miniprojet.databinding.FragmentFilterBinding;
 import com.example.miniprojet.databinding.FragmentHomeBinding;
+import com.example.miniprojet.models.FilterViewModel;
 
 public class FilterFragment extends Fragment {
 

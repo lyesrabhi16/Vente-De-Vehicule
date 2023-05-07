@@ -1,20 +1,16 @@
-package com.example.miniprojet.ui.home;
+package com.example.miniprojet.models;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.miniprojet.Server;
-
-public class HomeViewModel extends ViewModel {
+public class DashboardViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
-    private Server DBC;
 
-    public HomeViewModel() {
-        DBC = new Server();
+    public DashboardViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        mText.setValue("This is dashboard fragment");
     }
 
     public LiveData<String> getText() {

@@ -20,6 +20,7 @@ import com.example.miniprojet.databinding.ActivityMainBinding;
 import com.example.miniprojet.databinding.FragmentAccountBinding;
 import com.example.miniprojet.databinding.FragmentAccountSignInBinding;
 import com.example.miniprojet.databinding.FragmentAuthBinding;
+import com.example.miniprojet.models.User;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class AccountFragment extends Fragment {

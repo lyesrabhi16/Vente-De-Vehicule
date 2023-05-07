@@ -1,12 +1,7 @@
 package com.example.miniprojet;
 
-import com.example.miniprojet.ui.account.User;
-
-import java.net.URISyntaxException;
-
 import io.socket.client.IO;
 import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 
 public class SocketClient {
     private static Socket socket;

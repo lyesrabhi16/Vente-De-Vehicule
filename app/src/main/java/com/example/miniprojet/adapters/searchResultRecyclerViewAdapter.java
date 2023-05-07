@@ -1,4 +1,4 @@
-package com.example.miniprojet.ui.search;
+package com.example.miniprojet.adapters;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.miniprojet.R;
 import com.example.miniprojet.databinding.FragmentSearchResultItemBinding;
+import com.example.miniprojet.models.searchResultItem;
 
 import java.util.List;
 

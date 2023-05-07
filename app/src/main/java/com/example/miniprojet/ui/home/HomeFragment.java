@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.miniprojet.Server;
 import com.example.miniprojet.databinding.FragmentHomeBinding;
+import com.example.miniprojet.models.HomeViewModel;
 
 
 public class HomeFragment extends Fragment {

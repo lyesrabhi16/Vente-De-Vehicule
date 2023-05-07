@@ -1,6 +1,7 @@
 import { Connection, MysqlError, Query, createConnection} from "mysql";
 import { DB_HOST, DB_NAME, DB_PASSWORD, DB_USERNAME } from "./configs";
 import argon2  from "argon2";
+import { Message, User } from "./interfaces";
 
 export class DBC {
     constructor() {
@@ -77,15 +78,7 @@ export class DBC {
         
     }
 
-    signup = <T>(user : {
-                            nomClient : string, 
-                            prenomClient: string,
-                            ageClient : string,
-                            email : string,
-                            numTel : string,
-                            password : string
-                        }
-                ) : Promise<T> => {
+    signup = <T>(user: User) : Promise<T> => {
                     return new Promise<T>(
                         async (resolve, reject) => {
                                 let sql : string = `insert into client set ?`;
@@ -192,5 +185,38 @@ export class DBC {
         });
     }
 
-}
+    messages = <T>(id : number) : Promise<T> =>{
+        return new Promise((resolve, reject) =>{
+            let sql : string = `SELECT 
+                                idClient, nomClient, prenomClient,
+                                r.*
+                                FROM client,
+                                    (
+                                        SELECT * 
+                                        FROM message 
+                                        WHERE
+                                            idClient_sender = '${id}'
+                                            OR
+                                            idClient_reciever = '${id}'
+                                    ) as r
+                                WHERE idClient = r.idClient_sender OR idClient = r.idClient_reciever
+                                ORDER BY message.date DESC, idMessage DESC
+                `;
+            this.execute(sql, [])
+                .then((result:any) =>{
+                    resolve(result);
+                })
+                .catch((err) =>{reject(err)});
 
+        })
+    }
+    AddMessage = <T>(msg : Message) : Promise<T> => {
+        return new Promise<T>((resolve, reject) =>{
+            let sql : string = "insert into message set ?";
+            this.execute(sql, msg)
+                .then((result:any) => resolve(result))
+                .catch(err=> reject(err));
+        })
+    }
+
+}

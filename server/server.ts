@@ -7,6 +7,7 @@ import { Server, Socket } from "socket.io";
 import http from "http";
 import { io } from "socket.io-client";
 import socket from 'socket.io';
+import { Message } from "./interfaces";
 /* DB connection */
 
 const dbc : DBC  = new DBC();
@@ -195,7 +196,74 @@ APP.post("/search", (_req : express.Request , _res : express.Response) => {
         
 
     
-})
+});
+APP.post("/messages", (_req : express.Request, _res : express.Response) => {
+    let 
+        missingFields : string[] = [],
+        idClient : number = Number.parseInt(_req.body["idClient"]);
+        
+
+    if(!idClient){
+        missingFields.push("userID");
+    }
+    
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    dbc.messages(idClient)
+        .then(result=> _res.json({result:result}))
+        .catch(error => _res.json({error:error}));
+});
+APP.post("/messages/add", (_req : express.Request, _res : express.Response) => {
+    let 
+        missingFields : string[] = [],
+        idClient_sender : number = Number.parseInt(_req.body["idClient_sender"]),
+        idClient_reciever : number = Number.parseInt(_req.body["idClient_reciever"]),
+        contenuMessage : string = _req.body["contenuMessage"],
+        etatMessage : string = _req.body["etatMessage"],
+        date : string = _req.body["date"];
+
+        
+
+    if(!idClient_sender){
+        missingFields.push("idClient_sender");
+    }
+    if(!idClient_reciever){
+        missingFields.push("idClient_reciever");
+    }
+    if(!contenuMessage){
+        missingFields.push("contenuMessage");
+    }
+    if(!etatMessage){
+        missingFields.push("etatMessage");
+    }
+    if(!date){
+        missingFields.push("date");
+    }
+    
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    let msg : Message = {
+        idClient_sender,
+        idClient_reciever,
+        contenuMessage,
+        etatMessage : "sent",
+        date
+    } 
+
+    dbc.AddMessage(msg)
+        .then((result:any)=> _res.json({result:result.insertId}))
+        .catch(error => _res.json({error:error}));
+});
 
 const server = http.createServer(APP);
 
