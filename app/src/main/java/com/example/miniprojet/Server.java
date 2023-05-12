@@ -1,11 +1,12 @@
 package com.example.miniprojet;
 
 public class Server {
-    private static String IP = "10.2.62.78";
+    private static String IP = "192.168.43.147";
     private static String urlServer   = "http://"+IP+":5000";//chemin du serveur
     private static String urlLogin = urlServer + "/signin";
     private static  String urlRegister = urlServer + "/signup";
     private static  String urlSearch = urlServer + "/search";
+    private static String urlChats = urlServer +"/chats";
     private static String urlMessages = urlServer +"/messages";
 
 
@@ -55,6 +56,14 @@ public class Server {
 
     public static void setUrlMessages(String urlMessages) {
         Server.urlMessages = urlMessages;
+    }
+
+    public static String getUrlChats() {
+        return urlChats;
+    }
+
+    public static void setUrlChats(String urlChats) {
+        Server.urlChats = urlChats;
     }
 }
 

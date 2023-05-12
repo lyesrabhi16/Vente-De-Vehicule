@@ -1,8 +1,6 @@
 package com.example.miniprojet.models;
 
 import android.content.Context;
-import android.content.Intent;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -14,7 +12,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.miniprojet.MainActivity;
 import com.example.miniprojet.Server;
 import com.example.miniprojet.interfaces.RequestFinished;
 
@@ -29,7 +26,6 @@ import java.util.Map;
 public class Message {
     private int id,sender, reciever;
     private String contenu, etat;
-    private static ArrayList<Message> messages;
     public Message(int sender, int reciever, String contenu, String etat) {
         this.sender = sender;
         this.reciever = reciever;
@@ -76,8 +72,8 @@ public class Message {
     public void setEtat(String etat) {
         this.etat = etat;
     }
-    public static void getMessages (int id, Context ctx, RequestFinished req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlMessages(),
+    public static void getChats(int id, Context ctx, RequestFinished req){
+        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlChats(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -119,7 +115,6 @@ public class Message {
                                         }
                                     }
                                 }
-                                Toast.makeText(ctx, "Messages:\n"+messages, Toast.LENGTH_SHORT).show();
                                 req.onFinish(l);
                             }
 
@@ -154,4 +149,5 @@ public class Message {
         RequestQueue reqQ = Volley.newRequestQueue(ctx);
         reqQ.add(Sreq);
     }
+
 }

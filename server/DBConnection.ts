@@ -121,18 +121,25 @@ export class DBC {
             this.execute(sql, {})
                     .then(
                         async (result : any) => {
-                            let pass = result[0]["password"];
-                            if (await argon2.verify(pass, password)){
-                                delete result[0].password;
-                                resolve(result);
+                            try {
+                                let pass = result[0]["password"];    
+                                if (await argon2.verify(pass, password)){
+                                    console.log(result[0]);
+                                    delete result[0]["password"];
+                                    resolve(result);
+                                }
+                                else{
+                                    reject("Invalid password.");
+                                }                            
+                            } catch (error) {
+                                reject("invalid email/phone number");
                             }
-                            else{
-                                reject("Invalid password.");
-                            }
-                            
                         }
                     )
-                    .catch((err) => reject(err))
+                    .catch((err) => {
+                        console.log(err);
+                        reject(err);
+                    })
                 
             
         })
@@ -185,7 +192,7 @@ export class DBC {
         });
     }
 
-    messages = <T>(id : number) : Promise<T> =>{
+    chats = <T>(id : number) : Promise<T> =>{
         return new Promise((resolve, reject) =>{
             let sql : string = `SELECT 
                                 idClient, nomClient, prenomClient,
@@ -210,6 +217,16 @@ export class DBC {
 
         })
     }
+
+    messages = <T>(id1 : number, id2 : number) : Promise<T> => {
+        return new Promise((resolve, reject) =>{
+            let sql : string = `SELECT * from message where (idClient_sender = ${id1} and idClient_reciever = ${id2}) or (idClient_sender = ${id2} and idClient_reciever = ${id1}) ORDER BY date ASC, idMessage ASC`;
+            this.execute(sql , [])
+                    .then((result : any) => resolve(result))
+                    .catch(err => reject(err)); 
+        });
+    }
+
     AddMessage = <T>(msg : Message) : Promise<T> => {
         return new Promise<T>((resolve, reject) =>{
             let sql : string = "insert into message set ?";

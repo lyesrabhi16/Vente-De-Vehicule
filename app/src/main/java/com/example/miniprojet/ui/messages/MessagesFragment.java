@@ -1,10 +1,10 @@
 package com.example.miniprojet.ui.messages;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -19,13 +19,9 @@ import com.example.miniprojet.models.Message;
 import com.example.miniprojet.models.MessagesViewModel;
 import com.example.miniprojet.models.PersonItem;
 import com.example.miniprojet.models.User;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.miniprojet.ui.messages.chat.ChatActivity;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 
 public class MessagesFragment extends Fragment {
 
@@ -49,15 +45,21 @@ public class MessagesFragment extends Fragment {
             adapter = new PersonItemAdapter(chatsList, new RecyclerViewInterface() {
                 @Override
                 public void onItemClick(int position) {
-                    Toast.makeText(getContext(), "item "+position+" clicked.", Toast.LENGTH_SHORT).show();
+                    Intent chat = new Intent(getContext() , ChatActivity.class);
+                    PersonItem user = adapter.getList().get(position);
+                    chat.putExtra("userID", user.getUserID());
+                    chat.putExtra("AccountName", user.getTitle());
+                    startActivity(chat);
+
                 }
             });
 
             binding.recyclerChats.setAdapter(adapter);
             binding.progressBar.setVisibility(View.VISIBLE);
-            Message.getMessages(user.getID(), getContext(), new RequestFinished() {
+            Message.getChats(user.getID(), getContext(), new RequestFinished() {
                 @Override
                 public void onFinish(ArrayList args) {
+                    if(binding == null) return;
                     binding.progressBar.setVisibility(View.GONE);
                     if(args.size()<1){
                         binding.recyclerChats.setVisibility(View.GONE);
@@ -65,6 +67,7 @@ public class MessagesFragment extends Fragment {
                         binding.textMessages.setText(R.string.no_messages);
                     }
                     else{
+                        if(binding == null) return;
                         adapter.setList(args);
                         binding.recyclerChats.setAdapter(adapter);
                         binding.recyclerChats.setVisibility(View.VISIBLE);
@@ -79,6 +82,7 @@ public class MessagesFragment extends Fragment {
                     binding.textMessages.setText(R.string.refresh_request);
                 }
             });
+
 
         }
         else{

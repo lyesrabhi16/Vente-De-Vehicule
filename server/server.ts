@@ -2,7 +2,7 @@ import { DBC } from "./DBConnection";
 import express from 'express';
 import cors from 'cors';
 import { sign } from "crypto";
-import { ClientMessage, clients, connection, disconnection, init } from "./socket";
+import { ClientMessage, clients, connection, disconnection, init, message, message_received } from "./socket";
 import { Server, Socket } from "socket.io";
 import http from "http";
 import { io } from "socket.io-client";
@@ -152,7 +152,7 @@ APP.post("/signin", (_req : express.Request, _res : express.Response) => {
                     _res.json(response);
                 }
             )
-            .catch(error => _res.json({error : error }))
+            .catch(error => _res.json({error : error}))
 
 });
 
@@ -197,14 +197,14 @@ APP.post("/search", (_req : express.Request , _res : express.Response) => {
 
     
 });
-APP.post("/messages", (_req : express.Request, _res : express.Response) => {
+APP.post("/chats", (_req : express.Request, _res : express.Response) => {
     let 
         missingFields : string[] = [],
         idClient : number = Number.parseInt(_req.body["idClient"]);
         
 
     if(!idClient){
-        missingFields.push("userID");
+        missingFields.push("idClient");
     }
     
     if(missingFields.length > 0){
@@ -214,10 +214,38 @@ APP.post("/messages", (_req : express.Request, _res : express.Response) => {
         return;
     }
 
-    dbc.messages(idClient)
+    dbc.chats(idClient)
         .then(result=> _res.json({result:result}))
         .catch(error => _res.json({error:error}));
 });
+
+APP.post("/messages", (_req : express.Request, _res : express.Response) => {
+    let 
+        missingFields : string[] = [],
+        idClient1 : number = Number.parseInt(_req.body["idClient1"]),
+        idClient2 : number = Number.parseInt(_req.body["idClient2"]);
+        
+
+    if(!idClient1){
+        missingFields.push("idClient1");
+    }
+    
+    if(!idClient1){
+        missingFields.push("idClient2");
+    }
+    
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    dbc.messages(idClient1, idClient2)
+        .then(result=> _res.json({result:result}))
+        .catch(error => _res.json({error:error}));
+});
+
 APP.post("/messages/add", (_req : express.Request, _res : express.Response) => {
     let 
         missingFields : string[] = [],
@@ -256,7 +284,7 @@ APP.post("/messages/add", (_req : express.Request, _res : express.Response) => {
         idClient_sender,
         idClient_reciever,
         contenuMessage,
-        etatMessage : "sent",
+        etatMessage : etatMessage,
         date
     } 
 
@@ -264,6 +292,7 @@ APP.post("/messages/add", (_req : express.Request, _res : express.Response) => {
         .then((result:any)=> _res.json({result:result.insertId}))
         .catch(error => _res.json({error:error}));
 });
+
 
 const server = http.createServer(APP);
 
@@ -276,7 +305,9 @@ const socketServer = new Server(server);
 socketServer.on("connect", (socket : Socket ) =>{
     connection(socket)
     socket.on("init", (id : number) => init(id, socket) );
-    socket.on("client-message", (msg : string) => ClientMessage(msg, socket));    
+    socket.on("client-message", (msg : string) => ClientMessage(msg, socket));
+    socket.on("message", (msg : Message) => message(msg, socket));  
+    socket.on("message-received", (id : number) => message_received(id));
     socket.on("disconnect", () => disconnection(socket) );
 });
 

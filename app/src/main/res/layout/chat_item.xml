@@ -8,56 +8,58 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/chat_avatar"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        app:iconGravity="textTop"
-        app:iconPadding="0dp"
+        android:textColor="@color/bleu_clair"
         app:icon="@drawable/ic_account_circle_48"
+        app:iconGravity="top"
+        app:iconPadding="0dp"
+        app:iconTint="@color/bleu_clair"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:iconTint="@color/bleu_clair"
-        android:textColor="@color/bleu_clair"
 
-        />
+        app:layout_constraintVertical_bias="0.51" />
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintStart_toEndOf="@id/chat_avatar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
-            <TextView
-                android:id="@+id/header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Header"
-                android:textSize="12sp"
-                android:textStyle="italic"
-                />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.01"
+        app:layout_constraintStart_toEndOf="@id/chat_avatar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Header"
+            android:textSize="12sp"
+            android:textColor="@color/bleu_clair"
+            android:textStyle="bold|italic" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/body"
-            android:background="@drawable/chat_message"
-            android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/chat_message"
+            android:padding="10dp"
             android:text="Message"
-            android:textColor="@color/white"
-            />
+            android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/footer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="footer"
-                android:textSize="10sp"
-                android:textStyle="italic"
-                android:textAlignment="viewEnd"
-                android:gravity="end|center_vertical" />
+        <TextView
+            android:id="@+id/footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end|center_vertical"
+            android:text="footer"
+            android:textAlignment="viewEnd"
+            android:textSize="10sp"
+            android:textStyle="italic" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

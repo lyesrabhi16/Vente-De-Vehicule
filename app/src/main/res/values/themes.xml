@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="21">@color/bleu_clair</item>
         <!-- Customize your theme here. -->
+        <item name="colorAccent">@color/bleu_clair</item>
     </style>
 
     <style name="Theme.MiniProjet.Fullscreen" parent="Theme.MiniProjet">

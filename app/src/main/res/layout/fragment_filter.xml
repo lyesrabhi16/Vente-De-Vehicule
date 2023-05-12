@@ -1,18 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:foregroundTint="@color/bleu_clair"
+    android:padding="10dp"
+    android:scrollbarThumbHorizontal="?attr/colorPrimary"
 
-    <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/spinner_type_action"
-        android:layout_width="131dp"
-        android:layout_height="43dp"
-        android:dropDownWidth="match_parent"
-        android:entries="@array/types_actions"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.appcompat.widget.AppCompatSpinner>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    >
+    <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        >
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_margin="5dp"
+            android:hint="@string/type"
+
+            >
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:minWidth="120dp"
+                app:simpleItems="@array/types_actions"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_margin="5dp"
+            android:hint="@string/wilaya"
+            >
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="120dp"
+                android:inputType="none"
+                app:simpleItems="@array/wilaya"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_margin="5dp"
+            android:hint="@string/transmission"
+            >
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:layout_width="wrap_content"
+                android:minWidth="170dp"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                app:simpleItems="@array/boite"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_margin="5dp"
+            android:hint="@string/brand"
+            >
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="120dp"
+                android:inputType="none"
+                app:simpleItems="@array/marque"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_margin="5dp"
+            android:hint="@string/color"
+            >
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="120dp"
+                android:inputType="none"
+                app:simpleItems="@array/couleur"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+</HorizontalScrollView>

@@ -1,14 +1,16 @@
 package com.example.miniprojet.adapters;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.miniprojet.R;
 import com.example.miniprojet.databinding.FragmentSearchResultItemBinding;
+import com.example.miniprojet.interfaces.RecyclerViewInterface;
 import com.example.miniprojet.models.searchResultItem;
 
 import java.util.List;
@@ -17,15 +19,17 @@ import java.util.List;
 public class searchResultRecyclerViewAdapter extends RecyclerView.Adapter<searchResultRecyclerViewAdapter.ViewHolder> {
 
     private final List<searchResultItem> itemList;
+    private final RecyclerViewInterface recyclerViewInterface;
 
-    public searchResultRecyclerViewAdapter(List<searchResultItem> items) {
+    public searchResultRecyclerViewAdapter(List<searchResultItem> items, RecyclerViewInterface recyclerViewInterface) {
         itemList = items;
+        this.recyclerViewInterface = recyclerViewInterface;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        return new ViewHolder(FragmentSearchResultItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(FragmentSearchResultItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), recyclerViewInterface);
 
     }
 
@@ -47,11 +51,18 @@ public class searchResultRecyclerViewAdapter extends RecyclerView.Adapter<search
         public TextView subTitle;
         public ImageView img;
 
-        public ViewHolder(FragmentSearchResultItemBinding binding) {
+        public ViewHolder(FragmentSearchResultItemBinding binding, RecyclerViewInterface recyclerViewInterface) {
             super(binding.getRoot());
             Title = binding.Title;
             subTitle = binding.subTitle;
             img = binding.AccountImageView;
+
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    recyclerViewInterface.onItemClick(getBindingAdapterPosition());
+                }
+            });
         }
     }
 }

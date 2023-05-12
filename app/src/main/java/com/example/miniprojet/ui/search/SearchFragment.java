@@ -1,14 +1,14 @@
 package com.example.miniprojet.ui.search;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -20,8 +20,10 @@ import com.android.volley.toolbox.Volley;
 import com.example.miniprojet.Server;
 import com.example.miniprojet.adapters.searchResultRecyclerViewAdapter;
 import com.example.miniprojet.databinding.FragmentSearchListBinding;
+import com.example.miniprojet.interfaces.RecyclerViewInterface;
 import com.example.miniprojet.models.User;
 import com.example.miniprojet.models.searchResultItem;
+import com.example.miniprojet.ui.account.AccountActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,7 +58,12 @@ public class SearchFragment extends Fragment {
             ListBinding = FragmentSearchListBinding.inflate(inflater, container, false);
             View root = ListBinding.getRoot();
             List<searchResultItem> itemsList = search(ListBinding);
-            searchResultRecyclerViewAdapter adapter = new searchResultRecyclerViewAdapter(itemsList);
+            searchResultRecyclerViewAdapter adapter = new searchResultRecyclerViewAdapter(itemsList, new RecyclerViewInterface() {
+                @Override
+                public void onItemClick(int position) {
+                        startActivity(new Intent(getContext(), AccountActivity.class));
+                }
+            });
             ListBinding.list.setAdapter(adapter);
 
             return root;
