@@ -61,7 +61,9 @@ public class SearchFragment extends Fragment {
             searchResultRecyclerViewAdapter adapter = new searchResultRecyclerViewAdapter(itemsList, new RecyclerViewInterface() {
                 @Override
                 public void onItemClick(int position) {
-                        startActivity(new Intent(getContext(), AccountActivity.class));
+                        Intent account = new Intent(getContext(), AccountActivity.class);
+                        account.putExtra("accountID", itemsList.get(position).getId());
+                        startActivity(account);
                 }
             });
             ListBinding.list.setAdapter(adapter);
@@ -104,6 +106,7 @@ public class SearchFragment extends Fragment {
                                 searchResultItem item = new searchResultItem();
                                 item.setTitle(obj.getString("nomClient") +" "+ obj.getString("prenomClient") +" ");
                                 item.setSubTitle(obj.getString("email") );
+                                item.setId(obj.getInt("idClient"));
 
                                 list.add(item);
                             }

@@ -7,7 +7,7 @@ import { Server, Socket } from "socket.io";
 import http from "http";
 import { io } from "socket.io-client";
 import socket from 'socket.io';
-import { Message } from "./interfaces";
+import { Annonce, Message } from "./interfaces";
 /* DB connection */
 
 const dbc : DBC  = new DBC();
@@ -27,23 +27,26 @@ APP.use(cors());
 
 
 APP.get("/",(_req : express.Request, _res : express.Response) => {
+    console.log("GET /");
     _res.send("hello from Server");
 });
 
 APP.post("/user",
     async (_req : express.Request, _res : express.Response)=>{
-    let id : string = _req.body.idClient;
-    if(!id) {
-        _res.json({error:"missing required fields : [idClient]"});
-        return;
-    }
-    dbc.getUser(id)
-        .then(user => _res.json({user:user}))
-        .catch(err => _res.json({error:err}))
+        console.log("POST /user");
+        let id : string = _req.body.idClient;
+        if(!id) {
+            _res.json({error:"missing required fields : [idClient]"});
+            return;
+        }
+        dbc.getUser(id)
+            .then(user => _res.json({user:user}))
+            .catch(err => _res.json({error:err}))
 
 })
 
 APP.post("/signup", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /signup");
     let 
         missingFields : string[] = [],
         user : {
@@ -115,6 +118,7 @@ APP.post("/signup", (_req : express.Request, _res : express.Response) => {
 })
 
 APP.post("/signin", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /signin");
     let 
         missingFields : string[] = [],
         email : string = _req.body["email"],
@@ -157,7 +161,7 @@ APP.post("/signin", (_req : express.Request, _res : express.Response) => {
 });
 
 APP.post("/search", (_req : express.Request , _res : express.Response) => {
-    
+    console.log("POST /search");
 
     let 
         missingFields : string[] = [],
@@ -198,6 +202,7 @@ APP.post("/search", (_req : express.Request , _res : express.Response) => {
     
 });
 APP.post("/chats", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /chats");
     let 
         missingFields : string[] = [],
         idClient : number = Number.parseInt(_req.body["idClient"]);
@@ -220,6 +225,7 @@ APP.post("/chats", (_req : express.Request, _res : express.Response) => {
 });
 
 APP.post("/messages", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /messages");
     let 
         missingFields : string[] = [],
         idClient1 : number = Number.parseInt(_req.body["idClient1"]),
@@ -247,6 +253,7 @@ APP.post("/messages", (_req : express.Request, _res : express.Response) => {
 });
 
 APP.post("/messages/add", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /messages/add");
     let 
         missingFields : string[] = [],
         idClient_sender : number = Number.parseInt(_req.body["idClient_sender"]),
@@ -293,6 +300,177 @@ APP.post("/messages/add", (_req : express.Request, _res : express.Response) => {
         .catch(error => _res.json({error:error}));
 });
 
+APP.post("/annonce", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /annonce");
+    let 
+    missingFields : string[] = [],
+    idAnnonce : number = Number.parseInt(_req.body["idAnnonce"]);
+    
+
+    if(!idAnnonce){
+        missingFields.push("idAnnonce");
+    }
+
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    dbc.Annonce("idAnnonce",idAnnonce)
+        .then(result=> _res.json({result:result}))
+        .catch(error => _res.json({error:error})); 
+});
+
+APP.post("/annonces", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /annonces");
+    /*let 
+    missingFields : string[] = [],
+    idClient : number = Number.parseInt(_req.body["idClient"]);
+    
+
+    if(!idClient){
+        missingFields.push("idClient");
+    }
+
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }*/
+
+    dbc.Annonce("1",1)
+        .then(result=> _res.json({result:result}))
+        .catch(error => _res.json({error:error})); 
+});
+
+APP.post("/annonces/user", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /annonces/user");
+    let 
+    missingFields : string[] = [],
+    idClient : number = Number.parseInt(_req.body["idClient"]);
+    
+
+    if(!idClient){
+        missingFields.push("idClient");
+    }
+
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    dbc.Annonce("idClient",idClient)
+        .then(result=> _res.json({result:result}))
+        .catch(error => _res.json({error:error})); 
+});
+
+
+
+APP.post("/annonce/add", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /annonce/add");
+    let 
+        missingFields : string[] = [],
+        annonce : Annonce = {
+        idAnnonce: null,
+        idClient:Number.parseInt(_req.body["idClient"]),
+        titre:_req.body["titre"],
+        description:_req.body["description"],
+        typeVehicule:_req.body["typeVehicule"],
+        marqueVehicule:_req.body["marqueVehicule"],
+        modeleVehicule:_req.body["modeleVehicule"],
+        couleurVehicule:_req.body["couleurVehicule"],
+        transmissionVehicule:_req.body["transmissionVehicule"],
+        kilometrageVehicule:_req.body["kilometrageVehicule"],
+        anneeVehicule:Number.parseInt(_req.body["anneeVehicule"]),
+        moteurVehicule:_req.body["moteurVehicule"],
+        energieVehicule:_req.body["energieVehicule"],
+        prixVehicule:_req.body["prixVehicule"]
+    };
+
+    
+
+    if(!annonce.idClient){
+        missingFields.push("idClient");
+    }
+    if(!annonce.titre){
+        missingFields.push("titre");
+    }
+    if(!annonce.description){
+        missingFields.push("description");
+    }
+    if(!annonce.typeVehicule){
+        missingFields.push("typeVehicule");
+    }
+    if(!annonce.marqueVehicule){
+        missingFields.push("marqueVehicule");
+    }
+    if(!annonce.modeleVehicule){
+        missingFields.push("modeleVehicule");
+    }    
+    if(!annonce.couleurVehicule){
+        missingFields.push("couleurVehicule");
+    }
+    if(!annonce.transmissionVehicule){
+        missingFields.push("transmissionVehicule");
+    }
+
+    if(!annonce.kilometrageVehicule){
+        missingFields.push("kilometrageVehicule");
+    }
+    if(!annonce.anneeVehicule){
+        missingFields.push("anneeVehicule");
+    }
+    if(!annonce.moteurVehicule){
+        missingFields.push("moteurVehicule");
+    }    
+    if(!annonce.energieVehicule){
+        missingFields.push("energieVehicule");
+    }
+    if(!annonce.prixVehicule){
+        missingFields.push("prixVehicule");
+    }
+
+
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    dbc.AddAnnonce(annonce)
+        .then((result:any)=> _res.json({result:result.insertId}))
+        .catch(error => _res.json({error:error})); 
+});
+
+APP.post("/annonce/remove", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /annonce/remove");
+    let 
+    missingFields : string[] = [],
+    idAnnonce : number = Number.parseInt(_req.body["idAnnonce"]);
+    
+
+    if(!idAnnonce){
+        missingFields.push("idAnnonce");
+    }
+
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    dbc.DelAnnonce(idAnnonce)
+        .then(result=> _res.json({result:result}))
+        .catch(error => _res.json({error:error})); 
+});
+
 
 const server = http.createServer(APP);
 
@@ -311,3 +489,79 @@ socketServer.on("connect", (socket : Socket ) =>{
     socket.on("disconnect", () => disconnection(socket) );
 });
 
+/*  upload/download image javascript
+app.post("/upload/image", (req, res) => {
+
+    if(req.body["userID"] === undefined){
+        let message = " missing parameter : userID"
+        console.error(message);
+        res.json(
+            {error : message}
+        );
+        return;
+    }
+    if(req.body["imgB64"] === undefined){
+        let message = "missing parameter : imgB64"
+        console.error(message);
+        res.json(
+            {error : message}
+        );
+        return;
+    }
+    if(req.body["format"] === undefined){
+        let message = "missing parameter : format"
+        console.error(message);
+        res.json(
+            {error : message}
+        );
+        return;
+    }
+    console.log("image is being uploaded...");
+
+    let 
+        imgB64 = req.body["imgB64"],
+        userID = req.body["userID"],
+        format = req.body["format"];
+
+    const buffer = Buffer.from(imgB64, 'base64');
+
+    fs.writeFile(`images/Avatar-[${userID}].${format}`, buffer, (err) => {
+        if (err) {
+            console.error(err);
+            res.send('Error saving image');
+        } else {
+            console.log("image uploaded.");
+            res.send('Image saved successfully');
+        }
+    });
+})
+
+
+app.post("/download/image", (req, res) => {
+
+    if(req.body["imgName"] === undefined){
+        let message = "missing parameter : imgName"
+        console.error(message);
+        res.json(
+            {error : message}
+        );
+        return;
+    }
+    console.log("sending image...");
+
+    let 
+        name = req.body["imgName"];
+
+    const image = fs.readFile(`images/${name}`,(err, data) => {
+        if(err) {
+            console.log("image not found.");
+            res.json({error: "image not found."});
+        }
+        else{
+            const buffer = Buffer.from(data).toString("base64");
+            res.json({imgB64 : buffer});
+            console.log("image sent.");
+        }
+    });
+}) 
+*/

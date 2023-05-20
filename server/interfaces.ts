@@ -19,3 +19,20 @@ export interface User {
     numTel : string,
     password : string    
 }
+
+export interface Annonce{
+    idAnnonce             : number | null,
+    idClient              : number,
+    titre                 : string,
+    description           : string,
+    typeVehicule          : string,
+    marqueVehicule        : string,
+    modeleVehicule        : string,
+    couleurVehicule       : string,
+    transmissionVehicule  : string,
+    kilometrageVehicule   : string,
+    anneeVehicule         : number,
+    moteurVehicule        : string,
+    energieVehicule       : string,
+    prixVehicule          : string
+}

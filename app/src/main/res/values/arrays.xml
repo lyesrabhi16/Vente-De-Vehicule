@@ -23,4 +23,10 @@
         <item>rouge</item>
         <item>noire</item>
     </string-array>
+    <string-array name="energie">
+        <item>diesel</item>
+        <item>essence</item>
+        <item>electrique</item>
+        <item>hybride</item>
+    </string-array>
 </resources>

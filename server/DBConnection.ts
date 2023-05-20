@@ -1,7 +1,7 @@
-import { Connection, MysqlError, Query, createConnection} from "mysql";
+import { Connection, MysqlError, Query, createConnection,format} from "mysql";
 import { DB_HOST, DB_NAME, DB_PASSWORD, DB_USERNAME } from "./configs";
 import argon2  from "argon2";
-import { Message, User } from "./interfaces";
+import { Annonce, Message, User } from "./interfaces";
 
 export class DBC {
     constructor() {
@@ -42,8 +42,9 @@ export class DBC {
 
     };
 
-    execute = <T>(query : string, params : string[] | Object) : Promise<T> =>{
+    
 
+    execute = <T>(query : string, params : string[] | Object) : Promise<T> =>{
         return new Promise<T>((resolve, reject) =>
             {
 
@@ -190,7 +191,7 @@ export class DBC {
                     }
                 );
         });
-    }
+    };
 
     chats = <T>(id : number) : Promise<T> =>{
         return new Promise((resolve, reject) =>{
@@ -216,7 +217,7 @@ export class DBC {
                 .catch((err) =>{reject(err)});
 
         })
-    }
+    };
 
     messages = <T>(id1 : number, id2 : number) : Promise<T> => {
         return new Promise((resolve, reject) =>{
@@ -225,7 +226,7 @@ export class DBC {
                     .then((result : any) => resolve(result))
                     .catch(err => reject(err)); 
         });
-    }
+    };
 
     AddMessage = <T>(msg : Message) : Promise<T> => {
         return new Promise<T>((resolve, reject) =>{
@@ -234,6 +235,39 @@ export class DBC {
                 .then((result:any) => resolve(result))
                 .catch(err=> reject(err));
         })
-    }
+    };
 
+    Annonce = <T>(field : string, idAnnonce : number) : Promise<T> => {
+        return new Promise((resolve, reject) => {
+            let 
+                sql : string = `SELECT * from annonce `;
+            if (field == "1"){
+                sql = sql + "where ? = ?";
+            }
+            else{
+                sql = sql + "where ?? = ?"
+            }
+            
+            this.execute(sql, [field , idAnnonce])
+                    .then((res:any) => {resolve(res)})
+                    .catch(err => reject(err));
+        });
+    };
+
+    AddAnnonce = <T>(annonce : Annonce) : Promise<T> => {
+        return new Promise((resolve, reject) => {
+            let sql : string = `INSERT INTO annonce SET ?`;
+            this.execute(sql, annonce)
+                    .then((res:any) => {resolve(res)})
+                    .catch(err => reject(err));
+        });
+    };
+    DelAnnonce = <T>(idAnnonce : number) : Promise<T> => {
+        return new Promise((resolve, reject) => {
+            let sql : string = `Delete From annonce where idAnnonce = ?`;
+            this.execute(sql, idAnnonce)
+                    .then((res:any) => {resolve(res)})
+                    .catch(err => reject(err));
+        });
+    };
 }

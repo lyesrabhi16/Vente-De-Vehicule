@@ -85,5 +85,4 @@ public final class User {
         return sharedprefs.getInt(KEY_AGE, -1);
     }
 
-
 }

@@ -39,4 +39,12 @@
     <string name="price">Price</string>
     <string name="wilaya">Wilaya</string>
     <string name="color">Color</string>
+    <string name="year">Year</string>
+    <string name="engine">Engine</string>
+    <string name="energy">Energy</string>
+    <string name="add">Add</string>
+    <string name="images">Images</string>
+    <string name="login_request">Please Login</string>
+    <string name="my_announcements">My Announcements</string>
+    <string name="announcements">Announcements</string>
 </resources>

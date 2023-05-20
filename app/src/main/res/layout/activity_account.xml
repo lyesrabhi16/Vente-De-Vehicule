@@ -184,11 +184,11 @@
                     android:visibility="visible"
                     />
                 <Button
-                    android:id="@+id/button_Delete_Friend"
+                    android:id="@+id/button_Annonces"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Reserve"
+                    android:text="@string/announcements"
                     android:visibility="visible"
                     />
             </LinearLayout>

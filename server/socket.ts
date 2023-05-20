@@ -11,7 +11,7 @@ export const connection = (socket : Socket) => {
     console.log(`socket connected : [${socket.id}]`);
     socket.emit("connected");
     socket.emit("request-init");
-    console.log(`clients: [${clients}]`)
+    console.log(`clients: [${clients.map((client) => client.userID )}]`)
 }
 
 export const disconnection = (socket : Socket) => {
@@ -26,7 +26,7 @@ export const init = (id : number, socket : Socket) => {
     };
     clients.push(client);
     console.log(`client identified : [${socket.id}] : [${id}]`);
-    console.log(`clients: [${clients}]`)
+    console.log(`clients: [${clients.map((client) => client.userID )}]`)
 }
 
 export const ClientMessage = (message : string , socket : Socket) => {

@@ -62,6 +62,7 @@ public class HomeFragment extends Fragment {
         binding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent AddAnnonce = new Intent(getContext(), AddAnnonceActivity.class);
                 startActivity(AddAnnonce);
             }

@@ -4,7 +4,7 @@ import android.widget.ImageView;
 
 public class searchResultItem {
     private String Title, subTitle;
-    private int type;
+    private int type, id;
     public static int User = 0, Annonce = 1;
     private ImageView img;
 
@@ -38,5 +38,13 @@ public class searchResultItem {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

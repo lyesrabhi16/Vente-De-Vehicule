@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +15,7 @@ import com.example.miniprojet.R;
 import com.example.miniprojet.databinding.AnnonceBinding;
 import com.example.miniprojet.interfaces.RecyclerViewInterface;
 import com.example.miniprojet.models.Annonce;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
@@ -48,12 +50,18 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.ViewHold
         holder.img.setImageResource(R.raw.app_logo_rounded_square);
         holder.Title.setText(item.getTitle());
         holder.type.setText(item.getType());
-        holder.qte.setText(item.getQte());
-        holder.date.setText(item.getDate());
+        holder.qte.setText(item.getPrix()+"da");
+        holder.date.setText(item.getAnnee()+"");
         holder.desc.setText(item.getDesc());
         holder.userAvatar.setImageResource(R.drawable.ic_account_circle_48);
         holder.userTitle.setText(item.getUserTitle());
         holder.userSubTitle.setText(item.getUserSubTitle());
+        holder.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "to be implemented later", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -64,6 +72,7 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.ViewHold
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        private MaterialButton button;
         private ImageView img, userAvatar;
         private TextView Title, type, qte, date, desc, userTitle, userSubTitle;
         public ViewHolder(View view, RecyclerViewInterface recyclerViewInterface){
@@ -79,6 +88,7 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.ViewHold
             userTitle = view.findViewById(bind.Title.getId());
             userSubTitle = view.findViewById(bind.subTitle.getId());
             userAvatar = view.findViewById(bind.Avatar.getId());
+            button = bind.button;
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
