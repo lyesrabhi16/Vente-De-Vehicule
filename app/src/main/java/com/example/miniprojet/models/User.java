@@ -14,6 +14,7 @@ public final class User {
     private static final String KEY_NOM = "nomClient";
     private static final String KEY_PRENOM = "prenomClient";
     private static final String KEY_AGE = "ageClient";
+    private static final String KEY_IMAGE = "imageClient";
 
 
     private User(Context context){
@@ -83,6 +84,16 @@ public final class User {
     public int getAge(){
         SharedPreferences sharedprefs = Ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedprefs.getInt(KEY_AGE, -1);
+    }
+    public String getImageName(){
+        SharedPreferences sharedprefs = Ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedprefs.getString(KEY_IMAGE, null);
+    }
+    public void setImageName(String name){
+        SharedPreferences sharedprefs = Ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedprefs.edit();
+        editor.putString(KEY_IMAGE, name);
+        editor.apply();
     }
 
 }

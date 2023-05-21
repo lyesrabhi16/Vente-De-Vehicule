@@ -16,6 +16,7 @@
         >
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/typeLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
@@ -24,6 +25,7 @@
 
             >
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="none"
@@ -32,39 +34,10 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:layout_margin="5dp"
-            android:hint="@string/wilaya"
-            >
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="120dp"
-                android:inputType="none"
-                app:simpleItems="@array/wilaya"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:layout_margin="5dp"
-            android:hint="@string/transmission"
-            >
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:layout_width="wrap_content"
-                android:minWidth="170dp"
-                android:layout_height="wrap_content"
-                android:inputType="none"
-                app:simpleItems="@array/boite"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/marqueLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
@@ -72,6 +45,7 @@
             android:hint="@string/brand"
             >
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/marque"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="120dp"
@@ -80,6 +54,7 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/couleurLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
@@ -87,11 +62,46 @@
             android:hint="@string/color"
             >
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/couleur"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="120dp"
                 android:inputType="none"
                 app:simpleItems="@array/couleur"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/transmissionLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_margin="5dp"
+            android:hint="@string/transmission"
+            >
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/transmission"
+                android:layout_width="wrap_content"
+                android:minWidth="170dp"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                app:simpleItems="@array/boite"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/energieLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_margin="5dp"
+            android:hint="@string/energy"
+            >
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/energie"
+                android:layout_width="wrap_content"
+                android:minWidth="170dp"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                app:simpleItems="@array/energie"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 

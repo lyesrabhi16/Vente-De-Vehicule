@@ -1,6 +1,8 @@
 package com.example.miniprojet.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.miniprojet.R;
+import com.example.miniprojet.Server;
 import com.example.miniprojet.databinding.AnnonceBinding;
 import com.example.miniprojet.interfaces.RecyclerViewInterface;
+import com.example.miniprojet.interfaces.RequestFinished;
 import com.example.miniprojet.models.Annonce;
 import com.google.android.material.button.MaterialButton;
 
@@ -21,10 +25,12 @@ import java.util.ArrayList;
 
 public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.ViewHolder> {
     private ArrayList<Annonce> list;
+    private Context ctx;
     private final RecyclerViewInterface recyclerViewInterface;
-    public AnnonceAdapter(ArrayList<Annonce> list, RecyclerViewInterface recyclerViewInterface) {
+    public AnnonceAdapter(ArrayList<Annonce> list, Context ctx, RecyclerViewInterface recyclerViewInterface) {
 
         this.list = list;
+        this.ctx = ctx;
         this.recyclerViewInterface = recyclerViewInterface;
     }
 
@@ -51,7 +57,7 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.ViewHold
         holder.Title.setText(item.getTitle());
         holder.type.setText(item.getType());
         holder.qte.setText(item.getPrix()+"da");
-        holder.date.setText(item.getAnnee()+"");
+        holder.date.setText(item.getAnnee()+" ");
         holder.desc.setText(item.getDesc());
         holder.userAvatar.setImageResource(R.drawable.ic_account_circle_48);
         holder.userTitle.setText(item.getUserTitle());
@@ -62,6 +68,43 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.ViewHold
                 Toast.makeText(view.getContext(), "to be implemented later", Toast.LENGTH_SHORT).show();
             }
         });
+
+        Bitmap imgAnnonce = Server.getBitmap(ctx, "imageAnnonce-["+item.getIdAnnonce()+"].jpeg");
+        if(imgAnnonce != null){
+            holder.img.setImageBitmap(imgAnnonce);
+        }
+        else {
+            Server.getImage("imageAnnonce-[" +item.getIdAnnonce()+ "].jpeg", ctx, new RequestFinished() {
+                @Override
+                public void onFinish(ArrayList args) {
+                    Bitmap imgAnnonce = (Bitmap) args.get(0);
+                    holder.img.setImageBitmap(imgAnnonce);
+                }
+
+                @Override
+                public void onError(ArrayList args) {
+
+                }
+            });
+        }
+        Bitmap imgAvatar = Server.getBitmap(ctx, "imageClient-["+item.getIdUser()+"].jpeg");
+        if(imgAnnonce != null){
+            holder.userAvatar.setImageBitmap(imgAnnonce);
+        }
+        else {
+            Server.getImage("imageClient-["+item.getIdUser()+ "].jpeg", ctx, new RequestFinished() {
+                @Override
+                public void onFinish(ArrayList args) {
+                    Bitmap imgAnnonce = (Bitmap) args.get(0);
+                    holder.userAvatar.setImageBitmap(imgAnnonce);
+                }
+
+                @Override
+                public void onError(ArrayList args) {
+
+                }
+            });
+        }
     }
 
     @Override

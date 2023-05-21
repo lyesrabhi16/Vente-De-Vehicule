@@ -1,35 +1,47 @@
 package com.example.miniprojet.models;
 
-import android.widget.ImageView;
+import com.example.miniprojet.databinding.AnnonceBinding;
+import com.example.miniprojet.databinding.PersonItemBinding;
 
 public class searchResultItem {
-    private String Title, subTitle;
-    private int type, id;
-    public static int User = 0, Annonce = 1;
-    private ImageView img;
 
-    public String getTitle() {
-        return Title;
+    public static final int RESULT_PERSON = 0, RESULT_ANNONCE = 1;
+    private PersonItem person;
+    private Annonce annonce;
+    private PersonItemBinding containerPerson;
+    private AnnonceBinding containerAnnonce;
+    private int type;
+
+    public PersonItem getPerson() {
+        return person;
     }
 
-    public void setTitle(String title) {
-        Title = title;
+    public void setPerson(PersonItem person) {
+        this.person = person;
     }
 
-    public String getSubTitle() {
-        return subTitle;
+    public Annonce getAnnonce() {
+        return annonce;
     }
 
-    public void setSubTitle(String subTitle) {
-        this.subTitle = subTitle;
+    public void setAnnonce(Annonce annonce) {
+        this.annonce = annonce;
     }
 
-    public ImageView getImg() {
-        return img;
+    public PersonItemBinding getContainerPerson() {
+        return containerPerson;
     }
 
-    public void setImg(ImageView img) {
-        this.img = img;
+    public void setContainerPerson(PersonItemBinding containerPerson) {
+        this.containerPerson = containerPerson;
+    }
+
+    public AnnonceBinding getContainerAnnonce() {
+        return containerAnnonce;
+    }
+
+    public void setContainerAnnonce(AnnonceBinding containerAnnonce) {
+        this.containerAnnonce = containerAnnonce;
     }
 
     public int getType() {
@@ -38,13 +50,5 @@ public class searchResultItem {
 
     public void setType(int type) {
         this.type = type;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }

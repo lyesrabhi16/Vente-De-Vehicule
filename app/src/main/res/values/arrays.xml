@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="marque">
+        <item>All</item>
         <item>Mercedes</item>
         <item>BMW</item>
         <item>Audi</item>
@@ -8,22 +9,27 @@
         <item>Hyundai</item>
     </string-array>
     <string-array name="types_actions">
+        <item>All</item>
         <item>Vente</item>
         <item>Location</item>
     </string-array>
     <string-array name="wilaya">
+        <item>All</item>
         <item>Alger</item>
         <item>Bejaia</item>
     </string-array>
     <string-array name="boite">
+        <item>All</item>
         <item>Automatique</item>
         <item>Manual</item>
     </string-array>
     <string-array name="couleur">
+        <item>All</item>
         <item>rouge</item>
         <item>noire</item>
     </string-array>
     <string-array name="energie">
+        <item>All</item>
         <item>diesel</item>
         <item>essence</item>
         <item>electrique</item>

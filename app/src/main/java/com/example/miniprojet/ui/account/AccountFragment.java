@@ -1,14 +1,22 @@
 package com.example.miniprojet.ui.account;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -20,8 +28,15 @@ import com.example.miniprojet.databinding.ActivityMainBinding;
 import com.example.miniprojet.databinding.FragmentAccountBinding;
 import com.example.miniprojet.databinding.FragmentAccountSignInBinding;
 import com.example.miniprojet.databinding.FragmentAuthBinding;
+import com.example.miniprojet.interfaces.RequestFinished;
 import com.example.miniprojet.models.User;
 import com.google.android.material.navigation.NavigationBarView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class AccountFragment extends Fragment {
 
@@ -45,6 +60,28 @@ public class AccountFragment extends Fragment {
             AccountBinding.email.setText(user.getEmail());
             AccountBinding.numTel.setText(user.getNumtel());
 
+            if(user.getImageName() != null){
+                Bitmap avatar = Server.getBitmap(getContext(), user.getImageName());
+                if (avatar != null){
+                    AccountBinding.userAvatar.setImageBitmap(avatar);
+                }
+            }
+            else{
+                Server.getImage("imageClient-[" + user.getID() + "].jpeg", getContext(), new RequestFinished() {
+                    @Override
+                    public void onFinish(ArrayList args) {
+                        Bitmap img = (Bitmap) args.get(0);
+                        user.setImageName(Server.saveBitmap(getContext(), "imageClient", img));
+                        AccountBinding.userAvatar.setImageBitmap(img);
+                    }
+
+                    @Override
+                    public void onError(ArrayList args) {
+
+                    }
+                });
+            }
+
             AccountBinding.buttonChangePassword.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -59,6 +96,42 @@ public class AccountFragment extends Fragment {
                         Intent i = new Intent(getContext(), MainActivity.class);
                         startActivity(i);
                         getActivity().finish();
+                }
+            });
+
+            ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            Uri selectedImageUri = data.getData();
+                            try {
+                                Bitmap img = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), selectedImageUri);
+                                user.setImageName(Server.saveBitmap(getContext(), "imageClient", img));
+                                JSONObject o = new JSONObject();
+                                o.put("imgB64", Server.ImageToBase64(img, getContext()));
+                                o.put("id", user.getID());
+                                o.put("format", "jpeg");
+                                o.put("type", Server.TYPE_IMAGE_AVATAR);
+                                Server.sendImageToserver(o, getContext());
+                                AccountBinding.userAvatar.setImageURI(selectedImageUri);
+                            } catch (IOException e) {
+                                Toast.makeText(getContext(), "Error : "+e, Toast.LENGTH_SHORT).show();
+                            } catch (JSONException e) {
+                                Toast.makeText(getContext(), "Error : "+e, Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    }
+                }
+            });
+
+            AccountBinding.userAvatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    galleryLauncher.launch(gallery);
                 }
             });
 

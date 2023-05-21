@@ -348,4 +348,92 @@ public class Annonce {
         RequestQueue reqQ = Volley.newRequestQueue(ctx);
         reqQ.add(Sreq);
     }
+    public static void getAnnonces(JSONObject filterObj, Context ctx, RequestFinished Req){
+        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlAnnonces(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject res = new JSONObject(response);
+
+                            if(res.has("error")){
+                                Toast.makeText(ctx,"failed to get announcements. "+res.get("error"), Toast.LENGTH_LONG).show();
+                                ArrayList l = new ArrayList();
+                                l.add(res.get("error") );
+                                Req.onError(l);
+                            }
+
+                            else{
+                                JSONArray resA = res.getJSONArray("result");
+                                ArrayList<Annonce> l = new ArrayList<Annonce>();
+                                for (int i = 0; i < resA.length(); i++) {
+                                    JSONObject a = resA.getJSONObject(i);
+                                    Annonce annonce = new Annonce();
+                                    annonce.setIdAnnonce(a.getInt("idAnnonce"));
+                                    annonce.setTitle(a.getString("titre"));
+                                    annonce.setDesc(a.getString("description"));
+                                    annonce.setType(a.getString("typeVehicule"));
+                                    annonce.setMarque(a.getString("marqueVehicule"));
+                                    annonce.setModele(a.getString("modeleVehicule"));
+                                    annonce.setCouleur(a.getString("couleurVehicule"));
+                                    annonce.setTransmission(a.getString("transmissionVehicule"));
+                                    annonce.setKilometrage(a.getInt("kilometrageVehicule"));
+                                    annonce.setAnnee(a.getInt("anneeVehicule"));
+                                    annonce.setMoteur(a.getString("moteurVehicule"));
+                                    annonce.setEnergie(a.getString("energieVehicule"));
+                                    annonce.setPrix(a.getString("prixVehicule"));
+                                    annonce.setIdUser(a.getInt("idClient"));
+                                    Client.getClient(annonce.getIdUser(), ctx, new RequestFinished() {
+                                        @Override
+                                        public void onFinish(ArrayList args) {
+                                            Client c = (Client) args.get(0);
+                                            annonce.setUserTitle(c.getNom() + " " + c.getPrenom() + " ");
+                                            annonce.setUserSubTitle(c.getEmail());
+                                            l.add(annonce);
+                                            Req.onFinish(l);
+                                        }
+
+                                        @Override
+                                        public void onError(ArrayList args) {
+                                            Req.onError(args);
+                                        }
+                                    });
+                                }
+                                Req.onFinish(l);
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(ctx,"an error occurred.", Toast.LENGTH_SHORT).show();
+                            ArrayList l = new ArrayList<>();
+                            l.add(e.getMessage());
+                            Req.onError(l);
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                        ArrayList l = new ArrayList();
+                        l.add(error.getMessage());
+                        Req.onError(l);
+                    }
+                }){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String,String>();
+                if(filterObj.length()>0){
+                    params.put("filterObj", filterObj.toString());
+                }
+                return params;
+            }
+        };
+
+        RequestQueue reqQ = Volley.newRequestQueue(ctx);
+        reqQ.add(Sreq);
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.miniprojet.ui.messages.chat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import com.example.miniprojet.adapters.ChatItemAdapter;
 import com.example.miniprojet.databinding.ActivityChatBinding;
 import com.example.miniprojet.models.ChatItem;
 import com.example.miniprojet.models.User;
+import com.example.miniprojet.ui.account.AccountActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,10 +57,9 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(CBind.getRoot());
 
         R_userID = getIntent().getIntExtra("userID", -1);
-        R_userName = getIntent().getStringExtra("AccountName");
+        R_userName = getIntent().getStringExtra("accountName");
 
         CBind.buttonAccount.setText(R_userName);
-
         chatItemsList = new ArrayList<ChatItem>();
 
         chatItemAdapter = new ChatItemAdapter(chatItemsList);
@@ -80,12 +81,9 @@ public class ChatActivity extends AppCompatActivity {
         CBind.buttonAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ChatActivity.this, "To be implemented", Toast.LENGTH_SHORT).show();
-                /*
                 Intent account = new Intent(getApplicationContext(), AccountActivity.class);
-                account.putExtra("userID", R_userID);
+                account.putExtra("accountID", R_userID);
                 startActivity(account);
-                 */
             }
         });
 

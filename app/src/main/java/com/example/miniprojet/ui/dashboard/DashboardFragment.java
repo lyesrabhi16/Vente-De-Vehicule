@@ -38,7 +38,7 @@ public class DashboardFragment extends Fragment {
             binding.main.setVisibility(View.VISIBLE);
 
             annonces = new ArrayList<Annonce>();
-            adapter = new AnnonceAdapter(annonces, new RecyclerViewInterface() {
+            adapter = new AnnonceAdapter(annonces, getContext(), new RecyclerViewInterface() {
                 @Override
                 public void onItemClick(int position) {
                     Toast.makeText(getContext(), "item clicked", Toast.LENGTH_SHORT).show();
@@ -51,6 +51,7 @@ public class DashboardFragment extends Fragment {
             Annonce.getUserAnnonces(user.getID(), getContext(), new RequestFinished() {
                 @Override
                 public void onFinish(ArrayList args) {
+                    if(binding == null) return;
                     binding.progressBar.setVisibility(View.GONE);
 
                     annonces = (ArrayList<Annonce>) args;
@@ -60,6 +61,7 @@ public class DashboardFragment extends Fragment {
 
                 @Override
                 public void onError(ArrayList args) {
+                    if(binding == null) return;
                     binding.progressBar.setVisibility(View.GONE);
                 }
             });

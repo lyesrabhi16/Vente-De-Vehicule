@@ -47,4 +47,6 @@
     <string name="login_request">Please Login</string>
     <string name="my_announcements">My Announcements</string>
     <string name="announcements">Announcements</string>
+    <string name="send_message">Send Message</string>
+    <string name="no_annoncements">no Announcements</string>
 </resources>

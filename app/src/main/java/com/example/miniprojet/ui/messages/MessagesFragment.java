@@ -48,7 +48,7 @@ public class MessagesFragment extends Fragment {
                     Intent chat = new Intent(getContext() , ChatActivity.class);
                     PersonItem user = adapter.getList().get(position);
                     chat.putExtra("userID", user.getUserID());
-                    chat.putExtra("AccountName", user.getTitle());
+                    chat.putExtra("accountName", user.getTitle());
                     startActivity(chat);
 
                 }

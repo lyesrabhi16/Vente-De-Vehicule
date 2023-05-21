@@ -1,13 +1,12 @@
 import { DBC } from "./DBConnection";
 import express from 'express';
+import fs from "fs";
 import cors from 'cors';
-import { sign } from "crypto";
 import { ClientMessage, clients, connection, disconnection, init, message, message_received } from "./socket";
 import { Server, Socket } from "socket.io";
 import http from "http";
-import { io } from "socket.io-client";
-import socket from 'socket.io';
 import { Annonce, Message } from "./interfaces";
+import path from "path";
 /* DB connection */
 
 const dbc : DBC  = new DBC();
@@ -19,8 +18,8 @@ const PORT : number = 5000;
 
 
 // parse incoming request body and append data to `req.body`
-APP.use(express.json());
-APP.use(express.urlencoded({ extended: true }));
+APP.use(express.json({limit:"200mb"}));
+APP.use(express.urlencoded({ extended: true, limit:"200mb" }));
 
 // enable all CORS request 
 APP.use(cors());
@@ -325,23 +324,16 @@ APP.post("/annonce", (_req : express.Request, _res : express.Response) => {
 
 APP.post("/annonces", (_req : express.Request, _res : express.Response) => {
     console.log("POST /annonces");
-    /*let 
-    missingFields : string[] = [],
-    idClient : number = Number.parseInt(_req.body["idClient"]);
-    
-
-    if(!idClient){
-        missingFields.push("idClient");
+    let missingFields : string[] = [],
+        filterObj : Object;
+    try {
+        filterObj = JSON.parse(_req.body["filterObj"]);
+    } catch (error) {
+        filterObj = "1 = 1";   
     }
 
-    if(missingFields.length > 0){
-        _res.json({
-            error : `missing required fields : [${missingFields.join(", ")}]`
-        })
-        return;
-    }*/
 
-    dbc.Annonce("1",1)
+    dbc.Annonces(filterObj)
         .then(result=> _res.json({result:result}))
         .catch(error => _res.json({error:error})); 
 });
@@ -471,6 +463,105 @@ APP.post("/annonce/remove", (_req : express.Request, _res : express.Response) =>
         .catch(error => _res.json({error:error})); 
 });
 
+APP.post("/upload/image", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /upload/image");
+    
+    let 
+        missingFields : string[] = [],
+        id : number = _req.body["userID"],
+        imgB64 : string = _req.body["imgB64"],
+        format : string = _req.body["format"],
+        type : string = _req.body["type"];
+
+    
+    console.log("image is being uploaded...");
+
+    if(!id){
+        missingFields.push("id");
+    } 
+    if(!imgB64){
+        missingFields.push("imgB64");
+    } 
+    if(!format){
+        missingFields.push("format");
+    } 
+    if(!type){
+        missingFields.push("type");
+    } 
+
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    const buffer = Buffer.from(imgB64, 'base64');
+    let dir : string = "unknown",
+        fileprefix : string = "unknown";
+
+    switch (type) {
+        case "AVATAR":
+            dir = "client";
+            fileprefix = "imageClient";
+            break;
+        case "ANNONCE":
+            dir = "annonce";
+            fileprefix = "imageAnnonce";
+            break;
+        default:
+            break;
+    }
+
+    fs.writeFile(`images/${dir}/${fileprefix}-[${id}].${format}`, buffer, (err) => {
+        if (err) {
+            console.error(err);
+            _res.send('Error saving image');
+        } else {
+            console.log("image uploaded.");
+            _res.send('Image saved successfully');
+        }
+    });
+})
+
+APP.post("/download/image", async (_req : express.Request, _res : express.Response) => {
+    console.log("POST /download/image");
+    
+    if(_req.body["imgName"] === undefined){
+        let message = "missing parameter : imgName"
+        console.error(message);
+        _res.json(
+            {error : message}
+        );
+        return;
+    }
+    console.log("sending image...");
+    
+    let 
+        name = _req.body["imgName"];
+
+    await findFile("./images", name)
+    .then((p) =>{
+        if(p) {
+            console.log(p);
+            const image = fs.readFile(`${p}`,(err:any, data:any) => {
+                if(err) {
+                    console.log("image not found.");
+                    _res.json({error: "image not found."});
+                }
+                else{
+                    const buffer = Buffer.from(data).toString("base64");
+                    _res.json({imgB64 : buffer});
+                    console.log("image sent.");
+                }
+            });
+        }
+        else console.log("path not found");
+    });
+    
+    
+    
+}) 
 
 const server = http.createServer(APP);
 
@@ -489,79 +580,41 @@ socketServer.on("connect", (socket : Socket ) =>{
     socket.on("disconnect", () => disconnection(socket) );
 });
 
-/*  upload/download image javascript
-app.post("/upload/image", (req, res) => {
 
-    if(req.body["userID"] === undefined){
-        let message = " missing parameter : userID"
-        console.error(message);
-        res.json(
-            {error : message}
-        );
-        return;
+const findFile =  (dir:string, file:string) : Promise<string | null> => {
+    return new Promise<string | null>((resolve, reject) =>
+    {
+        fs.readdir(dir, (err, data) => {
+            if(err){
+                console.log(err);
+                reject(null);
+            }
+            
+            for (const i in data){
+                const item = data[i];
+                const itemPath = path.join(dir, item);
+                fs.stat(itemPath, (err, stat:fs.Stats) => {
+                    if (err) {
+                        console.log(err);
+                        reject(null);
+                    }
+                    if(stat.isDirectory()){
+    
+                        findFile(itemPath, file).then(p =>{
+                            if(p) resolve(p);
+                        });                    
+                    }
+                    else{
+                        if(stat.isFile() && item == file){
+                            resolve(itemPath);
+                        }
+                    }
+                })
+            }
+        })
     }
-    if(req.body["imgB64"] === undefined){
-        let message = "missing parameter : imgB64"
-        console.error(message);
-        res.json(
-            {error : message}
-        );
-        return;
-    }
-    if(req.body["format"] === undefined){
-        let message = "missing parameter : format"
-        console.error(message);
-        res.json(
-            {error : message}
-        );
-        return;
-    }
-    console.log("image is being uploaded...");
-
-    let 
-        imgB64 = req.body["imgB64"],
-        userID = req.body["userID"],
-        format = req.body["format"];
-
-    const buffer = Buffer.from(imgB64, 'base64');
-
-    fs.writeFile(`images/Avatar-[${userID}].${format}`, buffer, (err) => {
-        if (err) {
-            console.error(err);
-            res.send('Error saving image');
-        } else {
-            console.log("image uploaded.");
-            res.send('Image saved successfully');
-        }
-    });
-})
+    )
+    
 
 
-app.post("/download/image", (req, res) => {
-
-    if(req.body["imgName"] === undefined){
-        let message = "missing parameter : imgName"
-        console.error(message);
-        res.json(
-            {error : message}
-        );
-        return;
-    }
-    console.log("sending image...");
-
-    let 
-        name = req.body["imgName"];
-
-    const image = fs.readFile(`images/${name}`,(err, data) => {
-        if(err) {
-            console.log("image not found.");
-            res.json({error: "image not found."});
-        }
-        else{
-            const buffer = Buffer.from(data).toString("base64");
-            res.json({imgB64 : buffer});
-            console.log("image sent.");
-        }
-    });
-}) 
-*/
+};

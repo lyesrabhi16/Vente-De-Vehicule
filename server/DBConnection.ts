@@ -2,6 +2,7 @@ import { Connection, MysqlError, Query, createConnection,format} from "mysql";
 import { DB_HOST, DB_NAME, DB_PASSWORD, DB_USERNAME } from "./configs";
 import argon2  from "argon2";
 import { Annonce, Message, User } from "./interfaces";
+import { json } from "express";
 
 export class DBC {
     constructor() {
@@ -169,7 +170,7 @@ export class DBC {
                     
                             sql = sql.slice(0, sql.lastIndexOf("AND"));
                             sql = sql.replace(/\n/g, "");
-
+                            console.log(sql);
                             this.execute(sql, [cols, table])
                                                 .then(
                                                     (response : any) => {
@@ -240,17 +241,24 @@ export class DBC {
     Annonce = <T>(field : string, idAnnonce : number) : Promise<T> => {
         return new Promise((resolve, reject) => {
             let 
-                sql : string = `SELECT * from annonce `;
-            if (field == "1"){
-                sql = sql + "where ? = ?";
-            }
-            else{
-                sql = sql + "where ?? = ?"
-            }
+                sql : string = `SELECT * from annonce where ?? = ?`;
             
             this.execute(sql, [field , idAnnonce])
                     .then((res:any) => {resolve(res)})
                     .catch(err => reject(err));
+        });
+    };
+
+    Annonces = <T>(set : object) : Promise<T> => {
+        return new Promise((resolve, reject) => {
+            let 
+                sql : string = `SELECT * from annonce where `+ JSON.stringify(set).replace("{","").replace("}","").replaceAll(":"," = ").replaceAll(","," AND ").replace(/"(\w+)"\s*=/g, '\$1 =');
+            this.execute(sql, [])
+                    .then((res:any) => {
+                        console.error(res);
+                        resolve(res)})
+                    .catch((err:any) => {
+                        reject(err)});
         });
     };
 
