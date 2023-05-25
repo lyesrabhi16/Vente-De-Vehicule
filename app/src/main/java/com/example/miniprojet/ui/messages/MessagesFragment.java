@@ -42,7 +42,7 @@ public class MessagesFragment extends Fragment {
             chatsList = new ArrayList<PersonItem>();
 
             PersonItem i = new PersonItem();
-            adapter = new PersonItemAdapter(chatsList, new RecyclerViewInterface() {
+            adapter = new PersonItemAdapter(chatsList, getContext(), new RecyclerViewInterface() {
                 @Override
                 public void onItemClick(int position) {
                     Intent chat = new Intent(getContext() , ChatActivity.class);

@@ -1,7 +1,7 @@
 import { Connection, MysqlError, Query, createConnection,format} from "mysql";
 import { DB_HOST, DB_NAME, DB_PASSWORD, DB_USERNAME } from "./configs";
 import argon2  from "argon2";
-import { Annonce, Message, User } from "./interfaces";
+import { Annonce, Message, Reservation, User, RendezVous } from './interfaces';
 import { json } from "express";
 
 export class DBC {
@@ -278,4 +278,89 @@ export class DBC {
                     .catch(err => reject(err));
         });
     };
+
+    Reservation = <T>(idClient : number, idAnnonce : number) : Promise<T> => {
+        return new Promise((resolve, reject) => {
+            let 
+                sql : string = `SELECT * from reservation where idClient = ? and idAnnonce = ?`;
+            
+            this.execute(sql, [idClient , idAnnonce])
+                    .then((res:any) => {resolve(res)})
+                    .catch(err => reject(err));
+        });
+    };
+
+    Reservations = <T>(set : object) : Promise<T> => {
+        return new Promise((resolve, reject) => {
+            let 
+                sql : string = `SELECT * from reservation where `+ JSON.stringify(set).replace("{","").replace("}","").replaceAll(":"," = ").replaceAll(","," AND ").replace(/"(\w+)"\s*=/g, '\$1 =');
+            this.execute(sql, [])
+                    .then((res:any) => {
+                        console.error(res);
+                        resolve(res)})
+                    .catch((err:any) => {
+                        reject(err)});
+        });
+    };
+
+    AddReservation = <T>(reservation : Reservation) : Promise<T> => {
+        return new Promise((resolve, reject) => {
+            let sql : string = `INSERT INTO reservation SET ?`;
+            this.execute(sql, reservation)
+                    .then((res:any) => {resolve(res)})
+                    .catch(err => reject(err));
+        });
+    };
+    DelReservation = <T>(set : object) : Promise<T> => {
+        return new Promise((resolve, reject) => {
+            let sql : string = `Delete From reservation where ` +JSON.stringify(set).replace("{","").replace("}","").replaceAll(":"," = ").replaceAll(","," AND ").replace(/"(\w+)"\s*=/g, '\$1 =');
+            this.execute(sql, [])
+                    .then((res:any) => {resolve(res)})
+                    .catch(err => reject(err));
+        });
+    };
+
+    RendezVous = <T>(idClient : number, idAnnonce : number) : Promise<T> => {
+        return new Promise((resolve, reject) => {
+            let 
+                sql : string = `SELECT * from rendezvous where idClient = ? and idAnnonce = ?`;
+            
+            this.execute(sql, [idClient , idAnnonce])
+                    .then((res:any) => {resolve(res)})
+                    .catch(err => reject(err));
+        });
+    };
+
+    AllRendezVous = <T>(set : object) : Promise<T> => {
+        return new Promise((resolve, reject) => {
+            let 
+                sql : string = `SELECT * from rendezvous where `+ JSON.stringify(set).replace("{","").replace("}","").replaceAll(":"," = ").replaceAll(","," AND ").replace(/"(\w+)"\s*=/g, '\$1 =');
+            console.log("sql : "+sql);
+            
+            this.execute(sql, [])
+                    .then((res:any) => {
+                        console.error(res);
+                        resolve(res)})
+                    .catch((err:any) => {
+                        reject(err)});
+        });
+    };
+
+    AddRendezVous = <T>(rendezVous : RendezVous) : Promise<T> => {
+        return new Promise((resolve, reject) => {
+            let sql : string = `INSERT INTO rendezvous SET ?`;
+            this.execute(sql, rendezVous)
+                    .then((res:any) => {resolve(res)})
+                    .catch(err => reject(err));
+        });
+    };
+    DelRendezVous = <T>(set : object) : Promise<T> => {
+        return new Promise((resolve, reject) => {
+            let sql : string = `Delete From rendezvous where ` +JSON.stringify(set).replace("{","").replace("}","").replaceAll(":"," = ").replaceAll(","," AND ").replace(/"(\w+)"\s*=/g, '\$1 =');
+            this.execute(sql, [])
+                    .then((res:any) => {resolve(res)})
+                    .catch(err => reject(err));
+        });
+    };
+
 }

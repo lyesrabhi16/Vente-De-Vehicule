@@ -26,23 +26,23 @@ import java.util.Map;
 
 public class Annonce {
     Image img, userAvatar;
-    int idAnnonce, idUser, annee, kilometrage;
-    String prix;
+    int idAnnonce, idUser;
+    String prix, kilometrage, annee;
     String title, type, qte , date, desc, userTitle, marque, modele, couleur, transmission, moteur, energie;
 
-    public int getAnnee() {
+    public String getAnnee() {
         return annee;
     }
 
-    public void setAnnee(int annee) {
+    public void setAnnee(String annee) {
         this.annee = annee;
     }
 
-    public int getKilometrage() {
+    public String getKilometrage() {
         return kilometrage;
     }
 
-    public void setKilometrage(int kilometrage) {
+    public void setKilometrage(String kilometrage) {
         this.kilometrage = kilometrage;
     }
 
@@ -292,8 +292,8 @@ public class Annonce {
                                     annonce.setModele(a.getString("modeleVehicule"));
                                     annonce.setCouleur(a.getString("couleurVehicule"));
                                     annonce.setTransmission(a.getString("transmissionVehicule"));
-                                    annonce.setKilometrage(a.getInt("kilometrageVehicule"));
-                                    annonce.setAnnee(a.getInt("anneeVehicule"));
+                                    annonce.setKilometrage(a.getString("kilometrageVehicule"));
+                                    annonce.setAnnee(a.getString("anneeVehicule"));
                                     annonce.setMoteur(a.getString("moteurVehicule"));
                                     annonce.setEnergie(a.getString("energieVehicule"));
                                     annonce.setPrix(a.getString("prixVehicule"));
@@ -377,8 +377,8 @@ public class Annonce {
                                     annonce.setModele(a.getString("modeleVehicule"));
                                     annonce.setCouleur(a.getString("couleurVehicule"));
                                     annonce.setTransmission(a.getString("transmissionVehicule"));
-                                    annonce.setKilometrage(a.getInt("kilometrageVehicule"));
-                                    annonce.setAnnee(a.getInt("anneeVehicule"));
+                                    annonce.setKilometrage(a.getString("kilometrageVehicule"));
+                                    annonce.setAnnee(a.getString("anneeVehicule"));
                                     annonce.setMoteur(a.getString("moteurVehicule"));
                                     annonce.setEnergie(a.getString("energieVehicule"));
                                     annonce.setPrix(a.getString("prixVehicule"));
@@ -436,4 +436,90 @@ public class Annonce {
         RequestQueue reqQ = Volley.newRequestQueue(ctx);
         reqQ.add(Sreq);
     }
+    public static void getAnnonce(int id, Context ctx, RequestFinished Req){
+        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlAnnonce(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject res = new JSONObject(response);
+
+                            if(res.has("error")){
+                                Toast.makeText(ctx,"failed to get announcement. "+res.get("error"), Toast.LENGTH_LONG).show();
+                                ArrayList l = new ArrayList();
+                                l.add(res.get("error") );
+                                Req.onError(l);
+                            }
+
+                            else{
+                                JSONArray resA = res.getJSONArray("result");
+                                ArrayList l = new ArrayList();
+                                JSONObject a = resA.getJSONObject(0);
+                                Annonce annonce = new Annonce();
+                                annonce.setIdAnnonce(a.getInt("idAnnonce"));
+                                annonce.setTitle(a.getString("titre"));
+                                annonce.setDesc(a.getString("description"));
+                                annonce.setType(a.getString("typeVehicule"));
+                                annonce.setMarque(a.getString("marqueVehicule"));
+                                annonce.setModele(a.getString("modeleVehicule"));
+                                annonce.setCouleur(a.getString("couleurVehicule"));
+                                annonce.setTransmission(a.getString("transmissionVehicule"));
+                                annonce.setKilometrage(a.getString("kilometrageVehicule"));
+                                annonce.setAnnee(a.getString("anneeVehicule"));
+                                annonce.setMoteur(a.getString("moteurVehicule"));
+                                annonce.setEnergie(a.getString("energieVehicule"));
+                                annonce.setPrix(a.getString("prixVehicule"));
+                                annonce.setIdUser(a.getInt("idClient"));
+                                Client.getClient(annonce.getIdUser(), ctx, new RequestFinished() {
+                                    @Override
+                                    public void onFinish(ArrayList args) {
+                                        Client c = (Client) args.get(0);
+                                        annonce.setUserTitle(c.getNom() + " " + c.getPrenom() + " ");
+                                        annonce.setUserSubTitle(c.getEmail());
+                                        l.add(annonce);
+                                        l.add(c);
+                                        Req.onFinish(l);
+                                    }
+
+                                    @Override
+                                    public void onError(ArrayList args) {
+                                        Req.onError(args);
+                                    }
+                                });
+
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(ctx,"an error occurred.", Toast.LENGTH_SHORT).show();
+                            ArrayList l = new ArrayList<>();
+                            l.add(e.getMessage());
+                            Req.onError(l);
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                        ArrayList l = new ArrayList();
+                        l.add(error.getMessage());
+                        Req.onError(l);
+                    }
+                }){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String,String>();
+                params.put("idAnnonce", id + "");
+                return params;
+            }
+        };
+
+        RequestQueue reqQ = Volley.newRequestQueue(ctx);
+        reqQ.add(Sreq);
+    }
+
 }

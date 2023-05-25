@@ -58,8 +58,8 @@ public class AddAnnonceActivity extends AppCompatActivity {
                     annonce.setModele(modele);
                     annonce.setCouleur(couleur);
                     annonce.setTransmission(transmission);
-                    annonce.setKilometrage(Integer.parseInt(kilometrage));
-                    annonce.setAnnee(Integer.parseInt(annee));
+                    annonce.setKilometrage(kilometrage);
+                    annonce.setAnnee(annee);
                     annonce.setMoteur(moteur);
                     annonce.setEnergie(energie);
                     annonce.setPrix(prix);

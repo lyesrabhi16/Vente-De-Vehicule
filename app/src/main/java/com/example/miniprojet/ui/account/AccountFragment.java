@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +47,7 @@ public class AccountFragment extends Fragment {
     private ActivityMainBinding MainBinding;
     private FragmentAuthBinding AuthBinding;
     private Server dbc;
+    private ArrayList changed;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -81,6 +84,104 @@ public class AccountFragment extends Fragment {
                     }
                 });
             }
+
+            changed = new ArrayList();
+            AccountBinding.nom.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        ShowOrHideSave_Manager( String.join("", charSequence), user.getNom(),AccountBinding.nom.getId());
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), user.getNom(),AccountBinding.nom.getId());
+
+                }
+            });
+            AccountBinding.prenom.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ShowOrHideSave_Manager(String.join("", charSequence), user.getPrenom(),AccountBinding.prenom.getId());
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), user.getPrenom(),AccountBinding.prenom.getId());
+
+                }
+            });
+            AccountBinding.age.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ShowOrHideSave_Manager(String.join("", charSequence), user.getAge()+"",AccountBinding.age.getId());
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), user.getAge()+"",AccountBinding.age.getId());
+
+                }
+            });
+            AccountBinding.email.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ShowOrHideSave_Manager(String.join("", charSequence), user.getEmail(),AccountBinding.email.getId());
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), user.getEmail(),AccountBinding.email.getId());
+
+                }
+            });
+            AccountBinding.numTel.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ShowOrHideSave_Manager(String.join("", charSequence), user.getNumtel(),AccountBinding.numTel.getId());
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), user.getNumtel(),AccountBinding.numTel.getId());
+                }
+            });
+
+
+            AccountBinding.buttonSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getContext(), "to be implemented later.", Toast.LENGTH_SHORT).show();
+                }
+            });
 
             AccountBinding.buttonChangePassword.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -188,6 +289,27 @@ public class AccountFragment extends Fragment {
             Toast.makeText(getContext(),"logout failed.", Toast.LENGTH_LONG).show();
         prgrs.dismiss();
 
+    }
+
+    public void ShowOrHideSave_Manager(String text, String original, int id){
+        if(text.equals(original)){
+            if(changed.contains(id+"")){
+                changed.remove(id+"");
+            }
+        }
+        else{
+            changed.add(id+"");
+        }
+        ShowOrHideSaveBtn();
+    }
+    public void ShowOrHideSaveBtn(){
+        if(AccountBinding == null)return;
+        if(changed.size()>=1){
+            AccountBinding.buttonSave.setVisibility(View.VISIBLE);
+        }
+        else{
+            AccountBinding.buttonSave.setVisibility(View.GONE);
+        }
     }
 
 }

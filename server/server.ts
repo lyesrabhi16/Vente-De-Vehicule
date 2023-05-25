@@ -5,7 +5,7 @@ import cors from 'cors';
 import { ClientMessage, clients, connection, disconnection, init, message, message_received } from "./socket";
 import { Server, Socket } from "socket.io";
 import http from "http";
-import { Annonce, Message } from "./interfaces";
+import { Annonce, Message, RendezVous, Reservation } from "./interfaces";
 import path from "path";
 /* DB connection */
 
@@ -459,6 +459,376 @@ APP.post("/annonce/remove", (_req : express.Request, _res : express.Response) =>
     }
 
     dbc.DelAnnonce(idAnnonce)
+        .then(result=> _res.json({result:result}))
+        .catch(error => _res.json({error:error})); 
+});
+
+APP.post("/annonce/add", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /annonce/add");
+    let 
+        missingFields : string[] = [],
+        annonce : Annonce = {
+        idAnnonce: null,
+        idClient:Number.parseInt(_req.body["idClient"]),
+        titre:_req.body["titre"],
+        description:_req.body["description"],
+        typeVehicule:_req.body["typeVehicule"],
+        marqueVehicule:_req.body["marqueVehicule"],
+        modeleVehicule:_req.body["modeleVehicule"],
+        couleurVehicule:_req.body["couleurVehicule"],
+        transmissionVehicule:_req.body["transmissionVehicule"],
+        kilometrageVehicule:_req.body["kilometrageVehicule"],
+        anneeVehicule:Number.parseInt(_req.body["anneeVehicule"]),
+        moteurVehicule:_req.body["moteurVehicule"],
+        energieVehicule:_req.body["energieVehicule"],
+        prixVehicule:_req.body["prixVehicule"]
+    };
+
+    
+
+    if(!annonce.idClient){
+        missingFields.push("idClient");
+    }
+    if(!annonce.titre){
+        missingFields.push("titre");
+    }
+    if(!annonce.description){
+        missingFields.push("description");
+    }
+    if(!annonce.typeVehicule){
+        missingFields.push("typeVehicule");
+    }
+    if(!annonce.marqueVehicule){
+        missingFields.push("marqueVehicule");
+    }
+    if(!annonce.modeleVehicule){
+        missingFields.push("modeleVehicule");
+    }    
+    if(!annonce.couleurVehicule){
+        missingFields.push("couleurVehicule");
+    }
+    if(!annonce.transmissionVehicule){
+        missingFields.push("transmissionVehicule");
+    }
+
+    if(!annonce.kilometrageVehicule){
+        missingFields.push("kilometrageVehicule");
+    }
+    if(!annonce.anneeVehicule){
+        missingFields.push("anneeVehicule");
+    }
+    if(!annonce.moteurVehicule){
+        missingFields.push("moteurVehicule");
+    }    
+    if(!annonce.energieVehicule){
+        missingFields.push("energieVehicule");
+    }
+    if(!annonce.prixVehicule){
+        missingFields.push("prixVehicule");
+    }
+
+
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    dbc.AddAnnonce(annonce)
+        .then((result:any)=> _res.json({result:result.insertId}))
+        .catch(error => _res.json({error:error})); 
+});
+
+APP.post("/annonce/remove", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /annonce/remove");
+    let 
+    missingFields : string[] = [],
+    idAnnonce : number = Number.parseInt(_req.body["idAnnonce"]);
+    
+
+    if(!idAnnonce){
+        missingFields.push("idAnnonce");
+    }
+
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    dbc.DelAnnonce(idAnnonce)
+        .then(result=> _res.json({result:result}))
+        .catch(error => _res.json({error:error})); 
+});
+
+APP.post("/reservations", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /reservations");
+    let 
+    missingFields : string[] = [],
+    filter : Object;
+    try {
+        filter = JSON.parse(_req.body["filterObj"]);
+    } catch (error) {
+        filter = "1 = 1";   
+    }
+    
+    if(JSON.stringify(filter) === JSON.stringify({})){
+        filter = { "1" : 1};
+    }
+
+    if(!filter){
+        missingFields.push("FilterObj");
+    }
+
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    dbc.Reservations(filter)
+        .then(result=> _res.json({result:result}))
+        .catch(error => _res.json({error:error})); 
+});
+APP.post("/reservation", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /reservation");
+    let 
+    missingFields : string[] = [],
+    idAnnonce : number = Number.parseInt(_req.body["idAnnonce"]),
+    idClient  : number = Number.parseInt(_req.body["idClient"]);
+    
+
+    if(!idAnnonce){
+        missingFields.push("idAnnonce");
+    }
+
+    if(!idClient){
+        missingFields.push("idClient");
+    }
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    dbc.Reservation(idClient, idAnnonce)
+        .then(result=> _res.json({result:result}))
+        .catch(error => _res.json({error:error})); 
+});
+
+APP.post("/reservation/add", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /reservation/add");
+    let 
+    missingFields : string[] = [],
+    idAnnonce : number = Number.parseInt(_req.body["idAnnonce"]),
+    idClient  : number = Number.parseInt(_req.body["idClient"]),
+    dateDebut : string = _req.body["dateDebut"],
+    dateFin : string = _req.body["dateFin"],
+    lieuReservation : string = _req.body["lieuReservation"],
+    etatReservation : string = _req.body["etatReservation"];
+
+    if(!idAnnonce){
+        missingFields.push("idAnnonce");
+    }
+    if(!idClient){
+        missingFields.push("idClient");
+    }
+    if(!dateDebut){
+        missingFields.push("dateDebut");
+    }
+    if(!dateFin){
+        missingFields.push("dateFin");
+    }
+    if(!lieuReservation){
+        missingFields.push("lieuReservation");
+    }
+    if(!etatReservation){
+        etatReservation = "Pending";
+    }
+
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    let reservation : Reservation = {
+        idClient: idClient,
+        idAnnonce: idAnnonce,
+        dateDebut: dateDebut,
+        dateFin: dateFin,
+        lieuReservation: lieuReservation,
+        etatReservation: etatReservation
+    }
+
+    dbc.AddReservation(reservation)
+        .then(result=> _res.json({result:result}))
+        .catch(error => _res.json({error:error})); 
+});
+APP.post("/reservation/remove", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /reservation/remove");
+    let 
+    missingFields : string[] = [],
+    idAnnonce : number = Number.parseInt(_req.body["idAnnonce"]),
+    idClient  : number = Number.parseInt(_req.body["idClient"]);
+    
+
+    if(!idAnnonce){
+        missingFields.push("idAnnonce");
+    }
+
+    if(!idClient){
+        missingFields.push("idClient");
+    }
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    dbc.DelReservation({idAnnonce : idAnnonce, idClient : idClient})
+        .then(result=> _res.json({result:result}))
+        .catch(error => _res.json({error:error})); 
+});
+
+
+APP.post("/rendezvous/all", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /rendezvous/all");
+    let 
+    missingFields : string[] = [],
+    filter : Object;
+    try {
+        filter = JSON.parse(_req.body["filterObj"]);
+    } catch (error) {
+        filter = { "1" : 1 };   
+    }
+    if(JSON.stringify(filter) === JSON.stringify({})){
+        filter = { "1" : 1};
+    }
+    
+    
+
+    if(!filter){
+        missingFields.push("FilterObj");
+    }
+
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    dbc.AllRendezVous(filter)
+        .then(result=> {
+            console.log("result: "+ result);
+            _res.json({result:result})})
+        .catch(error => {
+            console.log("error: "+ error);
+            _res.json({error:error})}); 
+});
+APP.post("/rendezvous", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /rendezvous");
+    let 
+    missingFields : string[] = [],
+    idAnnonce : number = Number.parseInt(_req.body["idAnnonce"]),
+    idClient  : number = Number.parseInt(_req.body["idClient"]);
+    
+
+    if(!idAnnonce){
+        missingFields.push("idAnnonce");
+    }
+
+    if(!idClient){
+        missingFields.push("idClient");
+    }
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    dbc.RendezVous(idClient,idAnnonce)
+        .then(result=> _res.json({result:result}))
+        .catch(error => _res.json({error:error})); 
+});
+
+APP.post("/rendezvous/add", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /rendezvous/add");
+    let 
+    missingFields : string[] = [],
+    idAnnonce : number = Number.parseInt(_req.body["idAnnonce"]),
+    idClient  : number = Number.parseInt(_req.body["idClient"]),
+    dateRendezVous : string = _req.body["dateRendezVous"],
+    lieuRendezVous : string = _req.body["lieuRendezVous"],
+    etatRendezVous : string = _req.body["etatRendezVous"];
+
+    if(!idAnnonce){
+        missingFields.push("idAnnonce");
+    }
+    if(!idClient){
+        missingFields.push("idClient");
+    }
+
+    if(!dateRendezVous){
+        missingFields.push("dateRendezVous");
+    }
+    if(!lieuRendezVous){
+        missingFields.push("lieuRendezVous");
+    }
+    if(!etatRendezVous){
+        etatRendezVous = "Pending";
+    }
+
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    let rendezvous : RendezVous = {
+        idClient: idClient,
+        idAnnonce: idAnnonce,
+        dateRendezVous: dateRendezVous,
+        lieuRendezVous: lieuRendezVous,
+        etatRendezVous: etatRendezVous
+    }
+
+    dbc.AddRendezVous(rendezvous)
+        .then(result=> _res.json({result:result}))
+        .catch(error => _res.json({error:error})); 
+});
+APP.post("/rendezvous/remove", (_req : express.Request, _res : express.Response) => {
+    console.log("POST /rendezvous/remove");
+    let 
+    missingFields : string[] = [],
+    idAnnonce : number = Number.parseInt(_req.body["idAnnonce"]),
+    idClient  : number = Number.parseInt(_req.body["idClient"]);
+    
+
+    if(!idAnnonce){
+        missingFields.push("idAnnonce");
+    }
+
+    if(!idClient){
+        missingFields.push("idClient");
+    }
+    if(missingFields.length > 0){
+        _res.json({
+            error : `missing required fields : [${missingFields.join(", ")}]`
+        })
+        return;
+    }
+
+    dbc.DelRendezVous({idAnnonce : idAnnonce, idClient : idClient})
         .then(result=> _res.json({result:result}))
         .catch(error => _res.json({error:error})); 
 });

@@ -45,6 +45,15 @@ public class Server {
     private static String urlAddAnnonce = urlAnnonce +"/add";
     private static String urlDelAnnonce = urlAnnonce +"/remove";
 
+    private static String urlReservation = urlServer + "/reservation";
+    private static String urlReservations = urlServer + "/reservations";
+    private static String urlAddReservation = urlReservation + "/add";
+    private static String urlDelReservation = urlReservation + "/remove";
+    private static String urlRendezVous = urlServer + "/rendezvous";
+    private static String urlAllRendezVous = urlRendezVous + "/all";
+    private static String urlAddRendezVous = urlRendezVous + "/add";
+    private static String urlDelRendezVous = urlRendezVous + "/remove";
+
     private static String urlUpload = urlServer + "/upload";
     private static String urlUploadImage = urlUpload+"/image";
     private static String urlDownload = urlServer+"/download";
@@ -52,6 +61,72 @@ public class Server {
 
     public static final String TYPE_IMAGE_AVATAR = "AVATAR";
     public static final String TYPE_IMAGE_ANNONCE = "ANNONCE";
+
+
+    public static String getUrlReservation() {
+        return urlReservation;
+    }
+
+    public static void setUrlReservation(String urlReservation) {
+        Server.urlReservation = urlReservation;
+    }
+
+    public static String getUrlReservations() {
+        return urlReservations;
+    }
+
+    public static void setUrlReservations(String urlReservations) {
+        Server.urlReservations = urlReservations;
+    }
+
+    public static String getUrlAddReservation() {
+        return urlAddReservation;
+    }
+
+    public static void setUrlAddReservation(String urlAddReservation) {
+        Server.urlAddReservation = urlAddReservation;
+    }
+
+    public static String getUrlDelReservation() {
+        return urlDelReservation;
+    }
+
+    public static void setUrlDelReservation(String urlDelReservation) {
+        Server.urlDelReservation = urlDelReservation;
+    }
+
+    public static String getUrlRendezVous() {
+        return urlRendezVous;
+    }
+
+    public static void setUrlRendezVous(String urlRendezVous) {
+        Server.urlRendezVous = urlRendezVous;
+    }
+
+    public static String getUrlAllRendezVous() {
+        return urlAllRendezVous;
+    }
+
+    public static void setUrlAllRendezVous(String urlAllRendezVous) {
+        Server.urlAllRendezVous = urlAllRendezVous;
+    }
+
+    public static String getUrlAddRendezVous() {
+        return urlAddRendezVous;
+    }
+
+    public static void setUrlAddRendezVous(String urlAddRendezVous) {
+        Server.urlAddRendezVous = urlAddRendezVous;
+    }
+
+    public static String getUrlDelRendezVous() {
+        return urlDelRendezVous;
+    }
+
+    public static void setUrlDelRendezVous(String urlDelRendezVous) {
+        Server.urlDelRendezVous = urlDelRendezVous;
+    }
+
     public static String getUrlUpload() {
         return urlUpload;
     }

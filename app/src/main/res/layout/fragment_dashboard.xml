@@ -50,30 +50,101 @@
             android:orientation="vertical"
             android:padding="5dp"
             >
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/my_announcements"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:gravity="center"
-                android:textColor="?attr/colorPrimary"
-                />
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                app:dividerColor="?attr/colorPrimary"
-                />
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_dashboard"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/annonce"
-                >
+                android:orientation="vertical">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_rendezvous"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mes Rendez-Vous"
+                    android:drawableEnd="@drawable/baseline_arrow_drop_down_24"
+                    android:drawableRight="@drawable/baseline_arrow_drop_down_24"
+                    android:drawableTint="?attr/colorPrimary"
+                    android:textColor="?attr/colorPrimary"
+                    android:background="#00000000"
+                    />
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    app:dividerColor="?attr/colorPrimary"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_dashboard_rendezVous"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/annonce"
+                    android:visibility="gone"
+                    >
 
-            </androidx.recyclerview.widget.RecyclerView>
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_reservation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mes Reservations"
+                    android:drawableEnd="@drawable/baseline_arrow_drop_down_24"
+                    android:drawableRight="@drawable/baseline_arrow_drop_down_24"
+                    android:drawableTint="?attr/colorPrimary"
+                    android:textColor="?attr/colorPrimary"
+                    android:background="#00000000"
+                    />
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    app:dividerColor="?attr/colorPrimary"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_dashboard_reservations"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/annonce"
+                    android:visibility="gone"
+                    >
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_annonces"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mes Annonces"
+                    android:drawableEnd="@drawable/baseline_arrow_drop_down_24"
+                    android:drawableRight="@drawable/baseline_arrow_drop_down_24"
+                    android:drawableTint="?attr/colorPrimary"
+                    android:textColor="?attr/colorPrimary"
+                    android:background="#00000000"
+                    />
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    app:dividerColor="?attr/colorPrimary"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_dashboard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/annonce"
+                    android:visibility="gone"
+                    >
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 

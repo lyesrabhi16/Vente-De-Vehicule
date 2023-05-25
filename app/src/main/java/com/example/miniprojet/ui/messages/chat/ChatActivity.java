@@ -62,7 +62,7 @@ public class ChatActivity extends AppCompatActivity {
         CBind.buttonAccount.setText(R_userName);
         chatItemsList = new ArrayList<ChatItem>();
 
-        chatItemAdapter = new ChatItemAdapter(chatItemsList);
+        chatItemAdapter = new ChatItemAdapter(chatItemsList, getApplicationContext());
         CBind.recylcerChat.setAdapter(chatItemAdapter);
         User user = User.getInstance(getApplicationContext());
         loadMessages(user.getID(), R_userID);
@@ -137,9 +137,17 @@ public class ChatActivity extends AppCompatActivity {
                             JSONObject msg = new JSONObject(args[0].toString());
                             int id = (Integer) args[1];
 
-
+                            User user = User.getInstance(getApplicationContext());
                             ChatItem item = new ChatItem();
-                            item.setHeader(R_userName);
+                            Toast.makeText(ChatActivity.this, ""+msg.getInt("idClient_sender") + " "+ user.getID(), Toast.LENGTH_SHORT).show();
+                            if(msg.getInt("idClient_sender") == user.getID() ){
+                                item.setUserID(user.getID());
+                                item.setHeader(user.getNom()+" "+user.getPrenom()+" ");
+                            }
+                            else{
+                                item.setUserID(R_userID);
+                                item.setHeader(R_userName);
+                            }
                             item.setMessage(msg.getString("contenuMessage"));
                             item.setFooter(msg.getString("etatMessage"));
                             /*String[] d = item.getFooter().split(" ");
@@ -179,7 +187,15 @@ public class ChatActivity extends AppCompatActivity {
                         try {
                             msg = new JSONObject(args[0].toString());
                             ChatItem item = new ChatItem();
-                            item.setHeader(R_userName);
+                            User user = User.getInstance(getApplicationContext());
+                            if(msg.getInt("idClient_sender") == user.getID() ){
+                                item.setUserID(user.getID());
+                                item.setHeader(user.getNom()+" "+user.getPrenom()+" ");
+                            }
+                            else{
+                                item.setUserID(R_userID);
+                                item.setHeader(R_userName);
+                            }
                             item.setMessage(msg.getString("contenuMessage"));
                             item.setFooter(msg.getString("etatMessage"));
                             chatItemsList.add(item);
@@ -216,11 +232,19 @@ public class ChatActivity extends AppCompatActivity {
                     else{
                         chatItemsList = new ArrayList<ChatItem>();
                         JSONArray resArr = res.getJSONArray("result");
+                        User user = User.getInstance(getApplicationContext());
                         for (int i = 0; i < resArr.length(); i++) {
                             JSONObject r = resArr.getJSONObject(i);
 
                             ChatItem item = new ChatItem();
-                            item.setHeader(R_userName);
+                            if(r.getInt("idClient_sender") == user.getID() ){
+                                item.setUserID(user.getID());
+                                item.setHeader(user.getNom()+" "+user.getPrenom()+" ");
+                            }
+                            else{
+                                item.setUserID(R_userID);
+                                item.setHeader(R_userName);
+                            }
                             item.setMessage(r.getString("contenuMessage"));
                             item.setFooter(r.getString("etatMessage"));
                             /*String[] d = item.getFooter().split(" ");

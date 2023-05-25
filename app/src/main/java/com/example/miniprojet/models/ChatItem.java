@@ -1,7 +1,7 @@
 package com.example.miniprojet.models;
 
 public class ChatItem {
-    private int messageID;
+    private int messageID, userID;
     private String  header, message, footer, avatarText;
 
 
@@ -43,5 +43,13 @@ public class ChatItem {
 
     public void setMessageID(int messageID) {
         this.messageID = messageID;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 }

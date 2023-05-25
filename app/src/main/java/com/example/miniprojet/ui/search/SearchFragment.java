@@ -66,7 +66,7 @@ public class SearchFragment extends Fragment {
             View root = ListBinding.getRoot();
 
             itemsList = new ArrayList<searchResultItem>();
-            searchResultRecyclerViewAdapter adapter = new searchResultRecyclerViewAdapter(itemsList, new RecyclerViewInterface() {
+            searchResultRecyclerViewAdapter adapter = new searchResultRecyclerViewAdapter(itemsList, getContext(), new RecyclerViewInterface() {
                 @Override
                 public void onItemClick(int position) {
                         searchResultItem item = itemsList.get(position);
@@ -91,6 +91,8 @@ public class SearchFragment extends Fragment {
                 public void onFinish(ArrayList args) {
                     if(ListBinding.prgrs != null)
                         ListBinding.prgrs.setVisibility(View.GONE);
+                    ListBinding.textView3.setVisibility(View.GONE);
+                    ListBinding.list.setVisibility(View.VISIBLE);
                     itemsList = (ArrayList<searchResultItem>) args;
                     if(itemsList.size()>0){
                         ListBinding.textView3.setVisibility(View.GONE);
@@ -98,36 +100,60 @@ public class SearchFragment extends Fragment {
                         adapter.setItemList(itemsList);
                         ListBinding.list.setAdapter(adapter);
 
-                        search("client", "idClient, nomClient, prenomClient, email", getContext(), new RequestFinished() {
-                            @Override
-                            public void onFinish(ArrayList args) {
-                                itemsList.addAll((ArrayList<searchResultItem>) args);
-                                adapter.setItemList(itemsList);
-                                ListBinding.list.setAdapter(adapter);
-                            }
 
-                            @Override
-                            public void onError(ArrayList args) {
-
-                            }
-                        });
 
                     }
                     else{
                         ListBinding.textView3.setVisibility(View.VISIBLE);
                         ListBinding.list.setVisibility(View.GONE);
                     }
+                    search("client", "idClient, nomClient, prenomClient, email", getContext(), new RequestFinished() {
+                        @Override
+                        public void onFinish(ArrayList args) {
 
+                            if(ListBinding.prgrs != null)
+                                ListBinding.prgrs.setVisibility(View.GONE);
+                            ListBinding.textView3.setVisibility(View.GONE);
+                            ListBinding.list.setVisibility(View.VISIBLE);
+                            itemsList.addAll((ArrayList<searchResultItem>) args);
+                            adapter.setItemList(itemsList);
+                            ListBinding.list.setAdapter(adapter);
+                        }
+
+                        @Override
+                        public void onError(ArrayList args) {
+                            if(ListBinding.prgrs != null)
+                                ListBinding.prgrs.setVisibility(View.GONE);
+                        }
+                    });
                 }
 
                 @Override
                 public void onError(ArrayList args) {
-                    if(ListBinding.prgrs != null)
-                        ListBinding.prgrs.setVisibility(View.GONE);
-                    ListBinding.textView3.setVisibility(View.VISIBLE);
-                    ListBinding.list.setVisibility(View.GONE);
+
+                    search("client", "idClient, nomClient, prenomClient, email", getContext(), new RequestFinished() {
+                        @Override
+                        public void onFinish(ArrayList args) {
+                            if(ListBinding.prgrs != null)
+                                ListBinding.prgrs.setVisibility(View.GONE);
+                            ListBinding.textView3.setVisibility(View.GONE);
+                            ListBinding.list.setVisibility(View.VISIBLE);
+                            itemsList.addAll((ArrayList<searchResultItem>) args);
+                            adapter.setItemList(itemsList);
+                            ListBinding.list.setAdapter(adapter);
+                        }
+
+                        @Override
+                        public void onError(ArrayList args) {
+                            if(ListBinding.prgrs != null)
+                                ListBinding.prgrs.setVisibility(View.GONE);
+                            ListBinding.textView3.setVisibility(View.VISIBLE);
+                            ListBinding.list.setVisibility(View.GONE);
+                        }
+                    });
                 }
             });
+
 
 
             return root;
@@ -175,8 +201,8 @@ public class SearchFragment extends Fragment {
                                     annonce.setModele(obj.getString("modeleVehicule"));
                                     annonce.setCouleur(obj.getString("couleurVehicule"));
                                     annonce.setTransmission(obj.getString("transmissionVehicule"));
-                                    annonce.setKilometrage(obj.getInt("kilometrageVehicule"));
-                                    annonce.setAnnee(obj.getInt("anneeVehicule"));
+                                    annonce.setKilometrage(obj.getString("kilometrageVehicule"));
+                                    annonce.setAnnee(obj.getString("anneeVehicule"));
                                     annonce.setMoteur(obj.getString("moteurVehicule"));
                                     annonce.setEnergie(obj.getString("energieVehicule"));
                                     annonce.setPrix(obj.getString("prixVehicule"));

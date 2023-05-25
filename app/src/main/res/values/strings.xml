@@ -49,4 +49,8 @@
     <string name="announcements">Announcements</string>
     <string name="send_message">Send Message</string>
     <string name="no_annoncements">no Announcements</string>
+    <string name="save">Save</string>
+    <string name="demande">Demande : </string>
+    <string name="etat">etat</string>
+    <string name="etatText">etat : </string>
 </resources>

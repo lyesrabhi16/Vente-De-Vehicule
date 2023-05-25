@@ -88,15 +88,15 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.ViewHold
             });
         }
         Bitmap imgAvatar = Server.getBitmap(ctx, "imageClient-["+item.getIdUser()+"].jpeg");
-        if(imgAnnonce != null){
-            holder.userAvatar.setImageBitmap(imgAnnonce);
+        if(imgAvatar != null){
+            holder.userAvatar.setImageBitmap(imgAvatar);
         }
         else {
             Server.getImage("imageClient-["+item.getIdUser()+ "].jpeg", ctx, new RequestFinished() {
                 @Override
                 public void onFinish(ArrayList args) {
-                    Bitmap imgAnnonce = (Bitmap) args.get(0);
-                    holder.userAvatar.setImageBitmap(imgAnnonce);
+                    Bitmap imgAvatar = (Bitmap) args.get(0);
+                    holder.userAvatar.setImageBitmap(imgAvatar);
                 }
 
                 @Override

@@ -36,3 +36,20 @@ export interface Annonce{
     energieVehicule       : string,
     prixVehicule          : string
 }
+
+export interface Reservation{
+    idClient:number,
+    idAnnonce:number,
+    dateDebut:string,
+    dateFin:string,
+    lieuReservation:string,
+    etatReservation:string
+}
+
+export interface RendezVous{
+    idClient:number,
+    idAnnonce:number,
+    dateRendezVous:string,
+    lieuRendezVous:string,
+    etatRendezVous:string
+}
