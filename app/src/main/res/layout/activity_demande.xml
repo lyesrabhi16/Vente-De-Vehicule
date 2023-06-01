@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.Demande.DemandeActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_back"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start|center_vertical"
+                android:text="back"
+                android:textAlignment="textStart"
+                app:icon="@drawable/baseline_arrow_back_24"
+                app:iconGravity="start"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintHeight_min="200dp"
+                app:layout_constraintHeight_max="400dp"
+                android:layout_marginTop="32dp"
+                android:padding="0dp"
+                app:cardBackgroundColor="?attr/colorPrimary"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="0dp"
+                android:layout_margin="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_back"
+                >
+                <ImageView
+                    android:id="@+id/image_annonce"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:maxHeight="200dp"
+                    android:layout_gravity="center"
+                    android:padding="1dp"
+                    android:src="@mipmap/app_icon_foreground"
+                    android:clickable="true"
+                    android:background="@color/black_overlay"
+                    />
+            </androidx.cardview.widget.CardView>
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:background="?attr/colorPrimary"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView_image" />
+
+
+            <LinearLayout
+                android:id="@+id/info_annonce"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:hint="Demande"
+                    android:enabled="false"
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/demandeType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:hint="@string/etat"
+                    android:enabled="false"
+
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dateLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:hint="@string/date"
+                    android:enabled="false"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/baseline_edit_calendar_24"
+                    >
+
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/dateText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dateLayout2"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:hint="@string/date_fin"
+                    android:enabled="false"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/baseline_edit_calendar_24"
+                    android:visibility="gone"
+                    >
+
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/dateText2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lieuLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:hint="@string/location"
+                    android:enabled="false"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/baseline_map_24"
+
+                    >
+
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/lieuText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.tomtom.sdk.map.display.ui.MapView
+                    android:id="@+id/mapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+
+
+
+
+            </LinearLayout>
+            <include
+                android:id="@+id/container_person"
+                layout="@layout/person_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/info_annonce"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+            <LinearLayout
+                android:id="@+id/linearLayout_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/container_person"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                >
+                <Button
+                    android:id="@+id/button_confirmer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Confirmer"
+                    android:layout_marginTop="16dp"
+                    />
+                <Button
+                    android:id="@+id/button_annuler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Annuler"
+                    android:layout_marginTop="16dp"
+                    />
+                <Button
+                    android:id="@+id/button_accorder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Accorder"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    />
+                <Button
+                    android:id="@+id/button_rejeter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Rejeter"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    />
+                <Button
+                    android:id="@+id/button_supprimer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Supprimer"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    />
+            </LinearLayout>
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

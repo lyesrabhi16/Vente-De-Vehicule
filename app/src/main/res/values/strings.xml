@@ -1,4 +1,5 @@
 <resources>
+    <string name="API_KEY_TOMTOM">5dOTKQGhHLeGP0lQztyWFzPDswXAdBA7</string>
     <string name="app_name">GetCars</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -50,7 +51,12 @@
     <string name="send_message">Send Message</string>
     <string name="no_annoncements">no Announcements</string>
     <string name="save">Save</string>
-    <string name="demande">Demande : </string>
+    <string name="demande">Demande</string>
     <string name="etat">etat</string>
-    <string name="etatText">etat : </string>
+    <string name="etatText">etat</string>
+    <string name="date">Date</string>
+    <string name="location">Lieu</string>
+    <string name="date_debut">Date Debut</string>
+    <string name="date_fin">Date Fin</string>
+    <string name="delete_account">Delete Account</string>
 </resources>

@@ -46,6 +46,7 @@ public class NotificationsFragment extends Fragment {
             adapter = new DemandeAdapter(notifications, getContext());
             binding.recyclerNotifications.setAdapter(adapter);
 
+            binding.progressBar.setVisibility(View.VISIBLE);
             Annonce.getUserAnnonces(user.getID(), getContext(), new RequestFinished() {
                 @Override
                 public void onFinish(ArrayList args) {
@@ -60,6 +61,7 @@ public class NotificationsFragment extends Fragment {
                                 Reservation.getReservations(filterObj, getContext(), new RequestFinished() {
                                     @Override
                                     public void onFinish(ArrayList args) {
+                                        binding.progressBar.setVisibility(View.GONE);
                                         if(args.size() < 1) return;
                                         ArrayList<Reservation> reservations = (ArrayList<Reservation>) args;
                                         adapter.addWithReservationsList(reservations);
@@ -68,6 +70,7 @@ public class NotificationsFragment extends Fragment {
 
                                     @Override
                                     public void onError(ArrayList args) {
+                                        binding.progressBar.setVisibility(View.GONE);
 
                                     }
                                 });
@@ -77,6 +80,7 @@ public class NotificationsFragment extends Fragment {
                                 RendezVous.getAllRendezVous(filterObj, getContext(), new RequestFinished() {
                                     @Override
                                     public void onFinish(ArrayList args) {
+                                        binding.progressBar.setVisibility(View.GONE);
                                         if(args.size() < 1) return;
                                         ArrayList<RendezVous> rendezVous = (ArrayList<RendezVous>) args;
                                         adapter.addWithRendezVousList(rendezVous);
@@ -85,6 +89,7 @@ public class NotificationsFragment extends Fragment {
 
                                     @Override
                                     public void onError(ArrayList args) {
+                                        binding.progressBar.setVisibility(View.GONE);
 
                                     }
                                 });

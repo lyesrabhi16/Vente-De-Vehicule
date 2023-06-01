@@ -2,10 +2,10 @@ import { DBC } from "./DBConnection";
 import express from 'express';
 import fs from "fs";
 import cors from 'cors';
-import { ClientMessage, clients, connection, disconnection, init, message, message_received } from "./socket";
+import { ClientMessage, clients, connection, disconnection, init, message, message_received } from './socket';
 import { Server, Socket } from "socket.io";
 import http from "http";
-import { Annonce, Message, RendezVous, Reservation } from "./interfaces";
+import { Annonce, Message, RendezVous, Reservation, User } from "./interfaces";
 import path from "path";
 /* DB connection */
 
@@ -42,7 +42,78 @@ APP.post("/user",
             .then(user => _res.json({user:user}))
             .catch(err => _res.json({error:err}))
 
+});
+APP.post("/user/update",
+    async (_req : express.Request, _res : express.Response)=>{
+        console.log("POST /user/update");
+        let 
+            missingFields : string[] = [],
+            id : string = _req.body.idClient,
+            nomClient : string = _req.body["nomClient"],
+            prenomClient : string = _req.body["prenomClient"],
+            ageClient : string = _req.body["ageClient"],
+            email : string = _req.body["email"],
+            numTel : string =_req.body["numTel"];
+
+        if(!id) {
+            _res.json({error:"missing required fields : [idClient]"});
+            return;
+        }
+        if(!nomClient){
+            missingFields.push("nomClient")
+        }
+        
+        if(!prenomClient){
+            missingFields.push("prenomClient")
+        }
+        
+        if(!ageClient){
+            missingFields.push("ageClient")
+        }
+        if(!email){
+            missingFields.push("email")
+        }
+        
+        if(!numTel){
+            missingFields.push("numTel")
+        }
+        
+    
+        if(missingFields.length > 0){
+            _res.json({
+                error : `missing required fields : [${missingFields.join(", ")}]`
+            })
+            return;
+        }
+
+        let user:Object = {
+            nomClient: nomClient,
+            prenomClient: prenomClient,
+            ageClient: ageClient,
+            email: email,
+            numTel: numTel,
+        }
+
+        dbc.updateUser(id, user)
+            .then(result => _res.json({result:result}))
+            .catch(err => _res.json({error:err.message}))
+
 })
+
+APP.post("/user/remove",
+    async (_req : express.Request, _res : express.Response)=>{
+        console.log("POST /user/remove");
+        let id : string = _req.body.idClient;
+        if(!id) {
+            _res.json({error:"missing required fields : [idClient]"});
+            return;
+        }
+        dbc.delUser(id)
+            .then(user => _res.json({user:user}))
+            .catch(err => _res.json({error:err.message}))
+
+})
+
 
 APP.post("/signup", (_req : express.Request, _res : express.Response) => {
     console.log("POST /signup");
@@ -670,6 +741,64 @@ APP.post("/reservation/add", (_req : express.Request, _res : express.Response) =
         .then(result=> _res.json({result:result}))
         .catch(error => _res.json({error:error})); 
 });
+
+
+APP.post("/reservation/update",
+    async (_req : express.Request, _res : express.Response)=>{
+        console.log("POST /reservation/update");
+        let 
+            missingFields : string[] = [],
+            idClient : string = _req.body["idClient"],
+            idAnnonce : string = _req.body["idAnnonce"],
+            dateDebut : string = _req.body["dateDebut"],
+            dateFin : string = _req.body["dateFin"],
+            lieuReservation : string =_req.body["lieuReservation"],
+            etatReservation : string =_req.body["etatReservation"];
+
+        if(!idClient) {
+            _res.json({error:"missing required fields : [idClient]"});
+            return;
+        }
+        if(!idAnnonce){
+            missingFields.push("idAnnonce")
+        }
+        
+        if(!dateDebut){
+            missingFields.push("dateDebut")
+        }
+        
+        if(!dateFin){
+            missingFields.push("dateFin")
+        }
+        if(!lieuReservation){
+            missingFields.push("lieuReservation")
+        }
+        
+        if(!etatReservation){
+            missingFields.push("etatReservation")
+        }
+        
+    
+        if(missingFields.length > 0){
+            _res.json({
+                error : `missing required fields : [${missingFields.join(", ")}]`
+            })
+            return;
+        }
+
+        let reservation:Object = {
+            dateDebut: dateDebut,
+            dateFin: dateFin,
+            lieuReservation: lieuReservation,
+            etatReservation: etatReservation,
+        }
+
+        dbc.updateReservation(idClient, idAnnonce, reservation)
+            .then(result => _res.json({result:result}))
+            .catch(err => _res.json({error:err.message}))
+
+})
+
 APP.post("/reservation/remove", (_req : express.Request, _res : express.Response) => {
     console.log("POST /reservation/remove");
     let 
@@ -806,6 +935,58 @@ APP.post("/rendezvous/add", (_req : express.Request, _res : express.Response) =>
         .then(result=> _res.json({result:result}))
         .catch(error => _res.json({error:error})); 
 });
+
+APP.post("/rendezvous/update",
+    async (_req : express.Request, _res : express.Response)=>{
+        console.log("POST /rendezvous/update");
+        let 
+            missingFields : string[] = [],
+            idClient : string = _req.body["idClient"],
+            idAnnonce : string = _req.body["idAnnonce"],
+            dateRendezVous : string = _req.body["dateRendezVous"],
+            lieuRendezVous : string =_req.body["lieuRendezVous"],
+            etatRendezVous : string =_req.body["etatRendezVous"];
+
+        if(!idClient) {
+            _res.json({error:"missing required fields : [idClient]"});
+            return;
+        }
+        if(!idAnnonce){
+            missingFields.push("idAnnonce")
+        }
+        
+        if(!dateRendezVous){
+            missingFields.push("dateRendezVous")
+        }
+        
+        if(!lieuRendezVous){
+            missingFields.push("lieuRendezVous")
+        }
+        
+        if(!etatRendezVous){
+            missingFields.push("etatRendezVous")
+        }
+        
+    
+        if(missingFields.length > 0){
+            _res.json({
+                error : `missing required fields : [${missingFields.join(", ")}]`
+            })
+            return;
+        }
+
+        let reservation:Object = {
+            dateRendezVous: dateRendezVous,
+            lieuRendezVous: lieuRendezVous,
+            etatRendezVous: etatRendezVous,
+        }
+
+        dbc.updateRendezVOus(idClient, idAnnonce, reservation)
+            .then(result => _res.json({result:result}))
+            .catch(err => _res.json({error:err.message}))
+
+})
+
 APP.post("/rendezvous/remove", (_req : express.Request, _res : express.Response) => {
     console.log("POST /rendezvous/remove");
     let 

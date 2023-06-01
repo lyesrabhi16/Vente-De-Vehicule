@@ -155,4 +155,134 @@ public class Client {
         RequestQueue reqQ = Volley.newRequestQueue(ctx);
         reqQ.add(req);
     }
+
+    public static void delClient(int id, Context ctx, RequestFinished Req){
+
+
+        StringRequest req = new StringRequest(Request.Method.POST, Server.getUrlDelUser(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject res = new JSONObject(response);
+                            if(res.has("error")){
+                                Toast.makeText(ctx,"failed to delete user. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                                ArrayList l = new ArrayList<>();
+                                l.add(res.get("error"));
+                                Req.onError(l);
+                            }
+
+                            else{
+                                Toast.makeText(ctx, "Deleted Successfully", Toast.LENGTH_SHORT).show();
+                                ArrayList l = new ArrayList();
+                                l.add("success");
+                                Req.onFinish(l);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(ctx,"Response Handling error :  "+e, Toast.LENGTH_SHORT).show();
+                            ArrayList l = new ArrayList<>();
+                            l.add(e);
+                            Req.onError(l);
+
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ctx,"connection error."+error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        ArrayList l = new ArrayList<>();
+                        l.add(error);
+                        Req.onError(l);
+                    }
+                }){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String,String>();
+                params.put("idClient", id + "");
+                return params;
+
+            }
+
+            @Override
+            public Priority getPriority() {
+                return Priority.HIGH;
+            }
+        };
+
+        RequestQueue reqQ = Volley.newRequestQueue(ctx);
+        reqQ.add(req);
+    }
+
+    public static void updateClient(Client client, Context ctx, RequestFinished Req){
+
+
+        StringRequest req = new StringRequest(Request.Method.POST, Server.getUrlUpdateUser(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject res = new JSONObject(response);
+                            if(res.has("error")){
+                                Toast.makeText(ctx,"failed to update user info. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                                ArrayList l = new ArrayList<>();
+                                l.add(res.get("error"));
+                                Req.onError(l);
+                            }
+
+                            else{
+                                Toast.makeText(ctx, "Updated Successfully", Toast.LENGTH_SHORT).show();
+                                ArrayList l = new ArrayList();
+                                l.add("success");
+                                Req.onFinish(l);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(ctx,"Response Handling error :  "+e, Toast.LENGTH_SHORT).show();
+                            ArrayList l = new ArrayList<>();
+                            l.add(e);
+                            Req.onError(l);
+
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ctx,"connection error."+error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        ArrayList l = new ArrayList<>();
+                        l.add(error);
+                        Req.onError(l);
+                    }
+                }){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String,String>();
+                params.put("idClient", client.getIdClient() + "");
+                params.put("nomClient", client.getNom() + "");
+                params.put("prenomClient", client.getPrenom() + "");
+                params.put("ageClient", client.getAge() + "");
+                params.put("email", client.getEmail() + "");
+                params.put("numTel", client.getNumTel() + "");
+                return params;
+
+            }
+
+            @Override
+            public Priority getPriority() {
+                return Priority.HIGH;
+            }
+        };
+
+        RequestQueue reqQ = Volley.newRequestQueue(ctx);
+        reqQ.add(req);
+    }
+
 }

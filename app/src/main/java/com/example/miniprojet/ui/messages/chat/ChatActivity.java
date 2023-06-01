@@ -99,7 +99,7 @@ public class ChatActivity extends AppCompatActivity {
                     message.put("idClient_reciever", R_userID);
                     message.put("contenuMessage", msg);
                     message.put("etatMessage", "sending");
-                    message.put("date", getDate("yyyy-MM-dd HH:mm:ss") );
+                    message.put("date", getDate("yyyy-MM-dd HH:mm:ss", new Date()) );
                     socket.emit("message", message);
                     CBind.edittextMessage.setText("");
 
@@ -291,9 +291,9 @@ public class ChatActivity extends AppCompatActivity {
         RequestQueue reqQ = Volley.newRequestQueue(getApplicationContext());
         reqQ.add(Sreq);
     }
-    public String getDate(String format){
+    public static String getDate(String format, Date d){
         String date;
-        date = new SimpleDateFormat(format, Locale.getDefault()).format(new Date());
+        date = new SimpleDateFormat(format, Locale.getDefault()).format(d);
         return date;
     }
 }

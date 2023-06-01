@@ -2,13 +2,13 @@ package com.example.miniprojet.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +19,8 @@ import com.example.miniprojet.databinding.AnnonceBinding;
 import com.example.miniprojet.interfaces.RecyclerViewInterface;
 import com.example.miniprojet.interfaces.RequestFinished;
 import com.example.miniprojet.models.Annonce;
+import com.example.miniprojet.ui.Demande.DemandeActivity;
+import com.example.miniprojet.ui.annonce.AnnonceActivity;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
@@ -62,10 +64,66 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.ViewHold
         holder.userAvatar.setImageResource(R.drawable.ic_account_circle_48);
         holder.userTitle.setText(item.getUserTitle());
         holder.userSubTitle.setText(item.getUserSubTitle());
+
+        holder.itemView.getRootView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(ctx == null) return;
+                Intent annonce = new Intent(ctx, AnnonceActivity.class);
+                annonce.putExtra("idAnnonce", item.getIdAnnonce());
+                ctx.startActivity(annonce);
+            }
+        });
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "to be implemented later", Toast.LENGTH_SHORT).show();
+
+                Intent demande = new Intent(ctx, DemandeActivity.class);
+                demande.putExtra("idAnnonce",item.getIdAnnonce());
+                ctx.startActivity(demande);
+                /*if(item.getType().equals("Vente")){
+                    RendezVous rendezVous = new RendezVous(
+                            User.getInstance(ctx).getID(),
+                            item.getIdAnnonce(),
+                            "NULL",
+                            "NULL",
+                            "Pending"
+                    );
+                    RendezVous.AddRendezVous(rendezVous, ctx, new RequestFinished() {
+                        @Override
+                        public void onFinish(ArrayList args) {
+                            Toast.makeText(ctx, "Rendez-Vous Requested.", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(ArrayList args) {
+                            Toast.makeText(ctx, "failed to request Rendez-Vous.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else if (item.getType().equals("Location")) {
+                    Reservation reservation = new Reservation(
+                            User.getInstance(ctx).getID(),
+                            item.getIdAnnonce(),
+                            "NULL",
+                            "NULL",
+                            "NULL",
+                            "Pending"
+                    );
+                    Reservation.AddReservation(reservation, ctx, new RequestFinished() {
+                        @Override
+                        public void onFinish(ArrayList args) {
+                            Toast.makeText(ctx, "Reservation Requested.", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(ArrayList args) {
+                            Toast.makeText(ctx, "failed to request Reservation.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                else{
+                    Toast.makeText(ctx, "Unknown Announcement Type", Toast.LENGTH_SHORT).show();
+                }*/
             }
         });
 

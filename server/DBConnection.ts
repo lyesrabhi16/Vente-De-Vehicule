@@ -79,6 +79,18 @@ export class DBC {
         return result;
         
     }
+    delUser =  async (id : string) : Promise<Object> => {
+        let sql : string = "Delete From client WHERE idClient = ?";
+        let result : Object = await this.execute(sql, [id]);
+        return result;
+        
+    }
+    updateUser =  async (id : string ,user : Object) : Promise<Object> => {
+        let sql : string = `Update client Set ? WHERE idClient = ?`;
+        let result : Object = await this.execute(sql, [user, id]);
+        return result;
+        
+    }
 
     signup = <T>(user: User) : Promise<T> => {
                     return new Promise<T>(
@@ -311,6 +323,11 @@ export class DBC {
                     .catch(err => reject(err));
         });
     };
+    updateReservation =  async (idClient : string , idAnnonce : string,reservation : Object) : Promise<Object> => {
+        let sql : string = `Update reservation Set ? WHERE idClient = ? and idAnnonce = ?`;
+        let result : Object = await this.execute(sql, [reservation, idClient, idAnnonce]);
+        return result;        
+    }
     DelReservation = <T>(set : object) : Promise<T> => {
         return new Promise((resolve, reject) => {
             let sql : string = `Delete From reservation where ` +JSON.stringify(set).replace("{","").replace("}","").replaceAll(":"," = ").replaceAll(","," AND ").replace(/"(\w+)"\s*=/g, '\$1 =');
@@ -354,6 +371,11 @@ export class DBC {
                     .catch(err => reject(err));
         });
     };
+    updateRendezVOus =  async (idClient : string , idAnnonce : string,  rendezVous : Object) : Promise<Object> => {
+        let sql : string = `Update rendezvous Set ? WHERE idClient = ? and idAnnonce = ?`;
+        let result : Object = await this.execute(sql, [rendezVous, idClient, idAnnonce]);
+        return result;        
+    }
     DelRendezVous = <T>(set : object) : Promise<T> => {
         return new Promise((resolve, reject) => {
             let sql : string = `Delete From rendezvous where ` +JSON.stringify(set).replace("{","").replace("}","").replaceAll(":"," = ").replaceAll(","," AND ").replace(/"(\w+)"\s*=/g, '\$1 =');

@@ -1,7 +1,9 @@
 package com.example.miniprojet.ui.account;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -31,6 +33,7 @@ import com.example.miniprojet.databinding.FragmentAccountBinding;
 import com.example.miniprojet.databinding.FragmentAccountSignInBinding;
 import com.example.miniprojet.databinding.FragmentAuthBinding;
 import com.example.miniprojet.interfaces.RequestFinished;
+import com.example.miniprojet.models.Client;
 import com.example.miniprojet.models.User;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -179,7 +182,88 @@ public class AccountFragment extends Fragment {
             AccountBinding.buttonSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(getContext(), "to be implemented later.", Toast.LENGTH_SHORT).show();
+                    String lastname = AccountBinding.nom.getText().toString().trim();
+                    String firstname = AccountBinding.prenom.getText().toString().trim();
+                    String age = AccountBinding.age.getText().toString().trim();
+                    String email = AccountBinding.email.getText().toString().trim();
+                    String phonenumber = AccountBinding.numTel.getText().toString().trim();
+                    Client client = new Client(
+                            user.getID(),
+                            Integer.parseInt(age),
+                            email,
+                            phonenumber,
+                            lastname,
+                            firstname
+                    );
+                    ProgressDialog prgs = new ProgressDialog(getActivity());
+                    prgs.setMessage("Updating...");
+                    prgs.show();
+                    Client.updateClient(client, getContext(), new RequestFinished() {
+                        @Override
+                        public void onFinish(ArrayList args) {
+                            if(AccountBinding == null) return;
+                            prgs.dismiss();
+                            user.logout();
+                            user.userLogin(
+                                    client.getIdClient(),
+                                    client.getEmail(),
+                                    client.getNumTel(),
+                                    client.getNom(),
+                                    client.getPrenom(),
+                                    client.getAge()
+                            );
+                            AccountBinding.buttonSave.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError(ArrayList args) {
+                            if(AccountBinding == null) return;
+                            prgs.dismiss();
+                        }
+                    });
+                }
+            });
+            AccountBinding.buttonDeleteAccount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    alert.setMessage("Are you sure you want to delete your account ?");
+                    alert.setTitle(R.string.delete_account);
+                    alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            ProgressDialog prgrs = new ProgressDialog(getActivity());
+                            prgrs.setMessage("Deleting Account...");
+                            prgrs.show();
+                            Client.delClient(user.getID(), getContext(), new RequestFinished() {
+                                @Override
+                                public void onFinish(ArrayList args) {
+                                    prgrs.dismiss();
+                                    if(((String)args.get(0)).equals("success")){
+                                        logout();
+                                        SocketClient.closeSocket();
+                                        Intent i = new Intent(getContext(), MainActivity.class);
+                                        startActivity(i);
+                                        if(getActivity() == null) return;
+                                        getActivity().finish();
+                                    }
+                                }
+
+                                @Override
+                                public void onError(ArrayList args) {
+                                        prgrs.dismiss();
+                                }
+                            });
+                        }
+                    });
+                    alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    alert.create().show();
                 }
             });
 
@@ -196,6 +280,7 @@ public class AccountFragment extends Fragment {
                         SocketClient.closeSocket();
                         Intent i = new Intent(getContext(), MainActivity.class);
                         startActivity(i);
+                        if(getActivity() == null) return;
                         getActivity().finish();
                 }
             });

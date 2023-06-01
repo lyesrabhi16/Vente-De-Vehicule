@@ -35,6 +35,8 @@ public class Server {
     private static String urlLogin = urlServer + "/signin";
     private static  String urlRegister = urlServer + "/signup";
     private static String urlUser = urlServer + "/user";
+    private static String urlDelUser = urlUser + "/remove";
+    private static String urlUpdateUser = urlUser + "/update";
     private static  String urlSearch = urlServer + "/search";
     private static String urlChats = urlServer +"/chats";
     private static String urlMessages = urlServer +"/messages";
@@ -48,10 +50,12 @@ public class Server {
     private static String urlReservation = urlServer + "/reservation";
     private static String urlReservations = urlServer + "/reservations";
     private static String urlAddReservation = urlReservation + "/add";
+    private static String urlUpdateReservation = urlReservation + "/update";
     private static String urlDelReservation = urlReservation + "/remove";
     private static String urlRendezVous = urlServer + "/rendezvous";
     private static String urlAllRendezVous = urlRendezVous + "/all";
     private static String urlAddRendezVous = urlRendezVous + "/add";
+    private static String urlUpdateRendezVous = urlRendezVous + "/update";
     private static String urlDelRendezVous = urlRendezVous + "/remove";
 
     private static String urlUpload = urlServer + "/upload";
@@ -397,6 +401,38 @@ public class Server {
         };
         RequestQueue reqQ = Volley.newRequestQueue(ctx);
         reqQ.add(Sreq);
+    }
+
+    public static String getUrlDelUser() {
+        return urlDelUser;
+    }
+
+    public static void setUrlDelUser(String urlDelUser) {
+        Server.urlDelUser = urlDelUser;
+    }
+
+    public static String getUrlUpdateUser() {
+        return urlUpdateUser;
+    }
+
+    public static void setUrlUpdateUser(String urlUpdateUser) {
+        Server.urlUpdateUser = urlUpdateUser;
+    }
+
+    public static String getUrlUpdateRendezVous() {
+        return urlUpdateRendezVous;
+    }
+
+    public static void setUrlUpdateRendezVous(String urlUpdateRendezVous) {
+        Server.urlUpdateRendezVous = urlUpdateRendezVous;
+    }
+
+    public static String getUrlUpdateReservation() {
+        return urlUpdateReservation;
+    }
+
+    public static void setUrlUpdateReservation(String urlUpdateReservation) {
+        Server.urlUpdateReservation = urlUpdateReservation;
     }
 }
 

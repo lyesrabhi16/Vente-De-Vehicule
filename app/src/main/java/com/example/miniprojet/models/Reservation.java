@@ -30,12 +30,13 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(int idClient, int idAnnonce, String dateDebut, String dateFin, String lieuReservation) {
+    public Reservation(int idClient, int idAnnonce, String dateDebut, String dateFin, String lieuReservation, String etatReservation) {
         this.idClient = idClient;
         this.idAnnonce = idAnnonce;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.lieuReservation = lieuReservation;
+        this.etatReservation = etatReservation;
     }
 
     public int getIdClient() {
@@ -256,6 +257,58 @@ public class Reservation {
         reqQ.add(Sreq);
     }
 
+    public static void updateReservation(Reservation reservation, Context ctx, RequestFinished Req){
+        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlUpdateReservation(), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject res = new JSONObject(response);
+
+                    if(res.has("error")){
+                        Toast.makeText(ctx,"failed to update reservation. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                        ArrayList l = new ArrayList();
+                        l.add(res.get("error") );
+                        Req.onError(l);
+                    }
+
+                    else{
+                        ArrayList l = new ArrayList<>();
+                        Req.onFinish(l);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(ctx,"Response Handling Error.", Toast.LENGTH_SHORT).show();
+                    ArrayList l = new ArrayList<>();
+                    l.add(e.getMessage());
+                    Req.onError(l);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                ArrayList l = new ArrayList();
+                l.add(error.getMessage());
+                Req.onError(l);
+            }
+        }){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> Params = new HashMap<>();
+                Params.put("idAnnonce", reservation.getIdAnnonce()+"");
+                Params.put("idClient", reservation.getIdClient()+"");
+                Params.put("dateDebut", reservation.getDateDebut()+"");
+                Params.put("dateFin", reservation.getDateFin()+"");
+                Params.put("lieuReservation", reservation.getLieuReservation()+"");
+                Params.put("etatReservation", reservation.getEtatReservation()+"");
+                return Params;
+            }
+        };
+        RequestQueue reqQ = Volley.newRequestQueue(ctx);
+        reqQ.add(Sreq);
+    }
     public static void getReservations(JSONObject filterObj, Context ctx, RequestFinished Req){
         StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlReservations(),
                 new Response.Listener<String>() {

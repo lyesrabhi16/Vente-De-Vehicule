@@ -244,6 +244,57 @@ public class RendezVous {
         reqQ.add(Sreq);
     }
 
+    public static void updateRendezVous(RendezVous rendezVous, Context ctx, RequestFinished Req){
+        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlUpdateRendezVous(), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject res = new JSONObject(response);
+
+                    if(res.has("error")){
+                        Toast.makeText(ctx,"failed to update RendezVous. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                        ArrayList l = new ArrayList();
+                        l.add(res.get("error") );
+                        Req.onError(l);
+                    }
+
+                    else{
+                        ArrayList l = new ArrayList<>();
+                        Req.onFinish(l);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(ctx,"Response Handling Error.", Toast.LENGTH_SHORT).show();
+                    ArrayList l = new ArrayList<>();
+                    l.add(e.getMessage());
+                    Req.onError(l);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                ArrayList l = new ArrayList();
+                l.add(error.getMessage());
+                Req.onError(l);
+            }
+        }){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> Params = new HashMap<>();
+                Params.put("idAnnonce", rendezVous.getIdAnnonce()+"");
+                Params.put("idClient", rendezVous.getIdClient()+"");
+                Params.put("dateRendezVous", rendezVous.getDateRendezVous()+"");
+                Params.put("lieuRendezVous", rendezVous.getLieuRendezVous()+"");
+                Params.put("etatRendezVous", rendezVous.getEtatRendezVous()+"");
+                return Params;
+            }
+        };
+        RequestQueue reqQ = Volley.newRequestQueue(ctx);
+        reqQ.add(Sreq);
+    }
     public static void getAllRendezVous(JSONObject filterObj, Context ctx, RequestFinished Req){
         StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlAllRendezVous(),
                 new Response.Listener<String>() {

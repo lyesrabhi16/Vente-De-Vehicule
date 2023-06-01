@@ -2,6 +2,7 @@ package com.example.miniprojet.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,9 @@ import com.example.miniprojet.models.Client;
 import com.example.miniprojet.models.Demande;
 import com.example.miniprojet.models.RendezVous;
 import com.example.miniprojet.models.Reservation;
+import com.example.miniprojet.ui.Demande.DemandeActivity;
+import com.example.miniprojet.ui.account.AccountActivity;
+import com.example.miniprojet.ui.annonce.AnnonceActivity;
 
 import java.util.ArrayList;
 
@@ -71,6 +75,32 @@ public class DemandeAdapter extends RecyclerView.Adapter<DemandeAdapter.ViewHold
         holder.containerAnnonce.Avatar.setImageResource(R.drawable.ic_account_circle_48);
         holder.containerAnnonce.Title.setText(item.getAnnonce().getUserTitle());
         holder.containerAnnonce.subTitle.setText(item.getAnnonce().getUserSubTitle());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent demande = new Intent(holder.itemView.getContext(), DemandeActivity.class);
+                demande.putExtra("idAnnonce",item.getAnnonce().getIdAnnonce());
+                holder.itemView.getContext().startActivity(demande);
+            }
+        });
+
+        holder.containerPerson.getRoot().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent account = new Intent(ctx, AccountActivity.class);
+                account.putExtra("accountID", item.getPerson().getIdClient());
+                ctx.startActivity(account);
+            }
+        });
+        holder.containerAnnonce.getRoot().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent annonce = new Intent(ctx, AnnonceActivity.class);
+                annonce.putExtra("idAnnonce", item.getAnnonce().getIdAnnonce());
+                ctx.startActivity(annonce);
+            }
+        });
 
         Bitmap imgAvatarPerson = Server.getBitmap(ctx, "imageClient-["+item.getPerson().getIdClient()+"].jpeg");
         if(imgAvatarPerson != null){
@@ -148,7 +178,10 @@ public class DemandeAdapter extends RecyclerView.Adapter<DemandeAdapter.ViewHold
             etat = bind.etat;
             containerPerson = bind.containerPerson;
             containerAnnonce = bind.containerAnnonce;
+
+
         }
+
     }
     public void addWithRendezVousList(ArrayList<RendezVous> rendezVousList){
         for (int i = 0; i < rendezVousList.size(); i++) {

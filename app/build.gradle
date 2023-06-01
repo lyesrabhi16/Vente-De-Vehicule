@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.miniprojet"
-        minSdk 16
+        minSdk 21
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -21,6 +21,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    packagingOptions {
+        jniLibs.pickFirsts.add("lib/**/libc++_shared.so")
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -55,5 +58,10 @@ dependencies {
     implementation ('io.socket:socket.io-client:2.0.0') {
         exclude group: 'org.json', module: 'json'
     }
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    //tomtom map
+    implementation "com.tomtom.sdk.maps:map-display:0.12.0"
+
 
 }
