@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -62,6 +63,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     //tomtom map
     implementation "com.tomtom.sdk.maps:map-display:0.12.0"
+    implementation "com.tomtom.sdk.location:provider-android:0.12.0"
 
 
 }

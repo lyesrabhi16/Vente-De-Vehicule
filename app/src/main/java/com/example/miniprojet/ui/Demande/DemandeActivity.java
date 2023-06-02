@@ -1,17 +1,15 @@
 package com.example.miniprojet.ui.Demande;
 
-import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.pm.PackageManager;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 
+import com.example.miniprojet.MapActivity;
 import com.example.miniprojet.R;
 import com.example.miniprojet.databinding.ActivityDemandeBinding;
 import com.example.miniprojet.interfaces.RequestFinished;
@@ -24,10 +22,6 @@ import com.example.miniprojet.models.User;
 import com.example.miniprojet.ui.messages.chat.ChatActivity;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
-import com.tomtom.sdk.map.display.MapOptions;
-import com.tomtom.sdk.map.display.TomTomMap;
-import com.tomtom.sdk.map.display.marker.MarkerOptions;
-import com.tomtom.sdk.map.display.ui.MapReadyCallback;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,12 +35,11 @@ public class DemandeActivity extends AppCompatActivity {
     private Reservation reservation;
     private Client demendeur;
     private Client recepteur;
-    private TomTomMap map;
-    private MarkerOptions markerOptions;
-    private MapOptions mapOptions;
+
     private int Type = -1;
     public static int TYPE_RESERVATION = 0;
     public static int TYPE_RENDEZVOUS = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,17 +51,15 @@ public class DemandeActivity extends AppCompatActivity {
         User user = User.getInstance(getApplicationContext());
 
 
-        DBind.mapView.onCreate(savedInstanceState);
 
         int idAnnonce = getIntent().getIntExtra("idAnnonce", -1);
 
-        if(user.isLoggedin()){
+        if (user.isLoggedin()) {
 
-            if (idAnnonce == -1){
+            if (idAnnonce == -1) {
                 Toast.makeText(this, "Unrecognized Announcement", Toast.LENGTH_SHORT).show();
                 finish();
             }
-
 
 
             demande = new Demande();
@@ -76,60 +67,10 @@ public class DemandeActivity extends AppCompatActivity {
             rendezVous = new RendezVous();
             reservation = new Reservation();
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (getApplicationContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getApplicationContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                    return;
-                }
-            }
-
-            DBind.mapView.onCreate(savedInstanceState);
-            DBind.mapView.getMapAsync(
-                    new MapReadyCallback() {
-                        @Override
-                        public void onMapReady(@NonNull TomTomMap tomTomMap) {
-                            map = tomTomMap;
-
-                            /*FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(DemandeActivity.this);
-                            @SuppressLint("MissingPermission") Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
-                            locationResult.addOnCompleteListener(new OnCompleteListener<Location>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Location> task) {
-
-                                    MapMarker = new MarkerOptions().position(new LatLng(task.getResult().getLatitude(), task.getResult().getLongitude())).draggable(true);
-                                    Map.addMarker(MapMarker);
-                                    Map.addMapClickListener(new MapClickListener() {
-                                        @Override
-                                        public boolean onMapClicked(@NonNull GeoPoint geoPoint) {
-                                            reservation.setLieuReservation(marker.getPosition().toString());
-                                            rendezVous.setLieuRendezVous(marker.getPosition().toString());
-                                            DBind.lieuText.setText(marker.getTitle());
-                                            return false;
-                                        }
-                                    });
-                                    Map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                                        @Override
-                                        public void onMarkerDragStart(Marker marker) {
-
-                                        }
-
-                                        @Override
-                                        public void onMarkerDrag(Marker marker) {
-
-                                        }
-
-                                        @Override
-                                        public void onMarkerDragEnd(Marker marker) {
-
-                                        }
-                                    });
-                                }
-                            });*/
-                        }
-                    });
 
 
-            ProgressDialog prgrs = new ProgressDialog(this);
+
+            ProgressDialog prgrs = new ProgressDialog(DemandeActivity.this);
             prgrs.setMessage("Getting Details...");
             prgrs.show();
             Annonce.getAnnonce(idAnnonce, getApplicationContext(), new RequestFinished() {
@@ -385,6 +326,15 @@ public class DemandeActivity extends AppCompatActivity {
             }
         });
 
+        DBind.lieuLayout.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent map = new Intent(getApplicationContext(), MapActivity.class);
+                startActivity(map);
+
+            }
+        });
+
         DBind.buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -543,47 +493,6 @@ public class DemandeActivity extends AppCompatActivity {
             }
         });
 
-    }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(DBind == null)return;
-        DBind.mapView.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(DBind == null)return;
-        DBind.mapView.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if(DBind == null)return;
-        DBind.mapView.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(DBind == null)return;
-        DBind.mapView.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(DBind == null)return;
-        DBind.mapView.onDestroy();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if(DBind == null)return;
-        DBind.mapView.onSaveInstanceState(outState);
     }
 
 
