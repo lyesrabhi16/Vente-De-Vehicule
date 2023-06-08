@@ -80,6 +80,7 @@ public class NotificationsFragment extends Fragment {
                                 RendezVous.getAllRendezVous(filterObj, getContext(), new RequestFinished() {
                                     @Override
                                     public void onFinish(ArrayList args) {
+                                        if(binding==null)return;
                                         binding.progressBar.setVisibility(View.GONE);
                                         if(args.size() < 1) return;
                                         ArrayList<RendezVous> rendezVous = (ArrayList<RendezVous>) args;

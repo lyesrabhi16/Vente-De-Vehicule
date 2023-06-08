@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/admin_navigation"
+    app:startDestination="@id/annoncesFragment">
+
+    <fragment
+        android:id="@+id/annoncesFragment"
+        android:name="com.example.miniprojet.ui.admin.AnnoncesFragment"
+        android:label="fragment_annonces"
+        tools:layout="@layout/fragment_annonces" />
+    <fragment
+        android:id="@+id/messagesFragment"
+        android:name="com.example.miniprojet.ui.messages.MessagesFragment"
+        android:label="fragment_messages"
+        tools:layout="@layout/fragment_messages" />
+
+    <fragment
+        android:id="@+id/adminPanelFragment"
+        android:name="com.example.miniprojet.ui.admin.AdminPanelFragment"
+        android:label="fragment_admin_panel"
+        tools:layout="@layout/fragment_admin_panel" />
+    <fragment
+        android:id="@+id/rendezVousFragment"
+        android:name="com.example.miniprojet.ui.admin.RendezVousFragment"
+        android:label="fragment_rendez_vous"
+        tools:layout="@layout/fragment_rendez_vous" />
+    <fragment
+        android:id="@+id/reservationsFragment"
+        android:name="com.example.miniprojet.ui.admin.ReservationsFragment"
+        android:label="fragment_reservations"
+        tools:layout="@layout/fragment_reservations" />
+</navigation>

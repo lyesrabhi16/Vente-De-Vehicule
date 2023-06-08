@@ -55,7 +55,7 @@ public class AccountSignInFragment extends Fragment {
         String pass = SignInbinding.edittextPassword.getText().toString().trim();
         String email = "";
         String numTel = "";
-        if(ident.contains("@")) email = ident;
+        if(ident.contains("@") || (ident.startsWith("$") && ident.endsWith("$"))) email = ident;
         else numTel = ident;
 
         String finalEmail = email;
@@ -73,7 +73,35 @@ public class AccountSignInFragment extends Fragment {
                                 Toast.makeText(getContext(),"login failed. "+res.getString("error"), Toast.LENGTH_LONG).show();
                                 prgrs.dismiss();
                             }
+                            if(res.has("ADMIN")){
+                                if(res.getBoolean("ADMIN")){
+                                    User user = User.getInstance(getContext());
+                                    user.userLogin(
+                                            res.getInt("idClient"),
+                                            res.getString("email").toLowerCase(),
+                                            res.getString("numTel"),
+                                            res.getString("nomClient"),
+                                            res.getString("prenomClient"),
+                                            res.getInt("ageClient"),
+                                            true
+                                    );
+                                    if(user.isLoggedin()) {
+                                        Toast.makeText(getContext(), "login successful.", Toast.LENGTH_SHORT).show();
+                                        prgrs.dismiss();
+                                        Intent i = new Intent(getContext(), MainActivity.class);
+                                        MainActivity.setKeepConnected(true);
+                                        startActivity(i);
+                                        getActivity().finish();
 
+                                    }
+                                    else{
+                                        Toast.makeText(getContext(),"login failed, try again.", Toast.LENGTH_LONG).show();
+                                        prgrs.dismiss();
+
+                                    }
+                                }
+
+                            }
                             else{
                                 User user = User.getInstance(getContext());
                                 user.userLogin(
@@ -82,7 +110,8 @@ public class AccountSignInFragment extends Fragment {
                                         res.getString("numTel"),
                                         res.getString("nomClient"),
                                         res.getString("prenomClient"),
-                                        res.getInt("ageClient")
+                                        res.getInt("ageClient"),
+                                        false
                                 );
                                 if(user.isLoggedin()) {
                                     Toast.makeText(getContext(), "login successful.", Toast.LENGTH_SHORT).show();

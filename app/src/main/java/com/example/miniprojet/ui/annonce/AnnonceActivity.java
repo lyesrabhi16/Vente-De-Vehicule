@@ -118,7 +118,7 @@ public class AnnonceActivity extends AppCompatActivity {
                             }
                         });
 
-                        if(client.getIdClient() == User.getInstance(getApplicationContext()).getID()){
+                        if(client.getIdClient() == User.getInstance(getApplicationContext()).getID() || User.getInstance(getApplicationContext()).isAdmin()){
                             BAnnonce.imageAnnonce.setClickable(true);
                             BAnnonce.titre.setEnabled(true);
                             BAnnonce.desc.setEnabled(true);

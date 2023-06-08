@@ -1,11 +1,12 @@
 {
     "compilerOptions": {
-      "target": "es6",
+      "target": "es2017",
       "module": "commonjs",
       "rootDir": "./",
       "outDir": "./build",
       "esModuleInterop": true,
       "strict": true,
-      "lib":["es2021"]
+      "lib":["es2022"],
+      "resolveJsonModule": true
     }
 }

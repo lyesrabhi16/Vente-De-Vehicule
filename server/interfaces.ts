@@ -19,7 +19,15 @@ export interface User {
     numTel : string,
     password : string    
 }
-
+export interface Admin {
+    idClient : string,
+    nomClient : string, 
+    prenomClient: string,
+    ageClient : string,
+    email : string,
+    numTel : string,
+    password : string
+}
 export interface Annonce{
     idAnnonce             : number | null,
     idClient              : number,

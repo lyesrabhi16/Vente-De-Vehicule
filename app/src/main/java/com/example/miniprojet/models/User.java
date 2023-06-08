@@ -15,6 +15,7 @@ public final class User {
     private static final String KEY_PRENOM = "prenomClient";
     private static final String KEY_AGE = "ageClient";
     private static final String KEY_IMAGE = "imageClient";
+    private static final String KEY_ADMIN = "ADMIN";
 
 
     private User(Context context){
@@ -28,7 +29,7 @@ public final class User {
         return Instance;
     }
 
-    public boolean userLogin(int id,String email, String numTel, String nom, String prenom, int age){
+    public boolean userLogin(int id,String email, String numTel, String nom, String prenom, int age, Boolean admin){
         SharedPreferences sharedprefs = Ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedprefs.edit();
 
@@ -38,6 +39,7 @@ public final class User {
         editor.putString(KEY_NOM, nom);
         editor.putString(KEY_PRENOM, prenom);
         editor.putInt(KEY_AGE, age);
+        editor.putBoolean(KEY_ADMIN, admin);
 
         editor.apply();
         return true;
@@ -94,6 +96,10 @@ public final class User {
         SharedPreferences.Editor editor = sharedprefs.edit();
         editor.putString(KEY_IMAGE, name);
         editor.apply();
+    }
+    public boolean isAdmin(){
+        SharedPreferences sharedprefs = Ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedprefs.getBoolean(KEY_ADMIN, false);
     }
 
 }

@@ -9,7 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 
-import com.example.miniprojet.MapActivity;
+import com.example.miniprojet.ui.map.MapActivityKotlin;
 import com.example.miniprojet.R;
 import com.example.miniprojet.databinding.ActivityDemandeBinding;
 import com.example.miniprojet.interfaces.RequestFinished;
@@ -33,12 +33,15 @@ public class DemandeActivity extends AppCompatActivity {
     private Demande demande;
     private RendezVous rendezVous;
     private Reservation reservation;
+    private String[] lieu;
     private Client demendeur;
     private Client recepteur;
 
     private int Type = -1;
     public static int TYPE_RESERVATION = 0;
     public static int TYPE_RENDEZVOUS = 1;
+    public static int ACTIVITY_START =  10;
+    public static int ACTIVITY_RESUME = 11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,20 +108,19 @@ public class DemandeActivity extends AppCompatActivity {
                                     DBind.etat.setText(reservation.getEtatReservation());
                                 DBind.dateText.setText(reservation.getDateDebut());
                                 DBind.dateText2.setText(reservation.getDateFin());
-                                if(reservation.getLieuReservation() != null){
-                                    DBind.lieuText.setText(reservation.getLieuReservation());
-                                }
+                                lieu = reservation.getLieuReservation().split(" ");
+                                if(lieu.length >= 2 )
+                                    DBind.lieuText.setText("longitude : " + lieu[0] + " \nlatitude : " + lieu[1]);
+                                DBind.lieuLayout.setEnabled(true);
+
 
                                 DBind.buttonConfirmer.setVisibility(View.GONE);
                                 DBind.buttonAnnuler.setVisibility(View.GONE);
                                 DBind.buttonSupprimer.setVisibility(View.VISIBLE);
                                 if(user.getID() == recepteur.getIdClient()){
-                                    DBind.lieuLayout.setEnabled(true);
 
-                                    if(reservation.getEtatReservation().equals("Pending")){
-                                        DBind.buttonAccorder.setVisibility(View.VISIBLE);
-                                        DBind.buttonRejeter.setVisibility(View.VISIBLE);
-                                    }
+                                    DBind.buttonAccorder.setVisibility(View.VISIBLE);
+                                    DBind.buttonRejeter.setVisibility(View.VISIBLE);
 
                                 }
                                 Client.getClient(reservation.getIdClient(), getApplicationContext(), new RequestFinished() {
@@ -154,19 +156,18 @@ public class DemandeActivity extends AppCompatActivity {
                                 if(rendezVous.getEtatRendezVous() != null)
                                     DBind.etat.setText(rendezVous.getEtatRendezVous());
                                 DBind.dateText.setText(rendezVous.getDateRendezVous());
-                                if(rendezVous.getLieuRendezVous() != null){
-                                    DBind.lieuText.setText(rendezVous.getLieuRendezVous());
-                                }
+                                lieu = rendezVous.getLieuRendezVous().split(" ");
+                                if(lieu.length >= 2 )
+                                    DBind.lieuText.setText("longitude : " + lieu[0] + " \nlatitude : " + lieu[1]);
+
+                                DBind.lieuLayout.setEnabled(true);
 
                                 DBind.buttonConfirmer.setVisibility(View.GONE);
                                 DBind.buttonAnnuler.setVisibility(View.GONE);
                                 DBind.buttonSupprimer.setVisibility(View.VISIBLE);
                                 if(user.getID() == recepteur.getIdClient()){
-                                    DBind.lieuLayout.setEnabled(true);
-                                    if(reservation.getEtatReservation().equals("Pending")){
-                                        DBind.buttonAccorder.setVisibility(View.VISIBLE);
-                                        DBind.buttonRejeter.setVisibility(View.VISIBLE);
-                                    }
+                                    DBind.buttonAccorder.setVisibility(View.VISIBLE);
+                                    DBind.buttonRejeter.setVisibility(View.VISIBLE);
                                 }
                                 Client.getClient(rendezVous.getIdClient(), getApplicationContext(), new RequestFinished() {
                                     @Override
@@ -329,7 +330,20 @@ public class DemandeActivity extends AppCompatActivity {
         DBind.lieuLayout.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent map = new Intent(getApplicationContext(), MapActivity.class);
+                Intent map = new Intent(getApplicationContext(), MapActivityKotlin.class);
+                if(lieu != null){
+                    if(lieu.length >= 2){
+                        map.putExtra("longitude", lieu[0]);
+                        map.putExtra("latitude", lieu[1]);
+                    }
+                }
+                if(recepteur != null && user.getID() == recepteur.getIdClient()) {
+                        map.putExtra("MODE", MapActivityKotlin.Companion.getMODE_WRITE());
+                }
+                else {
+                    map.putExtra("MODE", MapActivityKotlin.Companion.getMODE_READ());
+                }
+
                 startActivity(map);
 
             }
@@ -493,6 +507,30 @@ public class DemandeActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        int idAnnonce = getIntent().getIntExtra("idAnnonce", -1);
+        intent.putExtra("idAnnonce",idAnnonce);
+        setIntent(intent);
+        int activity_code = getIntent().getIntExtra("ACTIVITY_CODE", -1);
+        if (activity_code == -1) return;
+        else if (activity_code == ACTIVITY_RESUME) {
+            String longitude = getIntent().getStringExtra("longitude");
+            String latitude = getIntent().getStringExtra("latitude");
+            DBind.lieuText.setText("longitude : " + longitude + " \nlatitude : " + latitude);
+
+            if(Type == -1) return;
+            else if (Type == TYPE_RENDEZVOUS) {
+                rendezVous.setLieuRendezVous(longitude + " " + latitude);
+            } else if (Type == TYPE_RESERVATION) {
+                reservation.setLieuReservation(longitude + " " + latitude);
+            }
+
+        }
     }
 
 

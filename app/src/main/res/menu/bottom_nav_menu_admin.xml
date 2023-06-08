@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/annoncesFragment"
+            android:icon="@drawable/baseline_view_list_24"
+            android:title="Annonces" />
+
+        <item
+            android:id="@+id/messagesFragment"
+            android:icon="@drawable/ic_message_dark_24dp"
+            android:title="Messages" />
+
+        <item
+            android:id="@+id/rendezVousFragment"
+            android:icon="@drawable/ic_dashboard_black_24dp"
+            android:title="RendezVous" />
+        <item
+            android:id="@+id/reservationsFragment"
+            android:icon="@drawable/ic_dashboard_black_24dp"
+            android:title="Reservation" />
+        <item
+            android:id="@+id/adminPanelFragment"
+            android:icon="@drawable/baseline_admin_panel_settings_24"
+            android:title="Admin" />
+    </group>
+
+</menu>

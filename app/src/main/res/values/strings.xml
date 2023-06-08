@@ -59,4 +59,5 @@
     <string name="date_debut">Date Debut</string>
     <string name="date_fin">Date Fin</string>
     <string name="delete_account">Delete Account</string>
+    <string name="id">ID</string>
 </resources>

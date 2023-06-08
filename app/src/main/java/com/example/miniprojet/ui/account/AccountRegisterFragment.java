@@ -3,14 +3,13 @@ package com.example.miniprojet.ui.account;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -19,8 +18,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.miniprojet.Server;
 import com.example.miniprojet.MainActivity;
+import com.example.miniprojet.Server;
 import com.example.miniprojet.databinding.FragmentAccountRegisterBinding;
 import com.example.miniprojet.models.User;
 
@@ -94,7 +93,8 @@ public class AccountRegisterFragment extends Fragment {
                                 res.getString("numTel"),
                                 res.getString("nomClient"),
                                 res.getString("prenomClient"),
-                                res.getInt("ageClient")
+                                res.getInt("ageClient"),
+                                false
                         );
                         if (user.isLoggedin()){
                             Toast.makeText(getContext(), "registration successful.", Toast.LENGTH_SHORT).show();

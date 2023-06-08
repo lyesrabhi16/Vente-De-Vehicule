@@ -5,8 +5,9 @@ import cors from 'cors';
 import { ClientMessage, clients, connection, disconnection, init, message, message_received } from './socket';
 import { Server, Socket } from "socket.io";
 import http from "http";
-import { Annonce, Message, RendezVous, Reservation, User } from "./interfaces";
+import { Admin, Annonce, Message, RendezVous, Reservation, User } from "./interfaces";
 import path from "path";
+import argon2 from 'argon2';
 /* DB connection */
 
 const dbc : DBC  = new DBC();
@@ -15,6 +16,17 @@ const dbc : DBC  = new DBC();
 /* Express Server */
 const APP : express.Application = express();
 const PORT : number = 5000;
+let ADMINS : Admin[];
+fs.readFile("ADMINS.json", (err, data) => {
+    if(err) {
+        console.log("err gettin ADMINS.json")
+        return;
+    };
+    ADMINS = JSON.parse(data.toString());
+})
+
+
+
 
 
 // parse incoming request body and append data to `req.body`
@@ -86,17 +98,42 @@ APP.post("/user/update",
             return;
         }
 
-        let user:Object = {
-            nomClient: nomClient,
-            prenomClient: prenomClient,
-            ageClient: ageClient,
-            email: email,
-            numTel: numTel,
-        }
+        let isAdmin = false;
+        ADMINS.forEach((admin : Admin) => {
+            if(admin.idClient == id){
+                isAdmin = true;
+                admin.nomClient = nomClient;
+                admin.prenomClient = prenomClient;
+                admin.ageClient = ageClient;
+                admin.email = email;
+                admin.numTel = numTel;
 
-        dbc.updateUser(id, user)
-            .then(result => _res.json({result:result}))
-            .catch(err => _res.json({error:err.message}))
+                fs.writeFile("./ADMINS.json", JSON.stringify(ADMINS), (err) =>{
+                    if(err) {
+                        console.log(err);
+                        _res.json({error : err})
+                        return
+                    };
+                    _res.json({success : true})
+
+                })
+            }
+        })
+        if(!isAdmin){
+            let user:Object = {
+                nomClient: nomClient,
+                prenomClient: prenomClient,
+                ageClient: ageClient,
+                email: email,
+                numTel: numTel,
+            }
+    
+    
+            dbc.updateUser(id, user)
+                .then(result => _res.json({result:result}))
+                .catch(err => _res.json({error:err.message}))
+        }
+        
 
 })
 
@@ -108,9 +145,37 @@ APP.post("/user/remove",
             _res.json({error:"missing required fields : [idClient]"});
             return;
         }
-        dbc.delUser(id)
+
+        let isAdmin = false;
+        
+        ADMINS.forEach((admin : Admin) => {
+            if(admin.idClient === id){
+                isAdmin = true;
+                console.log("deleting Admin Account...");
+                
+                let ADMINS1 = ADMINS.filter((admin => admin.idClient !== id));
+                console.log(ADMINS1);
+                
+                fs.writeFile("./ADMINS.json", JSON.stringify(ADMINS1), (err) =>{
+                    if(err) {
+                        console.log(err);
+                        _res.json({error : err})
+                        return
+                    }
+                    else{
+                        console.log("deleted successfully");
+                        _res.json({success : true});
+                    }
+        
+                })
+                
+            }
+        })
+        if(!isAdmin) {
+            dbc.delUser(id)
             .then(user => _res.json({user:user}))
             .catch(err => _res.json({error:err.message}))
+        }
 
 })
 
@@ -211,8 +276,32 @@ APP.post("/signin", (_req : express.Request, _res : express.Response) => {
             return;
 
         }
+        let sent = false;
+        
+        ADMINS.forEach(async (admin:Admin) =>{
+            
+            if(admin.email === email){
+                sent=true;
+                if(await argon2.verify(admin.password, password)){
+                    _res.json({
+                        "ADMIN" : true,
+                        "idClient" : admin.idClient,
+                        "nomClient" : admin.nomClient,
+                        "prenomClient": admin.prenomClient,
+                        "ageClient": admin.ageClient,
+                        "email" : admin.email,
+                        "numTel": admin.numTel
+                    });
+                }
+                else{
+                    _res.json({error:"Invalid password"});
+                }
+            }
+        })
+        
 
-        dbc.signin(email, numTel, password)
+        if(!sent){
+            dbc.signin(email, numTel, password)
             .then(
                 (result:any)=>{
                     let response = {
@@ -227,6 +316,8 @@ APP.post("/signin", (_req : express.Request, _res : express.Response) => {
                 }
             )
             .catch(error => _res.json({error : error}))
+        }
+        
 
 });
 

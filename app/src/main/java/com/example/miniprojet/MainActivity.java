@@ -5,10 +5,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.miniprojet.models.User;
-import com.example.miniprojet.ui.search.SearchFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -16,6 +12,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.miniprojet.databinding.ActivityMainBinding;
+import com.example.miniprojet.models.User;
+import com.example.miniprojet.ui.search.SearchFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import io.socket.client.Socket;
@@ -26,9 +25,11 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private static boolean keepConnected = false;
     private int nav;
+    private NavController navController;
+    private BottomNavigationView navView;
     private Socket client;
 
-    public static boolean isKeepConnected() {
+    public static boolean KeepConnected() {
         return keepConnected;
     }
 
@@ -44,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         updateBtnAccount(binding, 0);
         User user = User.getInstance(getApplicationContext());
+        navView = findViewById(R.id.nav_view);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        nav = R.id.navigation_home;
         if (user.isLoggedin()){
 
             client = SocketClient.connectSocket();
@@ -58,11 +62,35 @@ public class MainActivity extends AppCompatActivity {
                     });
                 }
             });
+            if(user.isAdmin()){
+                binding.buttonAccount.setClickable(false);
+                binding.navView.setVisibility(View.GONE);
+                binding.navViewAdmin.setVisibility(View.VISIBLE);
+                findViewById(R.id.nav_host_fragment_activity_main).setVisibility(View.GONE);
+                findViewById(R.id.nav_host_fragment_activity_main_admin).setVisibility(View.VISIBLE);
+                navView = binding.navViewAdmin;
+                navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main_admin);
+                nav = R.id.annoncesFragment;
+            }
+            else{
+                binding.navView.setVisibility(View.VISIBLE);
+                binding.navViewAdmin.setVisibility(View.GONE);
+                findViewById(R.id.nav_host_fragment_activity_main).setVisibility(View.VISIBLE);
+                findViewById(R.id.nav_host_fragment_activity_main_admin).setVisibility(View.GONE);
+            }
+
+        }
+        else{
+            binding.navView.setVisibility(View.VISIBLE);
+            binding.navViewAdmin.setVisibility(View.GONE);
+            findViewById(R.id.nav_host_fragment_activity_main).setVisibility(View.VISIBLE);
+            findViewById(R.id.nav_host_fragment_activity_main_admin).setVisibility(View.GONE);
         }
 
 
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         /*AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -72,14 +100,33 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         */
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-
-        nav = R.id.navigation_home;
         navView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 switch (item.getItemId()){
+                    //admin
+                    case R.id.annoncesFragment:
+                        nav = R.id.annoncesFragment;
+                        navController.navigate(R.id.annoncesFragment);
+                        return true;
+                    case R.id.messagesFragment:
+                        nav = R.id.messagesFragment;
+                        navController.navigate(R.id.messagesFragment);
+                        return true;
+                    case R.id.rendezVousFragment:
+                        nav = R.id.rendezVousFragment;
+                        navController.navigate(R.id.rendezVousFragment);
+                        return true;
+                    case R.id.reservationsFragment:
+                        nav = R.id.reservationsFragment;
+                        navController.navigate(R.id.reservationsFragment);
+                        return true;
+                    case R.id.adminPanelFragment:
+                        nav = R.id.adminPanelFragment;
+                        navController.navigate(R.id.adminPanelFragment);
+                        return true;
+                    //client
                     case R.id.navigation_home:
                         nav = R.id.navigation_home;
                         navController.navigate(R.id.navigation_home);
