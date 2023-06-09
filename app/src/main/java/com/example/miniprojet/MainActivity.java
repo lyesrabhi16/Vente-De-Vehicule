@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             });
             if(user.isAdmin()){
                 binding.buttonAccount.setClickable(false);
-                binding.navView.setVisibility(View.GONE);
+                binding.navView.setVisibility(View.INVISIBLE);
                 binding.navViewAdmin.setVisibility(View.VISIBLE);
                 findViewById(R.id.nav_host_fragment_activity_main).setVisibility(View.GONE);
                 findViewById(R.id.nav_host_fragment_activity_main_admin).setVisibility(View.VISIBLE);

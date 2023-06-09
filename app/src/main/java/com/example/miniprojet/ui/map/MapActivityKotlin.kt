@@ -1,10 +1,15 @@
 package com.example.miniprojet.ui.map
 
+import android.Manifest
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.example.miniprojet.R
 import com.example.miniprojet.databinding.ActivityMapBinding
@@ -41,6 +46,13 @@ class MapActivityKotlin : AppCompatActivity() {
         setContentView(MBind.root)
 
 
+        val permissionCheck = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 0)
+        }
+        val locationProvider : LocationProvider = AndroidLocationProvider(applicationContext)
+        locationProvider.enable()
+
         val mode = intent.getIntExtra("MODE", -1)
         val longitude = intent.getStringExtra("longitude")?.toDouble()
         val latitude = intent.getStringExtra("latitude")?.toDouble()
@@ -67,18 +79,21 @@ class MapActivityKotlin : AppCompatActivity() {
             }
             map.loadStyle(StandardStyles.SATELLITE, onStyleLoadedCallback)
 
-            val locationProvider : LocationProvider = AndroidLocationProvider(applicationContext)
+
             map.setLocationProvider(locationProvider)
-            locationProvider.enable()
 
             val locationMarkerOptions = LocationMarkerOptions(
                 type = LocationMarkerOptions.Type.Pointer
             )
             map.enableLocationMarker(locationMarkerOptions)
-
             if(longitude == null || latitude == null) {
-                val currentLocation : GeoLocation = map.currentLocation as GeoLocation
-                location = currentLocation.position
+                if(map.currentLocation != null){
+                    val currentLocation : GeoLocation = map.currentLocation as GeoLocation
+                    location = currentLocation.position
+                }
+                else{
+                    location = locationProvider.lastKnownLocation?.position!!
+                }
 
             }
             else{
@@ -129,5 +144,17 @@ class MapActivityKotlin : AppCompatActivity() {
         })
 
 
+    }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            0 -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted
+                } else {
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        }
     }
 }

@@ -36,6 +36,7 @@ public class HomeFragment extends Fragment {
     private Server dbc;
     private ArrayList<Annonce> Annonces;
     private AnnonceAdapter adapter;
+    private JSONObject filterObj;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -56,8 +57,8 @@ public class HomeFragment extends Fragment {
         });
 
         Home.recyclerHome.setAdapter(adapter);
-        JSONObject filterObj = new JSONObject();
-        Filter(filterObj);
+        filterObj = new JSONObject();
+        Filter();
 
         filter = FragmentFilterBinding.bind(Home.containerFilter.getRoot());
 
@@ -72,7 +73,7 @@ public class HomeFragment extends Fragment {
                     else{
                         filterObj.put("typeVehicule", Home.containerFilter.type.getText().toString());
                     }
-                    Filter(filterObj);
+                    Filter();
                 } catch (JSONException e) {
                     Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
                 }
@@ -89,7 +90,7 @@ public class HomeFragment extends Fragment {
                     else{
                         filterObj.put("marqueVehicule", Home.containerFilter.marque.getText().toString());
                     }
-                    Filter(filterObj);
+                    Filter();
                 } catch (JSONException e) {
                     Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
                 }
@@ -106,7 +107,7 @@ public class HomeFragment extends Fragment {
                     else{
                         filterObj.put("couleurVehicule", Home.containerFilter.couleur.getText().toString());
                     }
-                    Filter(filterObj);
+                    Filter();
                 } catch (JSONException e) {
                     Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
                 }
@@ -123,7 +124,7 @@ public class HomeFragment extends Fragment {
                     else{
                         filterObj.put("transmissionVehicule", Home.containerFilter.transmission.getText().toString());
                     }
-                    Filter(filterObj);
+                    Filter();
                 } catch (JSONException e) {
                     Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
                 }
@@ -140,7 +141,7 @@ public class HomeFragment extends Fragment {
                     else{
                         filterObj.put("energieVehicule", Home.containerFilter.energie.getText().toString());
                     }
-                    Filter(filterObj);
+                    Filter();
                 } catch (JSONException e) {
                     Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
                 }
@@ -166,11 +167,17 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Filter();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         Home = null;
     }
-    public void Filter(JSONObject filterObj){
+    public void Filter(){
         Home.progressBar.setVisibility(View.VISIBLE);
         Annonce.getAnnonces(filterObj, getContext(), new RequestFinished() {
             @Override

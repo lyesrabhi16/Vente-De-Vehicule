@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="none"
                 android:minWidth="120dp"
-                app:simpleItems="@array/types_actions"
+                app:simpleItems="@array/types_actionsFiltre"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:minWidth="120dp"
                 android:inputType="none"
-                app:simpleItems="@array/marque"
+                app:simpleItems="@array/marqueFiltre"
                 />
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:minWidth="120dp"
                 android:inputType="none"
-                app:simpleItems="@array/couleur"
+                app:simpleItems="@array/couleurFiltre"
                 />
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
@@ -84,7 +84,7 @@
                 android:minWidth="170dp"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                app:simpleItems="@array/boite"
+                app:simpleItems="@array/boiteFiltre"
                 />
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
@@ -101,7 +101,7 @@
                 android:minWidth="170dp"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                app:simpleItems="@array/energie"
+                app:simpleItems="@array/energieFiltre"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 

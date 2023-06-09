@@ -201,12 +201,6 @@
                     android:visibility="visible"
                     android:text="@string/logout" />
 
-                <View
-                    android:id="@+id/scroll_view_fix"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:visibility="gone"
-                    />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

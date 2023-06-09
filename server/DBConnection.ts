@@ -282,6 +282,14 @@ export class DBC {
                     .catch(err => reject(err));
         });
     };
+    UpdateAnnonce = <T>(idAnnonce:string, annonce : any) : Promise<T> => {
+        return new Promise((resolve, reject) => {
+            let sql : string = `Update annonce Set ? Where idAnnonce = ?`;
+            this.execute(sql, [annonce, idAnnonce])
+                    .then((res:any) => {resolve(res)})
+                    .catch(err => reject(err));
+        });
+    };
     DelAnnonce = <T>(idAnnonce : number) : Promise<T> => {
         return new Promise((resolve, reject) => {
             let sql : string = `Delete From annonce where idAnnonce = ?`;

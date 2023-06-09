@@ -45,6 +45,7 @@ public class Server {
     private static String urlAnnoncesUser = urlAnnonces +"/user";
 
     private static String urlAddAnnonce = urlAnnonce +"/add";
+    private static String urlUpdateAnnonce = urlAnnonce +"/update";
     private static String urlDelAnnonce = urlAnnonce +"/remove";
 
     private static String urlReservation = urlServer + "/reservation";
@@ -318,6 +319,7 @@ public class Server {
             id     : id of image/user/annonce
             format : image format (exp : jpeg)
             type   : predifend type of image (exp : TYPE_IMAGE_AVATAR)
+            index : index of image (if type is annnonce)
         */
 
 
@@ -344,6 +346,9 @@ public class Server {
                     Params.put("userID", img.getString("id")+"");
                     Params.put("format", img.getString("format"));
                     Params.put("type", img.getString("type"));
+                    if(img.getString("type")=="ANNONCE"){
+                        Params.put("index", img.getString("index"));
+                    }
                 } catch (JSONException e) {
                     Toast.makeText(ctx, "Error Sending Image", Toast.LENGTH_SHORT).show();
                 }
@@ -433,6 +438,14 @@ public class Server {
 
     public static void setUrlUpdateReservation(String urlUpdateReservation) {
         Server.urlUpdateReservation = urlUpdateReservation;
+    }
+
+    public static String getUrlUpdateAnnonce() {
+        return urlUpdateAnnonce;
+    }
+
+    public static void setUrlUpdateAnnonce(String urlUpdateAnnonce) {
+        Server.urlUpdateAnnonce = urlUpdateAnnonce;
     }
 }
 

@@ -3,13 +3,14 @@ package com.example.miniprojet.ui.Demande;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 
-import com.example.miniprojet.ui.map.MapActivityKotlin;
 import com.example.miniprojet.R;
 import com.example.miniprojet.databinding.ActivityDemandeBinding;
 import com.example.miniprojet.interfaces.RequestFinished;
@@ -19,6 +20,7 @@ import com.example.miniprojet.models.Demande;
 import com.example.miniprojet.models.RendezVous;
 import com.example.miniprojet.models.Reservation;
 import com.example.miniprojet.models.User;
+import com.example.miniprojet.ui.map.MapActivityKotlin;
 import com.example.miniprojet.ui.messages.chat.ChatActivity;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -38,8 +40,8 @@ public class DemandeActivity extends AppCompatActivity {
     private Client recepteur;
 
     private int Type = -1;
-    public static int TYPE_RESERVATION = 0;
-    public static int TYPE_RENDEZVOUS = 1;
+    public static final int TYPE_RESERVATION = 0;
+    public static final int TYPE_RENDEZVOUS = 1;
     public static int ACTIVITY_START =  10;
     public static int ACTIVITY_RESUME = 11;
 
@@ -53,167 +55,198 @@ public class DemandeActivity extends AppCompatActivity {
 
         User user = User.getInstance(getApplicationContext());
 
+        demande = new Demande();
+
+        rendezVous = new RendezVous();
+        reservation = new Reservation();
 
 
         int idAnnonce = getIntent().getIntExtra("idAnnonce", -1);
-
+        Type = getIntent().getIntExtra("TYPE", -1);
         if (user.isLoggedin()) {
 
             if (idAnnonce == -1) {
-                Toast.makeText(this, "Unrecognized Announcement", Toast.LENGTH_SHORT).show();
-                finish();
+                if(!user.isAdmin()){
+                    Toast.makeText(this, "Unrecognized Announcement", Toast.LENGTH_SHORT).show();
+                    onBackPressed();
+                }
+                else{
+                    if(Type != -1){
+                        DBind.idTextLayout.setVisibility(View.VISIBLE);
+                        DBind.idTextLayout.setEnabled(true);
+                        DBind.demandeType.setEnabled(false);
+                        switch (Type){
+                            case TYPE_RENDEZVOUS:
+                                demande.setTitle("RendezVous");
+                                DBind.demandeType.setText("RendezVous");
+                                break;
+                            case TYPE_RESERVATION:
+                                demande.setTitle("Reservation");
+                                DBind.demandeType.setText("Reservation");
+                                DBind.dateLayout2.setEnabled(true);
+                                break;
+                        }
+                        DBind.etatLayout.setEnabled(true);
+                        demande.setEtat("Pending");
+                        DBind.dateLayout.setEnabled(true);
+                        DBind.lieuLayout.setEnabled(true);
+                        DBind.buttonConfirmer.setVisibility(View.VISIBLE);
+                        DBind.buttonAnnuler.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            else{
+
+
+
+
+
+                ProgressDialog prgrs = new ProgressDialog(DemandeActivity.this);
+                prgrs.setMessage("Getting Details...");
+                prgrs.show();
+                Annonce.getAnnonce(idAnnonce, getApplicationContext(), new RequestFinished() {
+                    @Override
+                    public void onFinish(ArrayList args) {
+                        if (DBind == null) return;
+                        prgrs.dismiss();
+                        annonce = (Annonce) args.get(0);
+                        if(args.size() < 2 )return;
+                        recepteur = (Client) args.get(1);
+                        demande.setAnnonce(annonce);
+
+                        DBind.containerPerson.Title.setText(annonce.getUserTitle());
+                        DBind.containerPerson.subTitle.setText(annonce.getUserSubTitle());
+                        DBind.dateLayout.setEnabled(true);
+
+
+                        DBind.etat.setText("Pending");
+                        if(annonce.getType().equals("Location")){
+                            DBind.dateLayout.setHint(getResources().getText(R.string.date_debut));
+                            DBind.dateLayout2.setVisibility(View.VISIBLE);
+                            DBind.dateLayout2.setEnabled(true);
+                            DBind.demandeType.setText("Reservation");
+                            Type = TYPE_RESERVATION;
+                            reservation.setIdClient(user.getID());
+                            reservation.setIdAnnonce(annonce.getIdAnnonce());
+                            Reservation.getReservation(annonce.getIdAnnonce(), user.getID(), getApplicationContext(), new RequestFinished() {
+                                @Override
+                                public void onFinish(ArrayList args) {
+                                    reservation = (Reservation) args.get(0);
+                                    if(reservation.getEtatReservation() != null)
+                                        DBind.etat.setText(reservation.getEtatReservation());
+                                    DBind.dateText.setText(reservation.getDateDebut());
+                                    DBind.dateText2.setText(reservation.getDateFin());
+                                    lieu = reservation.getLieuReservation().split(" ");
+                                    if(lieu.length >= 2 )
+                                        DBind.lieuText.setText("longitude : " + lieu[0] + " \nlatitude : " + lieu[1]);
+                                    DBind.lieuLayout.setEnabled(true);
+
+
+                                    DBind.buttonConfirmer.setVisibility(View.GONE);
+                                    DBind.buttonAnnuler.setVisibility(View.GONE);
+                                    DBind.buttonSupprimer.setVisibility(View.VISIBLE);
+                                    if(user.getID() == recepteur.getIdClient()){
+
+                                        DBind.buttonAccorder.setVisibility(View.VISIBLE);
+                                        DBind.buttonRejeter.setVisibility(View.VISIBLE);
+
+                                    }
+                                    Client.getClient(reservation.getIdClient(), getApplicationContext(), new RequestFinished() {
+                                        @Override
+                                        public void onFinish(ArrayList args) {
+                                            demendeur = (Client) args.get(0);
+                                            demande.setPerson(demendeur);
+                                        }
+
+                                        @Override
+                                        public void onError(ArrayList args) {
+
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onError(ArrayList args) {
+
+                                }
+                            });
+
+                        }
+                        else{
+                            DBind.demandeType.setText("RendezVous");
+                            Type = TYPE_RENDEZVOUS;
+                            rendezVous.setIdClient(user.getID());
+                            rendezVous.setIdAnnonce(annonce.getIdAnnonce());
+                            RendezVous.getRendezVous(annonce.getIdAnnonce(), user.getID(), getApplicationContext(), new RequestFinished() {
+                                @Override
+                                public void onFinish(ArrayList args) {
+                                    rendezVous = (RendezVous) args.get(0);
+                                    if(rendezVous.getEtatRendezVous() != null)
+                                        DBind.etat.setText(rendezVous.getEtatRendezVous());
+                                    DBind.dateText.setText(rendezVous.getDateRendezVous());
+                                    lieu = rendezVous.getLieuRendezVous().split(" ");
+                                    if(lieu.length >= 2 )
+                                        DBind.lieuText.setText("longitude : " + lieu[0] + " \nlatitude : " + lieu[1]);
+
+                                    DBind.lieuLayout.setEnabled(true);
+
+                                    DBind.buttonConfirmer.setVisibility(View.GONE);
+                                    DBind.buttonAnnuler.setVisibility(View.GONE);
+                                    DBind.buttonSupprimer.setVisibility(View.VISIBLE);
+                                    if(user.getID() == recepteur.getIdClient()){
+                                        DBind.buttonAccorder.setVisibility(View.VISIBLE);
+                                        DBind.buttonRejeter.setVisibility(View.VISIBLE);
+                                    }
+                                    Client.getClient(rendezVous.getIdClient(), getApplicationContext(), new RequestFinished() {
+                                        @Override
+                                        public void onFinish(ArrayList args) {
+                                            demendeur = (Client) args.get(0);
+                                            demande.setPerson(demendeur);
+                                        }
+
+                                        @Override
+                                        public void onError(ArrayList args) {
+
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onError(ArrayList args) {
+
+                                }
+                            });
+
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onError(ArrayList args) {
+                        if (DBind == null) return;
+                        prgrs.dismiss();
+                    }
+                });
+
+
+                Client.getClient(user.getID(), getApplicationContext(), new RequestFinished() {
+                    @Override
+                    public void onFinish(ArrayList args) {
+                        Client c = (Client) args.get(0);
+                        demande.setPerson(c);
+                    }
+
+                    @Override
+                    public void onError(ArrayList args) {
+
+                    }
+                });
             }
 
 
-            demande = new Demande();
 
-            rendezVous = new RendezVous();
-            reservation = new Reservation();
-
-
-
-
-            ProgressDialog prgrs = new ProgressDialog(DemandeActivity.this);
-            prgrs.setMessage("Getting Details...");
-            prgrs.show();
-            Annonce.getAnnonce(idAnnonce, getApplicationContext(), new RequestFinished() {
-                @Override
-                public void onFinish(ArrayList args) {
-                    if (DBind == null) return;
-                    prgrs.dismiss();
-                    annonce = (Annonce) args.get(0);
-                    if(args.size() < 2 )return;
-                    recepteur = (Client) args.get(1);
-                    demande.setAnnonce(annonce);
-
-                    DBind.containerPerson.Title.setText(annonce.getUserTitle());
-                    DBind.containerPerson.subTitle.setText(annonce.getUserSubTitle());
-                    DBind.dateLayout.setEnabled(true);
-
-
-                    DBind.etat.setText("Pending");
-                    if(annonce.getType().equals("Location")){
-                        DBind.dateLayout.setHint(getResources().getText(R.string.date_debut));
-                        DBind.dateLayout2.setVisibility(View.VISIBLE);
-                        DBind.dateLayout2.setEnabled(true);
-                        DBind.demandeType.setText("Reservation");
-                        Type = TYPE_RESERVATION;
-                        reservation.setIdClient(user.getID());
-                        reservation.setIdAnnonce(annonce.getIdAnnonce());
-                        Reservation.getReservation(annonce.getIdAnnonce(), user.getID(), getApplicationContext(), new RequestFinished() {
-                            @Override
-                            public void onFinish(ArrayList args) {
-                                reservation = (Reservation) args.get(0);
-                                if(reservation.getEtatReservation() != null)
-                                    DBind.etat.setText(reservation.getEtatReservation());
-                                DBind.dateText.setText(reservation.getDateDebut());
-                                DBind.dateText2.setText(reservation.getDateFin());
-                                lieu = reservation.getLieuReservation().split(" ");
-                                if(lieu.length >= 2 )
-                                    DBind.lieuText.setText("longitude : " + lieu[0] + " \nlatitude : " + lieu[1]);
-                                DBind.lieuLayout.setEnabled(true);
-
-
-                                DBind.buttonConfirmer.setVisibility(View.GONE);
-                                DBind.buttonAnnuler.setVisibility(View.GONE);
-                                DBind.buttonSupprimer.setVisibility(View.VISIBLE);
-                                if(user.getID() == recepteur.getIdClient()){
-
-                                    DBind.buttonAccorder.setVisibility(View.VISIBLE);
-                                    DBind.buttonRejeter.setVisibility(View.VISIBLE);
-
-                                }
-                                Client.getClient(reservation.getIdClient(), getApplicationContext(), new RequestFinished() {
-                                    @Override
-                                    public void onFinish(ArrayList args) {
-                                        demendeur = (Client) args.get(0);
-                                        demande.setPerson(demendeur);
-                                    }
-
-                                    @Override
-                                    public void onError(ArrayList args) {
-
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onError(ArrayList args) {
-
-                            }
-                        });
-
-                    }
-                    else{
-                        DBind.demandeType.setText("RendezVous");
-                        Type = TYPE_RENDEZVOUS;
-                        rendezVous.setIdClient(user.getID());
-                        rendezVous.setIdAnnonce(annonce.getIdAnnonce());
-                        RendezVous.getRendezVous(annonce.getIdAnnonce(), user.getID(), getApplicationContext(), new RequestFinished() {
-                            @Override
-                            public void onFinish(ArrayList args) {
-                                rendezVous = (RendezVous) args.get(0);
-                                if(rendezVous.getEtatRendezVous() != null)
-                                    DBind.etat.setText(rendezVous.getEtatRendezVous());
-                                DBind.dateText.setText(rendezVous.getDateRendezVous());
-                                lieu = rendezVous.getLieuRendezVous().split(" ");
-                                if(lieu.length >= 2 )
-                                    DBind.lieuText.setText("longitude : " + lieu[0] + " \nlatitude : " + lieu[1]);
-
-                                DBind.lieuLayout.setEnabled(true);
-
-                                DBind.buttonConfirmer.setVisibility(View.GONE);
-                                DBind.buttonAnnuler.setVisibility(View.GONE);
-                                DBind.buttonSupprimer.setVisibility(View.VISIBLE);
-                                if(user.getID() == recepteur.getIdClient()){
-                                    DBind.buttonAccorder.setVisibility(View.VISIBLE);
-                                    DBind.buttonRejeter.setVisibility(View.VISIBLE);
-                                }
-                                Client.getClient(rendezVous.getIdClient(), getApplicationContext(), new RequestFinished() {
-                                    @Override
-                                    public void onFinish(ArrayList args) {
-                                        demendeur = (Client) args.get(0);
-                                        demande.setPerson(demendeur);
-                                    }
-
-                                    @Override
-                                    public void onError(ArrayList args) {
-
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onError(ArrayList args) {
-
-                            }
-                        });
-
-                    }
-
-
-                }
-
-                @Override
-                public void onError(ArrayList args) {
-                    if (DBind == null) return;
-                    prgrs.dismiss();
-                }
-            });
-
-
-            Client.getClient(user.getID(), getApplicationContext(), new RequestFinished() {
-                @Override
-                public void onFinish(ArrayList args) {
-                    Client c = (Client) args.get(0);
-                    demande.setPerson(c);
-                }
-
-                @Override
-                public void onError(ArrayList args) {
-
-                }
-            });
 
 
         }
@@ -222,12 +255,61 @@ public class DemandeActivity extends AppCompatActivity {
             finish();
         }
 
+        DBind.id.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                Annonce.getAnnonce(Integer.parseInt(editable.toString()), getApplicationContext(), new RequestFinished() {
+                    @Override
+                    public void onFinish(ArrayList args) {
+
+                        Annonce a = (Annonce) args.get(0);
+                        Client c = (Client) args.get(1);
+                        if(a.getType().equals("Location")) {
+                            Toast.makeText(DemandeActivity.this, "Annonce is not of type Vente!!!", Toast.LENGTH_SHORT).show();
+                        }
+                        demande.setAnnonce(a);
+                        demande.setPerson(c);
+                    }
+
+                    @Override
+                    public void onError(ArrayList args) {
+                        Toast.makeText(DemandeActivity.this, "failed to find annonce", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        DBind.etat.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                demande.setEtat(editable.toString());
+            }
+        });
+
         DBind.dateLayout.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (demande == null )return;
-                DBind.etat.setText("Pending");
-                if (demande.getAnnonce().getType().equals("Vente")){
+                if (Type == TYPE_RENDEZVOUS){
                     demande.setTitle("RendezVous");
                     DBind.demandeType.setText("RendezVous");
                     MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
@@ -248,7 +330,7 @@ public class DemandeActivity extends AppCompatActivity {
                         }
                     });
 
-                } else if (demande.getAnnonce().getType().equals("Location")) {
+                } else if (Type == TYPE_RESERVATION) {
                     demande.setTitle("Reservation");
                     DBind.demandeType.setText("Reservation");
                     MaterialDatePicker<Pair<Long, Long>> datePicker = MaterialDatePicker.Builder.dateRangePicker()
@@ -337,7 +419,7 @@ public class DemandeActivity extends AppCompatActivity {
                         map.putExtra("latitude", lieu[1]);
                     }
                 }
-                if(recepteur != null && user.getID() == recepteur.getIdClient()) {
+                if((recepteur != null && user.getID() == recepteur.getIdClient()) || user.isAdmin()) {
                         map.putExtra("MODE", MapActivityKotlin.Companion.getMODE_WRITE());
                 }
                 else {
@@ -365,9 +447,24 @@ public class DemandeActivity extends AppCompatActivity {
         DBind.buttonConfirmer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(demande.getAnnonce().getType().equals("Vente")){
-                        rendezVous.setEtatRendezVous("Pending");
-                        rendezVous.setLieuRendezVous("null");
+                if(Type == -1){
+                    if(annonce != null){
+                        switch (annonce.getType()){
+                            case "Vente":
+                                Type = TYPE_RENDEZVOUS;
+                                break;
+                            case "Location":
+                                Type = TYPE_RESERVATION;
+                                break;
+                        }
+                    }
+                }
+
+                if(Type == TYPE_RENDEZVOUS){
+                        if(rendezVous.getEtatRendezVous() == null)
+                            rendezVous.setEtatRendezVous("Pending");
+                        if(rendezVous.getLieuRendezVous() == null)
+                            rendezVous.setLieuRendezVous("null");
                         RendezVous.AddRendezVous(rendezVous, getApplicationContext(), new RequestFinished() {
                             @Override
                             public void onFinish(ArrayList args) {
@@ -381,9 +478,11 @@ public class DemandeActivity extends AppCompatActivity {
 
                             }
                         });
-                } else if (demande.getAnnonce().getType().equals("Location")) {
-                    reservation.setEtatReservation("Pending");
-                    reservation.setLieuReservation("null");
+                } else if (Type == TYPE_RESERVATION) {
+                    if(reservation.getEtatReservation() == null)
+                        reservation.setEtatReservation("Pending");
+                    if(reservation.getLieuReservation() == null)
+                        reservation.setLieuReservation("null");
                     Reservation.AddReservation(reservation, getApplicationContext(), new RequestFinished() {
                         @Override
                         public void onFinish(ArrayList args) {

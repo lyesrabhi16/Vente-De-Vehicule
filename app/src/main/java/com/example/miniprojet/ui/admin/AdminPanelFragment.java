@@ -72,7 +72,6 @@ public class AdminPanelFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Abinding = FragmentAccountBinding.bind(binding.containerAccount.getRoot());
-        Abinding.scrollViewFix.setVisibility(View.VISIBLE);
 
         User user = User.getInstance(getContext());
 

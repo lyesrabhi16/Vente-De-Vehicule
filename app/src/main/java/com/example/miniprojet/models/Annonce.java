@@ -262,7 +262,124 @@ public class Annonce {
         RequestQueue reqQ = Volley.newRequestQueue(ctx);
         reqQ.add(Sreq);
     }
+    public static void updateAnnonce(Annonce annonce, Context ctx, RequestFinished Req){
+        Toast.makeText(ctx, "updating annonce...", Toast.LENGTH_SHORT).show();
+        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlUpdateAnnonce(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject res = new JSONObject(response);
 
+                            if(res.has("error")){
+                                Toast.makeText(ctx,"failed to updating annonce. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                                ArrayList l = new ArrayList();
+                                l.add(res.get("error") );
+                                Req.onError(l);
+                            }
+
+                            else{
+                                Toast.makeText(ctx, "Annonce updated", Toast.LENGTH_SHORT).show();
+                                ArrayList l = new ArrayList();
+                                l.add("success");
+                                Req.onFinish(l);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(ctx,"an error occurred.", Toast.LENGTH_SHORT).show();
+                            ArrayList l = new ArrayList<>();
+                            l.add(e.getMessage());
+                            Req.onError(l);
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                        ArrayList l = new ArrayList();
+                        l.add(error.getMessage());
+                        Req.onError(l);
+                    }
+                }){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String,String>();
+                params.put("idAnnonce", annonce.getIdAnnonce()+"");
+                params.put("idClient", annonce.getIdUser()+"");
+                params.put("titre", annonce.getTitle()+"");
+                params.put("description", annonce.getDesc()+"");
+                params.put("typeVehicule", annonce.getType()+"");
+                params.put("marqueVehicule", annonce.getMarque()+"");
+                params.put("modeleVehicule", annonce.getModele()+"");
+                params.put("couleurVehicule", annonce.getCouleur()+"");
+                params.put("transmissionVehicule", annonce.getTransmission()+"");
+                params.put("kilometrageVehicule", annonce.getKilometrage()+"");
+                params.put("anneeVehicule", annonce.getAnnee()+"");
+                params.put("moteurVehicule", annonce.getMoteur()+"");
+                params.put("energieVehicule", annonce.getEnergie()+"");
+                params.put("prixVehicule", annonce.getPrix()+"");
+                return params;
+            }
+        };
+
+        RequestQueue reqQ = Volley.newRequestQueue(ctx);
+        reqQ.add(Sreq);
+    }
+    public static void delAnnonce(int id, Context ctx, RequestFinished Req){
+        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlDelAnnonce(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject res = new JSONObject(response);
+
+                            if(res.has("error")){
+                                Toast.makeText(ctx,"failed to remove announcement. "+res.get("error"), Toast.LENGTH_LONG).show();
+                                ArrayList l = new ArrayList();
+                                l.add(res.get("error") );
+                                Req.onError(l);
+                            }
+
+                            else{
+                                ArrayList l = new ArrayList();
+                                l.add("success");
+                                Req.onFinish(l);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(ctx,"Response Handling error.", Toast.LENGTH_SHORT).show();
+                            ArrayList l = new ArrayList<>();
+                            l.add(e.getMessage());
+                            Req.onError(l);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                        ArrayList l = new ArrayList();
+                        l.add(error.getMessage());
+                        Req.onError(l);
+                    }
+                }){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String,String>();
+                params.put("idAnnonce", id + "");
+                return params;
+            }
+        };
+
+        RequestQueue reqQ = Volley.newRequestQueue(ctx);
+        reqQ.add(Sreq);
+    }
     public static void getUserAnnonces(int id, Context ctx, RequestFinished Req){
         StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlAnnoncesUser(),
                 new Response.Listener<String>() {
@@ -521,5 +638,6 @@ public class Annonce {
         RequestQueue reqQ = Volley.newRequestQueue(ctx);
         reqQ.add(Sreq);
     }
+
 
 }

@@ -1,5 +1,6 @@
 package com.example.miniprojet.ui.admin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.example.miniprojet.adapters.DemandeAdapter;
 import com.example.miniprojet.databinding.FragmentRendezVousBinding;
 import com.example.miniprojet.interfaces.RequestFinished;
 import com.example.miniprojet.models.RendezVous;
+import com.example.miniprojet.ui.Demande.DemandeActivity;
 
 import org.json.JSONObject;
 
@@ -55,6 +57,16 @@ public class RendezVousFragment extends Fragment {
                 binding.progressBar.setVisibility(View.GONE);
             }
         });
+
+        binding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
+                Intent demande = new Intent(getContext(), DemandeActivity.class);
+                demande.putExtra("TYPE", DemandeActivity.TYPE_RENDEZVOUS);
+                startActivity(demande);
+            }
+        });
     }
 
     @Override
@@ -62,6 +74,14 @@ public class RendezVousFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentRendezVousBinding.inflate(inflater, container, false);
+        binding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent demande = new Intent(getContext(), DemandeActivity.class);
+                demande.putExtra("TYPE", DemandeActivity.TYPE_RENDEZVOUS);
+                startActivity(demande);
+            }
+        });
         return binding.getRoot();
     }
 

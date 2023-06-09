@@ -1,11 +1,14 @@
 package com.example.miniprojet.ui.annonce;
 
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,12 +18,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.miniprojet.R;
 import com.example.miniprojet.Server;
 import com.example.miniprojet.databinding.ActivityAnnonceBinding;
 import com.example.miniprojet.interfaces.RequestFinished;
 import com.example.miniprojet.models.Annonce;
 import com.example.miniprojet.models.Client;
 import com.example.miniprojet.models.User;
+import com.example.miniprojet.ui.Demande.DemandeActivity;
 import com.example.miniprojet.ui.account.AccountActivity;
 
 import org.json.JSONException;
@@ -35,6 +40,8 @@ public class AnnonceActivity extends AppCompatActivity {
     private int idAnnonce;
     private Annonce annonce;
     private Client client;
+    private ArrayList changed;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,22 +58,84 @@ public class AnnonceActivity extends AppCompatActivity {
         });
 
         BAnnonce.buttonSupprimer.setVisibility(View.GONE);
+
+        BAnnonce.buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String titre = BAnnonce.titre.getText().toString().trim();
+                String desc = BAnnonce.desc.getText().toString().trim();
+                String type = BAnnonce.type.getText().toString().trim();
+                String marque = BAnnonce.marque.getText().toString().trim();
+                String modele = BAnnonce.modele.getText().toString().trim();
+                String couleur = BAnnonce.couleur.getText().toString().trim();
+                String transmission = BAnnonce.transmission.getText().toString().trim();
+                String kilometrage = BAnnonce.kilometrage.getText().toString().trim();
+                String annee = BAnnonce.year.getText().toString().trim();
+                String moteur = BAnnonce.moteur.getText().toString().trim();
+                String energie = BAnnonce.energie.getText().toString().trim();
+                String prix = BAnnonce.prix.getText().toString().trim();
+
+                annonce.setIdUser(User.getInstance(getApplicationContext()).getID());
+                annonce.setTitle(titre);
+                annonce.setDesc(desc);
+                annonce.setType(type);
+                annonce.setMarque(marque);
+                annonce.setModele(modele);
+                annonce.setCouleur(couleur);
+                annonce.setTransmission(transmission);
+                annonce.setKilometrage(kilometrage);
+                annonce.setAnnee(annee);
+                annonce.setMoteur(moteur);
+                annonce.setEnergie(energie);
+                annonce.setPrix(prix);
+
+                Annonce.updateAnnonce(annonce, getApplicationContext(), new RequestFinished() {
+                    @Override
+                    public void onFinish(ArrayList args) {
+
+                    }
+
+                    @Override
+                    public void onError(ArrayList args) {
+
+                    }
+                });
+            }
+        });
         BAnnonce.buttonSupprimer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(AnnonceActivity.this, "to be implemented later", Toast.LENGTH_SHORT).show();
+                Annonce.delAnnonce(annonce.getIdAnnonce(), getApplicationContext(), new RequestFinished() {
+                    @Override
+                    public void onFinish(ArrayList args) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onError(ArrayList args) {
+
+                    }
+                });
             }
         });
         BAnnonce.buttonReserver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(AnnonceActivity.this, "to be implemented later", Toast.LENGTH_SHORT).show();
+                if(annonce == null) return;
+                Intent demande = new Intent(getApplicationContext(), DemandeActivity.class);
+                demande.putExtra("idAnnonce", annonce.getIdAnnonce());
+                demande.putExtra("TYPE",DemandeActivity.TYPE_RESERVATION);
+                startActivity(demande);
             }
         });
         BAnnonce.buttonDemanderRendezvous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(AnnonceActivity.this, "to be implemented later", Toast.LENGTH_SHORT).show();
+                if(annonce == null) return;
+                Intent demande = new Intent(getApplicationContext(), DemandeActivity.class);
+                demande.putExtra("idAnnonce", annonce.getIdAnnonce());
+                demande.putExtra("TYPE",DemandeActivity.TYPE_RENDEZVOUS);
+                startActivity(demande);
             }
         });
 
@@ -135,6 +204,14 @@ public class AnnonceActivity extends AppCompatActivity {
                             BAnnonce.buttonSupprimer.setVisibility(View.VISIBLE);
                             BAnnonce.buttonReserver.setVisibility(View.GONE);
                             BAnnonce.buttonDemanderRendezvous.setVisibility(View.GONE);
+
+                            BAnnonce.type.setSimpleItems(getResources().getStringArray(R.array.types_actions));
+                            BAnnonce.marque.setSimpleItems(getResources().getStringArray(R.array.marque));
+                            BAnnonce.couleur.setSimpleItems(getResources().getStringArray(R.array.couleur));
+                            BAnnonce.transmission.setSimpleItems(getResources().getStringArray(R.array.boite));
+                            BAnnonce.energie.setSimpleItems(getResources().getStringArray(R.array.energie));
+
+
                         }
                         else{
                             BAnnonce.imageAnnonce.setClickable(false);
@@ -184,37 +261,283 @@ public class AnnonceActivity extends AppCompatActivity {
                 });
             }
 
+
+
+            changed = new ArrayList();
+            BAnnonce.titre.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ShowOrHideSave_Manager( String.join("", charSequence), annonce.getTitle(),BAnnonce.titre.getId());
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), annonce.getTitle(),BAnnonce.titre.getId());
+
+                }
+            });
+            BAnnonce.desc.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ShowOrHideSave_Manager(String.join("", charSequence), annonce.getDesc(),BAnnonce.desc.getId());
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), annonce.getDesc(),BAnnonce.desc.getId());
+
+                }
+            });
+            BAnnonce.type.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ShowOrHideSave_Manager(String.join("", charSequence), annonce.getType(),BAnnonce.type.getId());
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), annonce.getType(),BAnnonce.type.getId());
+
+                }
+            });
+            BAnnonce.marque.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ShowOrHideSave_Manager(String.join("", charSequence), annonce.getMarque(),BAnnonce.marque.getId());
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), annonce.getMarque(),BAnnonce.marque.getId());
+
+                }
+            });
+            BAnnonce.modele.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ShowOrHideSave_Manager(String.join("", charSequence), annonce.getModele(),BAnnonce.modele.getId());
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), annonce.getModele(),BAnnonce.modele.getId());
+                }
+            });
+
+            BAnnonce.couleur.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ShowOrHideSave_Manager(String.join("", charSequence), annonce.getCouleur(),BAnnonce.couleur.getId());
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), annonce.getCouleur(),BAnnonce.couleur.getId());
+                }
+            });
+            BAnnonce.transmission.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ShowOrHideSave_Manager(String.join("", charSequence), annonce.getTransmission(),BAnnonce.transmission.getId());
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), annonce.getTransmission(),BAnnonce.transmission.getId());
+                }
+            });
+            BAnnonce.kilometrage.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ShowOrHideSave_Manager(String.join("", charSequence), annonce.getKilometrage(),BAnnonce.kilometrage.getId());
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), annonce.getKilometrage(),BAnnonce.kilometrage.getId());
+                }
+            });
+
+            //
+            BAnnonce.year.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ShowOrHideSave_Manager(String.join("", charSequence), annonce.getAnnee(),BAnnonce.year.getId());
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), annonce.getAnnee(),BAnnonce.year.getId());
+                }
+            });
+
+            BAnnonce.moteur.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ShowOrHideSave_Manager(String.join("", charSequence), annonce.getMoteur(),BAnnonce.moteur.getId());
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), annonce.getMoteur(),BAnnonce.moteur.getId());
+                }
+            });
+            BAnnonce.energie.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ShowOrHideSave_Manager(String.join("", charSequence), annonce.getEnergie(),BAnnonce.energie.getId());
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), annonce.getEnergie(),BAnnonce.energie.getId());
+                }
+            });
+            BAnnonce.prix.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ShowOrHideSave_Manager(String.join("", charSequence), annonce.getPrix(),BAnnonce.prix.getId());
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    ShowOrHideSave_Manager(editable.toString(), annonce.getPrix(),BAnnonce.prix.getId());
+                }
+            });
+
             ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
                         if (data != null) {
-                            Uri selectedImageUri = data.getData();
-                            try {
-                                Bitmap img = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
-                                Server.saveBitmap(getApplicationContext(), "imageAnnonce-["+idAnnonce+"]", img);
-                                JSONObject o = new JSONObject();
-                                o.put("imgB64", Server.ImageToBase64(img, getApplicationContext()));
-                                o.put("id", idAnnonce);
-                                o.put("format", "jpeg");
-                                o.put("type", Server.TYPE_IMAGE_ANNONCE);
-                                Server.sendImageToserver(o, getApplicationContext());
-                                BAnnonce.imageAnnonce.setImageURI(selectedImageUri);
-                            } catch (IOException e) {
-                                Toast.makeText(getApplicationContext(), "Error : "+e, Toast.LENGTH_SHORT).show();
-                            } catch (JSONException e) {
-                                Toast.makeText(getApplicationContext(), "Error : "+e, Toast.LENGTH_SHORT).show();
+                            ClipData clipData = data.getClipData();
+                            if(clipData != null){
+                                for (int i = 0; i < clipData.getItemCount(); i++) {
+                                    Uri selectedImageUri = clipData.getItemAt(i).getUri();
+                                    Toast.makeText(AnnonceActivity.this, i+ " uri : " +selectedImageUri, Toast.LENGTH_SHORT).show();
+                                    try {
+                                        Bitmap img = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
+                                        Server.saveBitmap(getApplicationContext(), "imageAnnonce-["+idAnnonce+"]-["+i+"]", img);
+                                        JSONObject o = new JSONObject();
+                                        o.put("imgB64", Server.ImageToBase64(img, getApplicationContext()));
+                                        o.put("id", idAnnonce);
+                                        o.put("format", "jpeg");
+                                        o.put("type", Server.TYPE_IMAGE_ANNONCE);
+                                        o.put("index", i);
+                                        Server.sendImageToserver(o, getApplicationContext());
+                                        if(i == 0)
+                                            BAnnonce.imageAnnonce.setImageURI(selectedImageUri);
+                                    } catch (IOException e) {
+                                        Toast.makeText(getApplicationContext(), "Error : "+e, Toast.LENGTH_SHORT).show();
+                                    } catch (JSONException e) {
+                                        Toast.makeText(getApplicationContext(), "Error : "+e, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
                             }
+                            else{
+                                Uri selectedImageUri = data.getData();
+                                try {
+                                    Bitmap img = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
+                                    Server.saveBitmap(getApplicationContext(), "imageAnnonce-["+idAnnonce+"]-[0]", img);
+                                    JSONObject o = new JSONObject();
+                                    o.put("imgB64", Server.ImageToBase64(img, getApplicationContext()));
+                                    o.put("id", idAnnonce);
+                                    o.put("format", "jpeg");
+                                    o.put("type", Server.TYPE_IMAGE_ANNONCE);
+                                    Server.sendImageToserver(o, getApplicationContext());
+                                    BAnnonce.imageAnnonce.setImageURI(selectedImageUri);
+                                } catch (IOException e) {
+                                    Toast.makeText(getApplicationContext(), "Error : "+e, Toast.LENGTH_SHORT).show();
+                                } catch (JSONException e) {
+                                    Toast.makeText(getApplicationContext(), "Error : "+e, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
 
                         }
                     }
                 }
             });
+
             BAnnonce.imageAnnonce.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    Intent gallery = new Intent();
+                    gallery.setType("image/*");
+                    gallery.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                    gallery.setAction(Intent.ACTION_GET_CONTENT);
                     galleryLauncher.launch(gallery);
                 }
             });
@@ -223,5 +546,25 @@ public class AnnonceActivity extends AppCompatActivity {
             Toast.makeText(this, "unrecognized announcement", Toast.LENGTH_SHORT).show();
         }
 
+    }
+    public void ShowOrHideSave_Manager(String text, String original, int id){
+        if(text.equals(original)){
+            if(changed.contains(id+"")){
+                changed.remove(id+"");
+            }
+        }
+        else{
+            changed.add(id+"");
+        }
+        ShowOrHideSaveBtn();
+    }
+    public void ShowOrHideSaveBtn(){
+        if(BAnnonce == null)return;
+        if(changed.size()>=1){
+            BAnnonce.buttonSave.setVisibility(View.VISIBLE);
+        }
+        else{
+            BAnnonce.buttonSave.setVisibility(View.GONE);
+        }
     }
 }

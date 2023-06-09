@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="marque">
+        <item>Mercedes</item>
+        <item>BMW</item>
+        <item>Audi</item>
+        <item>Porsche</item>
+        <item>Hyundai</item>
+    </string-array>
+    <string-array name="marqueFiltre">
         <item>All</item>
         <item>Mercedes</item>
         <item>BMW</item>
@@ -9,30 +16,57 @@
         <item>Hyundai</item>
     </string-array>
     <string-array name="types_actions">
+        <item>Vente</item>
+        <item>Location</item>
+    </string-array>
+    <string-array name="types_actionsFiltre">
         <item>All</item>
         <item>Vente</item>
         <item>Location</item>
     </string-array>
     <string-array name="wilaya">
+        <item>Alger</item>
+        <item>Bejaia</item>
+    </string-array>
+    <string-array name="wilayaFiltre">
         <item>All</item>
         <item>Alger</item>
         <item>Bejaia</item>
     </string-array>
     <string-array name="boite">
+        <item>Automatique</item>
+        <item>Manual</item>
+    </string-array>
+    <string-array name="boiteFiltre">
         <item>All</item>
         <item>Automatique</item>
         <item>Manual</item>
     </string-array>
-    <string-array name="couleur">
+    <string-array name="couleurFiltre">
         <item>All</item>
         <item>rouge</item>
         <item>noire</item>
     </string-array>
-    <string-array name="energie">
+    <string-array name="couleur">
+        <item>rouge</item>
+        <item>noire</item>
+    </string-array>
+    <string-array name="energieFiltre">
         <item>All</item>
         <item>diesel</item>
         <item>essence</item>
         <item>electrique</item>
         <item>hybride</item>
+    </string-array>
+    <string-array name="energie">
+        <item>diesel</item>
+        <item>essence</item>
+        <item>electrique</item>
+        <item>hybride</item>
+    </string-array>
+    <string-array name="etat">
+        <item>Pending</item>
+        <item>Accepted</item>
+        <item>Rejected</item>
     </string-array>
 </resources>

@@ -625,12 +625,12 @@ APP.post("/annonce/remove", (_req : express.Request, _res : express.Response) =>
         .catch(error => _res.json({error:error})); 
 });
 
-APP.post("/annonce/add", (_req : express.Request, _res : express.Response) => {
+APP.post("/annonce/update", (_req : express.Request, _res : express.Response) => {
     console.log("POST /annonce/add");
     let 
         missingFields : string[] = [],
-        annonce : Annonce = {
-        idAnnonce: null,
+        idAnnonce: string = _req.body["idAnnonce"],
+        annonce : any = {
         idClient:Number.parseInt(_req.body["idClient"]),
         titre:_req.body["titre"],
         description:_req.body["description"],
@@ -647,7 +647,9 @@ APP.post("/annonce/add", (_req : express.Request, _res : express.Response) => {
     };
 
     
-
+    if(!idAnnonce){
+        missingFields.push("idAnnonce");
+    }
     if(!annonce.idClient){
         missingFields.push("idClient");
     }
@@ -697,33 +699,11 @@ APP.post("/annonce/add", (_req : express.Request, _res : express.Response) => {
         return;
     }
 
-    dbc.AddAnnonce(annonce)
+    dbc.UpdateAnnonce(idAnnonce, annonce)
         .then((result:any)=> _res.json({result:result.insertId}))
         .catch(error => _res.json({error:error})); 
 });
 
-APP.post("/annonce/remove", (_req : express.Request, _res : express.Response) => {
-    console.log("POST /annonce/remove");
-    let 
-    missingFields : string[] = [],
-    idAnnonce : number = Number.parseInt(_req.body["idAnnonce"]);
-    
-
-    if(!idAnnonce){
-        missingFields.push("idAnnonce");
-    }
-
-    if(missingFields.length > 0){
-        _res.json({
-            error : `missing required fields : [${missingFields.join(", ")}]`
-        })
-        return;
-    }
-
-    dbc.DelAnnonce(idAnnonce)
-        .then(result=> _res.json({result:result}))
-        .catch(error => _res.json({error:error})); 
-});
 
 APP.post("/reservations", (_req : express.Request, _res : express.Response) => {
     console.log("POST /reservations");
@@ -1113,7 +1093,8 @@ APP.post("/upload/image", (_req : express.Request, _res : express.Response) => {
         id : number = _req.body["userID"],
         imgB64 : string = _req.body["imgB64"],
         format : string = _req.body["format"],
-        type : string = _req.body["type"];
+        type : string = _req.body["type"],
+        index : string = _req.body["index"];
 
     
     console.log("image is being uploaded...");
@@ -1130,6 +1111,13 @@ APP.post("/upload/image", (_req : express.Request, _res : express.Response) => {
     if(!type){
         missingFields.push("type");
     } 
+    else{
+        if(type == "ANNONCE"){
+            if(!index){
+                missingFields.push("index");
+            }
+        }
+    }
 
     if(missingFields.length > 0){
         _res.json({
@@ -1140,7 +1128,8 @@ APP.post("/upload/image", (_req : express.Request, _res : express.Response) => {
 
     const buffer = Buffer.from(imgB64, 'base64');
     let dir : string = "unknown",
-        fileprefix : string = "unknown";
+        fileprefix : string = "unknown",
+        filesuffix : string = `[${id}].${format}`;
 
     switch (type) {
         case "AVATAR":
@@ -1150,12 +1139,13 @@ APP.post("/upload/image", (_req : express.Request, _res : express.Response) => {
         case "ANNONCE":
             dir = "annonce";
             fileprefix = "imageAnnonce";
+            filesuffix = `[${id}]-[${index}].${format}`;
             break;
         default:
             break;
     }
 
-    fs.writeFile(`images/${dir}/${fileprefix}-[${id}].${format}`, buffer, (err) => {
+    fs.writeFile(`images/${dir}/${fileprefix}-${filesuffix}`, buffer, (err) => {
         if (err) {
             console.error(err);
             _res.send('Error saving image');

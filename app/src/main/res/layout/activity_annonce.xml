@@ -288,7 +288,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 >
-            <Button
+                <Button
+                    android:id="@+id/button_save"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/save"
+                    android:visibility="gone"
+                    />
+                <Button
                 android:id="@+id/button_reserver"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -309,6 +317,7 @@
                     android:text="Supprimer"
                     android:layout_marginTop="16dp"
                     />
+
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

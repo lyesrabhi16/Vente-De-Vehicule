@@ -167,7 +167,6 @@ public class AnnoncesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.containerHome.scrollViewFix.setVisibility(View.VISIBLE);
     }
 
     public void Filter(JSONObject filterObj){
