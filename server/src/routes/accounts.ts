@@ -1,6 +1,6 @@
 import { Router, type RequestHandler } from 'express';
 import { z } from 'zod';
-import { authenticate, hashPassword, requireSelfOrAdmin, requireUser, signToken, verifyPassword } from '../auth';
+import { authenticate, hashPassword, optionalAuthenticate, requireSelfOrAdmin, signToken, verifyPassword } from '../auth';
 import { isDuplicate, rows, run } from '../db';
 import { businessError, handler, parseBody } from '../http';
 import type { Images } from '../images';
@@ -68,15 +68,17 @@ export function accountRoutes(ctx: Ctx, images: Images, limiters: { signup: Requ
 
   router.post(
     '/user',
-    auth,
+    optionalAuthenticate(db, config),
     handler(async (req, res) => {
       const { idClient } = parseBody(userSchema, req.body);
-      const me = requireUser(req);
+      const me = req.user;
       const [row] = await rows<ClientRow>(db, `SELECT ${CLIENT_COLUMNS} FROM client WHERE idClient = ?`, [idClient]);
       if (!row) throw businessError('Utilisateur introuvable');
-      // Les coordonnées d'un vendeur servent à le contacter ; son âge non (l'application en lit un, d'où 0 et non l'absence).
-      const own = me.role === 'admin' || me.idClient === idClient;
-      res.json({ user: [presentClient(own ? row : { ...row, ageClient: 0 })] });
+      // Qui parcourt les annonces sans compte voit le nom du vendeur ; ses coordonnées, pour le contacter, demandent un compte ;
+      // son âge n'est montré qu'à lui (l'application lit les trois : d'où « vide » et 0, pas l'absence).
+      const own = me !== undefined && (me.role === 'admin' || me.idClient === idClient);
+      const visible = own ? row : { ...row, ageClient: 0, ...(me ? {} : { email: '', numTel: '' }) };
+      res.json({ user: [presentClient(visible)] });
     }),
   );
 

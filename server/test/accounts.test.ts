@@ -83,10 +83,18 @@ describe('inscription et connexion', () => {
 });
 
 describe('jetons', () => {
-  it('exige un jeton partout où on touche à un compte', async () => {
+  it('exige un jeton pour modifier, supprimer ou lire des coordonnées', async () => {
     const me = await signup(server);
+    const identity = { idClient: me.idClient, nomClient: 'X', prenomClient: 'Y', ageClient: '30', email: 'x@exemple.fr', numTel: '0600004321' };
+    expect((await server.api.post('/user/update').type('form').send(identity)).status).toBe(401);
+    expect((await server.api.post('/user/remove').type('form').send({ idClient: me.idClient })).status).toBe(401);
+  });
+
+  it('montre sans compte le nom d’un vendeur, mais ni ses coordonnées ni son âge', async () => {
+    const me = await signup(server, { ageClient: '52' });
     const res = await server.api.post('/user').type('form').send({ idClient: me.idClient });
-    expect(res.status).toBe(401);
+    expect(res.status).toBe(200);
+    expect(res.body.user[0]).toMatchObject({ nomClient: 'Nom', email: '', numTel: '', ageClient: 0 });
   });
 
   it('refuse un jeton falsifié, expiré ou signé avec un autre secret', async () => {
@@ -126,6 +134,7 @@ describe('profils', () => {
     const other = await server.api.post('/user').set(b.as).type('form').send({ idClient: a.idClient });
     expect(other.body.user[0].ageClient).toBe(0);
     expect(other.body.user[0].nomClient).toBe('Nom');
+    expect(other.body.user[0].email).toBe(a.email);
   });
 
   it('refuse de modifier ou supprimer le compte d’un autre', async () => {
