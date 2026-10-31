@@ -165,6 +165,18 @@ public class DashboardFragment extends Fragment {
         return root;
     }
 
+    private boolean resumedOnce;
+
+    /** Au retour d'une demande ou d'une annonce modifiée, la liste se recharge. */
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (resumedOnce && User.getInstance(getContext()).isLoggedin()) {
+            getParentFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        }
+        resumedOnce = true;
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

@@ -104,10 +104,10 @@ public class Message {
 
                                             PersonItem item = new PersonItem();
                                             item.setUserID(r.getInt("idClient"));
-                                            item.setTitle(r.getString("nomClient")+" "+r.getString("prenomClient")+" ");
+                                            item.setTitle(r.getString("prenomClient") + " " + r.getString("nomClient"));
                                             item.setSubTitle("");
                                             if (user.getID() == r.getInt("idClient_sender")) {
-                                                item.setSubTitle("You: ");
+                                                item.setSubTitle("Vous : ");
                                             }
                                             item.setSubTitle(item.getSubTitle() + "" + r.getString("contenuMessage"));
                                             item.setData(r.getString("date"));

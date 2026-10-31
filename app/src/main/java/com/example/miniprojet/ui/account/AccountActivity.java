@@ -75,6 +75,24 @@ public class AccountActivity extends AppCompatActivity {
                     ABind.age.setText(client.getAge()+"");
                     ABind.email.setText(client.getEmail());
                     ABind.numTel.setText(client.getNumTel());
+                    if (client.getIdClient() != user.getID()) {
+                        // le profil d'un autre : sa photo, et pas d'âge (le serveur ne le donne qu'à son titulaire)
+                        if (client.getAge() == 0) {
+                            ABind.ageTextLayout.setVisibility(View.GONE);
+                        }
+                        Server.getImage("imageClient-[" + client.getIdClient() + "].jpeg", getApplicationContext(), new RequestFinished() {
+                            @Override
+                            public void onFinish(ArrayList args) {
+                                if (ABind != null && args.get(0) != null) {
+                                    ABind.userAvatar.setImageBitmap((Bitmap) args.get(0));
+                                }
+                            }
+
+                            @Override
+                            public void onError(ArrayList args) {
+                            }
+                        });
+                    }
                     if(client.getIdClient() == user.getID()){
                         ABind.userAvatar.setClickable(true);
                         ABind.nomTextLayout.setEnabled(true);

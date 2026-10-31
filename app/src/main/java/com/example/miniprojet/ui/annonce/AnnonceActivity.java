@@ -161,7 +161,12 @@ public class AnnonceActivity extends AppCompatActivity {
                     if(BAnnonce != null){
                         BAnnonce.titre.setText(annonce.getTitle());
                         BAnnonce.desc.setText(annonce.getDesc());
-                        Ui.typePill(BAnnonce.type, annonce.getType());
+                        BAnnonce.type.setText(annonce.getType());
+                        // l'en-tête résume l'annonce (titre, prix, caractéristiques clés)
+                        Ui.typePill(BAnnonce.headerType, annonce.getType());
+                        BAnnonce.headerTitle.setText(annonce.getTitle());
+                        BAnnonce.headerPrice.setText(Ui.price(BAnnonce.headerPrice.getContext(), annonce.getPrix(), annonce.getType()));
+                        BAnnonce.headerMeta.setText(annonce.getAnnee() + "  ·  " + Ui.km(BAnnonce.headerMeta.getContext(), annonce.getKilometrage()) + "  ·  " + annonce.getEnergie() + "  ·  " + annonce.getTransmission());
                         BAnnonce.marque.setText(annonce.getMarque());
                         BAnnonce.modele.setText(annonce.getModele());
                         BAnnonce.couleur.setText(annonce.getCouleur());

@@ -8,8 +8,8 @@
     <string name="title_messages">Messages</string>
     <string name="title_account">Compte</string>
     <string name="title_admin_annonces">Annonces</string>
-    <string name="title_admin_rendezvous">Rendez-vous</string>
-    <string name="title_admin_reservations">Réservations</string>
+    <string name="title_admin_rendezvous">RDV</string>
+    <string name="title_admin_reservations">Locations</string>
     <string name="title_admin">Admin</string>
     <string name="search_hint">Rechercher</string>
 
@@ -54,7 +54,7 @@
     <string name="brand">Marque</string>
     <string name="modele">Modèle</string>
     <string name="description">Description</string>
-    <string name="transmission">Boîte de vitesses</string>
+    <string name="transmission">Boîte</string>
     <string name="mileage">Kilométrage</string>
     <string name="price">Prix</string>
     <string name="wilaya">Wilaya</string>
@@ -71,6 +71,7 @@
     <string name="send_message">Envoyer un message</string>
     <string name="save">Enregistrer</string>
     <string name="seller">Vendeur</string>
+    <string name="requester">Demandeur</string>
     <string name="section_info">Informations</string>
     <string name="images_hint">Ajouter des photos depuis la galerie</string>
     <string name="delete">Supprimer</string>

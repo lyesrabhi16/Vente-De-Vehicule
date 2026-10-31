@@ -234,7 +234,7 @@ public class SearchFragment extends Fragment {
                                 }
                                 else{
                                     PersonItem p = new PersonItem();
-                                    p.setTitle(obj.getString("nomClient") +" "+ obj.getString("prenomClient") +" ");
+                                    p.setTitle(obj.getString("prenomClient") + " " + obj.getString("nomClient"));
                                     p.setSubTitle(obj.getString("email") );
                                     p.setUserID(obj.getInt("idClient"));
                                     item.setPerson(p);

@@ -83,6 +83,7 @@ public class DemandeAdapter extends RecyclerView.Adapter<DemandeAdapter.ViewHold
             public void onClick(View view) {
                 Intent demande = new Intent(holder.itemView.getContext(), DemandeActivity.class);
                 demande.putExtra("idAnnonce",item.getAnnonce().getIdAnnonce());
+                demande.putExtra("idClient", item.getPerson().getIdClient()); // la demande de cette personne, pas la mienne
                 holder.itemView.getContext().startActivity(demande);
             }
         });

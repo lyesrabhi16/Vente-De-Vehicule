@@ -6,6 +6,7 @@ import { createDb, run } from '../src/db';
 /**
  * Remplit un serveur en marche de données de démonstration (comptes, annonces avec photos, demandes, conversations) en passant
  * par l'API, comme le ferait l'application : `npm run seed:demo` (API_URL pour un autre serveur que http://localhost:5000).
+ * Les lieux sont des coordonnées « longitude latitude », comme les enregistre le sélecteur de carte de l'application.
  * Les comptes ont tous le mot de passe « demo1234 » ; le compte admin@getcars.dz est administrateur.
  * Rejouable : un compte ou une annonce déjà présente n'est pas recréé.
  */
@@ -114,20 +115,20 @@ async function main(): Promise<void> {
 
     // réservations (locations) et rendez-vous (ventes)
     await safe('réservation Audi', async () => {
-      await call('/reservation/add', { idClient: sara.idClient, idAnnonce: idOf('Audi Q5 à la journée'), dateDebut: inDays(10), dateFin: inDays(14), lieuReservation: 'Aéroport Houari Boumediene, Alger' }, sara.token);
-      await call('/reservation/update', { idClient: sara.idClient, idAnnonce: idOf('Audi Q5 à la journée'), dateDebut: inDays(10), dateFin: inDays(14), lieuReservation: 'Aéroport Houari Boumediene, Alger', etatReservation: 'Accepted' }, accounts.yanis.token);
+      await call('/reservation/add', { idClient: sara.idClient, idAnnonce: idOf('Audi Q5 à la journée'), dateDebut: inDays(10), dateFin: inDays(14), lieuReservation: '3.2154 36.6910' }, sara.token);
+      await call('/reservation/update', { idClient: sara.idClient, idAnnonce: idOf('Audi Q5 à la journée'), dateDebut: inDays(10), dateFin: inDays(14), lieuReservation: '3.2154 36.6910', etatReservation: 'Accepted' }, accounts.yanis.token);
     });
-    await safe('réservation Tucson', () => call('/reservation/add', { idClient: sara.idClient, idAnnonce: idOf('Hyundai Tucson à la journée'), dateDebut: inDays(20), dateFin: inDays(23), lieuReservation: 'Gare de Bejaia' }, sara.token));
+    await safe('réservation Tucson', () => call('/reservation/add', { idClient: sara.idClient, idAnnonce: idOf('Hyundai Tucson à la journée'), dateDebut: inDays(20), dateFin: inDays(23), lieuReservation: '5.0689 36.7509' }, sara.token));
     await safe('réservation Peugeot', async () => {
-      await call('/reservation/add', { idClient: accounts.karim.idClient, idAnnonce: idOf('Peugeot 508 à la journée'), dateDebut: inDays(5), dateFin: inDays(7), lieuReservation: 'Hydra, Alger' }, accounts.karim.token);
-      await call('/reservation/update', { idClient: accounts.karim.idClient, idAnnonce: idOf('Peugeot 508 à la journée'), dateDebut: inDays(5), dateFin: inDays(7), lieuReservation: 'Hydra, Alger', etatReservation: 'Rejected' }, accounts.yanis.token);
+      await call('/reservation/add', { idClient: accounts.karim.idClient, idAnnonce: idOf('Peugeot 508 à la journée'), dateDebut: inDays(5), dateFin: inDays(7), lieuReservation: '3.0420 36.7440' }, accounts.karim.token);
+      await call('/reservation/update', { idClient: accounts.karim.idClient, idAnnonce: idOf('Peugeot 508 à la journée'), dateDebut: inDays(5), dateFin: inDays(7), lieuReservation: '3.0420 36.7440', etatReservation: 'Rejected' }, accounts.yanis.token);
     });
-    await safe('rendez-vous Mercedes', () => call('/rendezvous/add', { idClient: sara.idClient, idAnnonce: idOf('Mercedes Classe C 220d'), dateRendezVous: inDays(3, 15), lieuRendezVous: 'Garage Hydra, Alger' }, sara.token));
+    await safe('rendez-vous Mercedes', () => call('/rendezvous/add', { idClient: sara.idClient, idAnnonce: idOf('Mercedes Classe C 220d'), dateRendezVous: inDays(3, 15), lieuRendezVous: '3.0420 36.7440' }, sara.token));
     await safe('rendez-vous BMW', async () => {
-      await call('/rendezvous/add', { idClient: sara.idClient, idAnnonce: idOf('BMW Série 4 Coupé'), dateRendezVous: inDays(6, 11), lieuRendezVous: 'Showroom Bab Ezzouar' }, sara.token);
-      await call('/rendezvous/update', { idClient: sara.idClient, idAnnonce: idOf('BMW Série 4 Coupé'), dateRendezVous: inDays(6, 11), lieuRendezVous: 'Showroom Bab Ezzouar', etatRendezVous: 'Accepted' }, accounts.lina.token);
+      await call('/rendezvous/add', { idClient: sara.idClient, idAnnonce: idOf('BMW Série 4 Coupé'), dateRendezVous: inDays(6, 11), lieuRendezVous: '3.1830 36.7220' }, sara.token);
+      await call('/rendezvous/update', { idClient: sara.idClient, idAnnonce: idOf('BMW Série 4 Coupé'), dateRendezVous: inDays(6, 11), lieuRendezVous: '3.1830 36.7220', etatRendezVous: 'Accepted' }, accounts.lina.token);
     });
-    await safe('rendez-vous Tesla', () => call('/rendezvous/add', { idClient: accounts.karim.idClient, idAnnonce: idOf('Tesla Model 3 Long Range'), dateRendezVous: inDays(4, 17), lieuRendezVous: 'Borne de recharge, Kouba' }, accounts.karim.token));
+    await safe('rendez-vous Tesla', () => call('/rendezvous/add', { idClient: accounts.karim.idClient, idAnnonce: idOf('Tesla Model 3 Long Range'), dateRendezVous: inDays(4, 17), lieuRendezVous: '3.0810 36.7280' }, accounts.karim.token));
 
     // conversations
     const exists = (await call('/messages', { idClient1: sara.idClient, idClient2: accounts.karim.idClient }, sara.token)).result as Json[];
