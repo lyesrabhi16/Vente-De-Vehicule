@@ -5,9 +5,10 @@
 Mini-projet de fin de cycle de Licence : une application Android pour publier des annonces de véhicules, les parcourir sans compte, réserver une location ou demander un rendez-vous, et discuter en temps réel avec le vendeur. Elle parle à un serveur Express / TypeScript / MySQL.
 
 <p align="center">
-  <img src="docs/accueil.png" alt="Annonces" width="220">
-  <img src="docs/messages.png" alt="Conversations" width="220">
-  <img src="docs/conversation.png" alt="Conversation" width="220">
+  <img src="docs/screenshots/01-accueil.png" alt="Annonces" width="200">
+  <img src="docs/screenshots/08-annonce-location.png" alt="Détail d'une annonce" width="200">
+  <img src="docs/screenshots/14-conversation.png" alt="Conversation" width="200">
+  <img src="docs/screenshots/26-sombre-accueil.png" alt="Mode sombre" width="200">
 </p>
 
 ## Fonctionnalités
@@ -18,6 +19,42 @@ Mini-projet de fin de cycle de Licence : une application Android pour publier de
 - Messagerie en temps réel (Socket.IO) entre acheteur et vendeur
 - Carte (TomTom) pour situer un rendez-vous
 
+## Captures
+
+Toutes les pages de l'application, dans l'ordre d'un parcours. Les données viennent de `npm run seed:demo` (voir plus bas) ; les voitures sont des illustrations générées, pas des photos.
+
+**Sans compte** : on parcourt et on cherche, on ne fait rien d'autre.
+
+<table>
+<tr><td align="center"><img src="docs/screenshots/01-accueil.png" width="170"><br><sub>Annonces</sub></td><td align="center"><img src="docs/screenshots/02-filtres.png" width="170"><br><sub>Filtres</sub></td><td align="center"><img src="docs/screenshots/03-recherche.png" width="170"><br><sub>Recherche</sub></td><td align="center"><img src="docs/screenshots/04-connexion.png" width="170"><br><sub>Connexion</sub></td><td align="center"><img src="docs/screenshots/05-inscription.png" width="170"><br><sub>Inscription</sub></td></tr>
+</table>
+
+**Acheteur** : consulter une annonce, réserver une location, demander un rendez-vous, suivre ses demandes, discuter.
+
+<table>
+<tr><td align="center"><img src="docs/screenshots/06-accueil-connecte.png" width="170"><br><sub>Accueil, connecté</sub></td><td align="center"><img src="docs/screenshots/07-annonce-vente.png" width="170"><br><sub>Annonce à vendre</sub></td><td align="center"><img src="docs/screenshots/08-annonce-location.png" width="170"><br><sub>Annonce à louer</sub></td><td align="center"><img src="docs/screenshots/09-reservation.png" width="170"><br><sub>Réservation en attente</sub></td><td align="center"><img src="docs/screenshots/10-nouvelle-demande.png" width="170"><br><sub>Nouvelle demande</sub></td></tr>
+<tr><td align="center"><img src="docs/screenshots/11-rendez-vous.png" width="170"><br><sub>Rendez-vous accepté</sub></td><td align="center"><img src="docs/screenshots/12-mon-espace.png" width="170"><br><sub>Mon espace</sub></td><td align="center"><img src="docs/screenshots/13-messages.png" width="170"><br><sub>Messages</sub></td><td align="center"><img src="docs/screenshots/14-conversation.png" width="170"><br><sub>Conversation</sub></td><td align="center"><img src="docs/screenshots/15-profil.png" width="170"><br><sub>Mon profil</sub></td></tr>
+<tr><td align="center"><img src="docs/screenshots/16-publier.png" width="170"><br><sub>Publier une annonce</sub></td><td align="center"><img src="docs/screenshots/17-profil-vendeur.png" width="170"><br><sub>Profil d'un vendeur</sub></td><td align="center"><img src="docs/screenshots/18-annonces-vendeur.png" width="170"><br><sub>Ses annonces</sub></td></tr>
+</table>
+
+**Vendeur** : recevoir une demande, l'accepter ou la refuser.
+
+<table>
+<tr><td align="center"><img src="docs/screenshots/19-demandes.png" width="170"><br><sub>Demandes reçues</sub></td><td align="center"><img src="docs/screenshots/20-demande-recue.png" width="170"><br><sub>Une demande reçue</sub></td><td align="center"><img src="docs/screenshots/21-aucune-demande.png" width="170"><br><sub>Rien en attente</sub></td></tr>
+</table>
+
+**Administrateur** : toutes les annonces, tous les rendez-vous et toutes les locations.
+
+<table>
+<tr><td align="center"><img src="docs/screenshots/22-admin-annonces.png" width="170"><br><sub>Annonces</sub></td><td align="center"><img src="docs/screenshots/23-admin-rendez-vous.png" width="170"><br><sub>Rendez-vous</sub></td><td align="center"><img src="docs/screenshots/24-admin-locations.png" width="170"><br><sub>Locations</sub></td><td align="center"><img src="docs/screenshots/25-admin-profil.png" width="170"><br><sub>Profil</sub></td></tr>
+</table>
+
+**Mode sombre et lancement**
+
+<table>
+<tr><td align="center"><img src="docs/screenshots/26-sombre-accueil.png" width="170"><br><sub>Accueil</sub></td><td align="center"><img src="docs/screenshots/27-sombre-conversation.png" width="170"><br><sub>Conversation</sub></td><td align="center"><img src="docs/screenshots/28-sombre-profil.png" width="170"><br><sub>Profil</sub></td><td align="center"><img src="docs/screenshots/29-lancement.png" width="170"><br><sub>Lancement</sub></td></tr>
+</table>
+
 ## Architecture
 
 ```
@@ -26,6 +63,7 @@ server/   API REST + Socket.IO (Express 4, TypeScript, mysql2, zod)
   db/schema.sql   le schéma MySQL (idempotent)
   src/            config, auth, routes, temps réel
   test/           75 tests sur une vraie base MySQL
+  demo/           illustrations et `npm run seed:demo` (données de démonstration)
 ```
 
 L'application parle à l'API en `POST` avec des formulaires (c'est ce que fait Volley) ; les erreurs « métier » (champ manquant, identifiants invalides, e-mail déjà pris…) restent des réponses HTTP 200 `{ "error": "…" }`. Ce qui touche à la sécurité a son vrai code : 401, 403, 429, 413.
@@ -73,6 +111,16 @@ tomtomKey=ma-cle
 
 Le trafic en clair (HTTP) n'est autorisé que par le build debug ; une version release exige HTTPS.
 
+### Données de démonstration
+
+Pour remplir un serveur en marche (comptes, annonces avec photos, réservations, rendez-vous, conversations) :
+
+```bash
+cd server && npm run seed:demo
+```
+
+Les comptes `admin@getcars.dz` (administrateur), `karim@getcars.dz`, `lina@getcars.dz`, `yanis@getcars.dz` (vendeurs) et `sara@getcars.dz` (acheteuse) ont tous le mot de passe `demo1234`. La commande est rejouable ; à ne pas lancer sur un serveur de production.
+
 ## Tests
 
 ```bash
@@ -81,6 +129,10 @@ cd server && npm test                                     # 75 tests
 ```
 
 Ils couvrent la configuration, l'authentification, les autorisations (qui peut lire, modifier, supprimer quoi), les tentatives d'injection SQL, l'envoi d'images piégées (traversée de répertoire, faux formats, taille) et la messagerie temps réel. La CI (GitHub Actions) les rejoue avec un service MySQL, construit l'image Docker et compile l'application Android.
+
+## Design
+
+L'interface a été entièrement reprise (Material 3, clair et sombre) : palette GetCars plus contrastée, cartes d'annonce avec photo, type, année et prix en DA, pastilles d'état (En attente, Acceptée, Refusée), conversation en bulles, états vides, formulaires en deux colonnes, navigation du bas avec indicateur. L'application est en français ; les libellés sont dans `app/src/main/res/values/strings.xml`.
 
 ## Ce qui a changé
 
