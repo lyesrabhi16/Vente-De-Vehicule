@@ -37,11 +37,10 @@ export function imageRoutes(ctx: Ctx, images: Images) {
         if (!canActAs(me, data.userID)) throw forbidden();
         ref = { kind: 'avatar', id: data.userID, ext: data.format };
       } else {
-        if (data.index === undefined) throw businessError('missing required fields : [index]');
         const [annonce] = await rows<{ idClient: number }>(db, 'SELECT idClient FROM annonce WHERE idAnnonce = ?', [data.userID]);
         if (!annonce) throw businessError('Annonce introuvable');
         if (!canActAs(me, annonce.idClient)) throw forbidden();
-        ref = { kind: 'annonce', id: data.userID, index: data.index, ext: data.format };
+        ref = { kind: 'annonce', id: data.userID, index: data.index ?? 0, ext: data.format };
       }
 
       const buffer = Buffer.from(data.imgB64, 'base64');

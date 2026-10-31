@@ -6,15 +6,18 @@ export type Extension = (typeof EXTENSIONS)[number];
 
 export type ImageRef = { kind: 'avatar'; id: number; ext: Extension } | { kind: 'annonce'; id: number; index: number; ext: Extension };
 
-const NAME = /^image(?:Client-\[(\d{1,10})\]|Annonce-\[(\d{1,10})\]-\[(\d{1,2})\])\.(jpeg|jpg|png|webp)$/;
+const NAME = /^image(?:Client-\[(\d{1,10})\]|Annonce-\[(\d{1,10})\](?:-\[(\d{1,2})\])?)\.(jpeg|jpg|png|webp)$/;
 
-/** Le nom qu'une image porte (celui que l'application demande), ou null : on ne lit jamais autre chose que ces noms-là. */
+/**
+ * Le nom qu'une image porte (celui que l'application demande), ou null : on ne lit jamais autre chose que ces noms-là.
+ * Une annonce sans numéro (`imageAnnonce-[12].jpeg`) désigne sa photo principale, la numéro 0.
+ */
 export function parseImageName(name: string): ImageRef | null {
   const match = NAME.exec(name);
   if (!match) return null;
   const ext = match[4] as Extension;
   if (match[1] !== undefined) return { kind: 'avatar', id: Number(match[1]), ext };
-  return { kind: 'annonce', id: Number(match[2]), index: Number(match[3]), ext };
+  return { kind: 'annonce', id: Number(match[2]), index: match[3] === undefined ? 0 : Number(match[3]), ext };
 }
 
 export function imageName(ref: ImageRef): string {
@@ -57,12 +60,16 @@ export class Images {
     await writeFile(this.file(ref), data);
   }
 
+  /** L'image de l'emplacement, quelle que soit l'extension sous laquelle elle a été enregistrée (l'application demande toujours .jpeg). */
   async read(ref: ImageRef): Promise<Buffer | null> {
-    try {
-      return await readFile(this.file(ref));
-    } catch {
-      return null;
+    for (const ext of [ref.ext, ...EXTENSIONS.filter((e) => e !== ref.ext)]) {
+      try {
+        return await readFile(this.file({ ...ref, ext }));
+      } catch {
+        // pas sous cette extension
+      }
     }
+    return null;
   }
 
   private async removeSlot(ref: ImageRef): Promise<void> {

@@ -354,8 +354,8 @@ public class Server {
                     Params.put("userID", img.getString("id")+"");
                     Params.put("format", img.getString("format"));
                     Params.put("type", img.getString("type"));
-                    if(img.getString("type")=="ANNONCE"){
-                        Params.put("index", img.getString("index"));
+                    if("ANNONCE".equals(img.getString("type"))){
+                        Params.put("index", img.optString("index", "0"));
                     }
                 } catch (JSONException e) {
                     Toast.makeText(ctx, "Error Sending Image", Toast.LENGTH_SHORT).show();

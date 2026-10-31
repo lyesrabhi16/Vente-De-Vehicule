@@ -91,6 +91,15 @@ describe('lecture', () => {
     expect(Buffer.from(res.body.imgB64, 'base64').equals(PNG)).toBe(true);
   });
 
+  it('sert la photo principale d’une annonce sous le nom sans numéro, quelle que soit son extension', async () => {
+    const res = await server.api.post('/download/image').type('form').send({ imgName: `imageAnnonce-[${annonce}].jpeg` });
+    expect(res.body.error).toBe('image not found.');
+    const sent = await upload(owner, { userID: String(annonce), imgB64: PNG.toString('base64'), format: 'png', type: 'ANNONCE' }); // sans index : la photo 0
+    expect(sent.text).toBe('Image saved successfully');
+    const read = await server.api.post('/download/image').type('form').send({ imgName: `imageAnnonce-[${annonce}].jpeg` });
+    expect(Buffer.from(read.body.imgB64, 'base64').equals(PNG)).toBe(true);
+  });
+
   it('réserve les avatars aux comptes connectés', async () => {
     const anonymous = await server.api.post('/download/image').type('form').send({ imgName: `imageClient-[${owner.idClient}].jpeg` });
     expect(anonymous.status).toBe(401);
