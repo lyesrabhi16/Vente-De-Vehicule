@@ -1,5 +1,4 @@
 <resources>
-    <string name="API_KEY_TOMTOM">5dOTKQGhHLeGP0lQztyWFzPDswXAdBA7</string>
     <string name="app_name">GetCars</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>

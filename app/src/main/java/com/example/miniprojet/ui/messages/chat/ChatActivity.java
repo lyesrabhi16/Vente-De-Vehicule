@@ -1,5 +1,6 @@
 package com.example.miniprojet.ui.messages.chat;
 
+import com.example.miniprojet.AuthRequest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -219,7 +220,7 @@ public class ChatActivity extends AppCompatActivity {
 
         CBind.progressBar2.setVisibility(View.VISIBLE);
 
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlMessages(), new Response.Listener<String>() {
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlMessages(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 CBind.progressBar2.setVisibility(View.GONE);
@@ -293,7 +294,7 @@ public class ChatActivity extends AppCompatActivity {
     }
     public static String getDate(String format, Date d){
         String date;
-        date = new SimpleDateFormat(format, Locale.getDefault()).format(d);
+        date = new SimpleDateFormat(format, Locale.US).format(d);
         return date;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.miniprojet.ui.account;
 
+import com.example.miniprojet.AuthRequest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -63,7 +64,7 @@ public class AccountSignInFragment extends Fragment {
         prgrs.setMessage("login in progress...");
         prgrs.show();
         String finalNumTel = numTel;
-        StringRequest req = new StringRequest(Request.Method.POST, dbc.getUrlLogin(),
+        StringRequest req = new AuthRequest(Request.Method.POST, dbc.getUrlLogin(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -72,10 +73,12 @@ public class AccountSignInFragment extends Fragment {
                             if(res.has("error")){
                                 Toast.makeText(getContext(),"login failed. "+res.getString("error"), Toast.LENGTH_LONG).show();
                                 prgrs.dismiss();
+                                return;
                             }
                             if(res.has("ADMIN")){
                                 if(res.getBoolean("ADMIN")){
                                     User user = User.getInstance(getContext());
+                                    user.setToken(res.optString("token", null));
                                     user.userLogin(
                                             res.getInt("idClient"),
                                             res.getString("email").toLowerCase(),
@@ -104,6 +107,7 @@ public class AccountSignInFragment extends Fragment {
                             }
                             else{
                                 User user = User.getInstance(getContext());
+                                user.setToken(res.optString("token", null));
                                 user.userLogin(
                                         res.getInt("idClient"),
                                         res.getString("email").toLowerCase(),

@@ -1,5 +1,6 @@
 package com.example.miniprojet.ui.account;
 
+import com.example.miniprojet.AuthRequest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -75,18 +76,19 @@ public class AccountRegisterFragment extends Fragment {
         prgrs.setMessage("registering...");
         prgrs.show();
 
-        StringRequest str_req = new StringRequest(Request.Method.POST, Server.getUrlRegister(), new Response.Listener<String>() {
+        StringRequest str_req = new AuthRequest(Request.Method.POST, Server.getUrlRegister(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject res = new JSONObject(response);
 
                     if(res.has("error")){
-                        Toast.makeText(getContext(),"registration failed."+ res.getString("message"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),"registration failed. "+ res.getString("error"), Toast.LENGTH_LONG).show();
                         prgrs.dismiss();
                     }
                     else {
                         User user = User.getInstance(getContext());
+                        user.setToken(res.optString("token", null));
                         user.userLogin(
                                 res.getInt("idClient"),
                                 res.getString("email"),

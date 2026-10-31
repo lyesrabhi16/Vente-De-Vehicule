@@ -1,5 +1,6 @@
 package com.example.miniprojet.models;
 
+import com.example.miniprojet.AuthRequest;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -89,7 +90,7 @@ public class Reservation {
 
 
     public static void getReservation(int idAnnonce, int idClient, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlReservation(), new Response.Listener<String>() {
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlReservation(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -157,7 +158,7 @@ public class Reservation {
         reqQ.add(Sreq);
     }
     public static void RemoveReservation(int idAnnonce, int idClient, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlDelReservation(), new Response.Listener<String>() {
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlDelReservation(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -205,7 +206,7 @@ public class Reservation {
         reqQ.add(Sreq);
     }
     public static void AddReservation(Reservation reservation, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlAddReservation(), new Response.Listener<String>() {
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlAddReservation(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -258,7 +259,7 @@ public class Reservation {
     }
 
     public static void updateReservation(Reservation reservation, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlUpdateReservation(), new Response.Listener<String>() {
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlUpdateReservation(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -310,7 +311,7 @@ public class Reservation {
         reqQ.add(Sreq);
     }
     public static void getReservations(JSONObject filterObj, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlReservations(),
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlReservations(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

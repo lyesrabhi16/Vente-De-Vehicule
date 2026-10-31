@@ -253,8 +253,7 @@ public class AccountActivity extends AppCompatActivity {
                         public void onFinish(ArrayList args) {
                             if(ABind == null) return;
                             prgs.dismiss();
-                            user.logout();
-                            user.userLogin(
+                            user.refreshProfile(
                                     client.getIdClient(),
                                     client.getEmail(),
                                     client.getNumTel(),

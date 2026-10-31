@@ -1,5 +1,6 @@
 package com.example.miniprojet.ui.search;
 
+import com.example.miniprojet.AuthRequest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -170,7 +171,7 @@ public class SearchFragment extends Fragment {
             List<searchResultItem> list = new ArrayList<>();
 
 
-            StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlSearch(), new Response.Listener<String>() {
+            StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlSearch(), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {

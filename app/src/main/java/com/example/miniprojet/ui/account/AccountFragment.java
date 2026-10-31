@@ -203,8 +203,7 @@ public class AccountFragment extends Fragment {
                         public void onFinish(ArrayList args) {
                             if(AccountBinding == null) return;
                             prgs.dismiss();
-                            user.logout();
-                            user.userLogin(
+                            user.refreshProfile(
                                     client.getIdClient(),
                                     client.getEmail(),
                                     client.getNumTel(),

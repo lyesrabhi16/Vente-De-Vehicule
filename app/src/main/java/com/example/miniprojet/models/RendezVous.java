@@ -1,5 +1,6 @@
 package com.example.miniprojet.models;
 
+import com.example.miniprojet.AuthRequest;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -78,7 +79,7 @@ public class RendezVous {
         this.etatRendezVous = etatRendezVous;
     }
     public static void getRendezVous(int idAnnonce, int idClient, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlRendezVous(), new Response.Listener<String>() {
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlRendezVous(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -145,7 +146,7 @@ public class RendezVous {
         reqQ.add(Sreq);
     }
     public static void RemoveRendezVous(int idAnnonce, int idClient, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlDelRendezVous(), new Response.Listener<String>() {
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlDelRendezVous(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -193,7 +194,7 @@ public class RendezVous {
         reqQ.add(Sreq);
     }
     public static void AddRendezVous(RendezVous rendezVous, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlAddRendezVous(), new Response.Listener<String>() {
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlAddRendezVous(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -245,7 +246,7 @@ public class RendezVous {
     }
 
     public static void updateRendezVous(RendezVous rendezVous, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlUpdateRendezVous(), new Response.Listener<String>() {
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlUpdateRendezVous(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -296,7 +297,7 @@ public class RendezVous {
         reqQ.add(Sreq);
     }
     public static void getAllRendezVous(JSONObject filterObj, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlAllRendezVous(),
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlAllRendezVous(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

@@ -1,5 +1,6 @@
 package com.example.miniprojet.models;
 
+import com.example.miniprojet.AuthRequest;
 import android.content.Context;
 import android.media.Image;
 import android.widget.Toast;
@@ -198,7 +199,7 @@ public class Annonce {
 
     public static void AddAnnonce(Annonce annonce, Context ctx, RequestFinished Req){
         Toast.makeText(ctx, "adding annonce...", Toast.LENGTH_SHORT).show();
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlAddAnnonce(),
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlAddAnnonce(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -264,7 +265,7 @@ public class Annonce {
     }
     public static void updateAnnonce(Annonce annonce, Context ctx, RequestFinished Req){
         Toast.makeText(ctx, "updating annonce...", Toast.LENGTH_SHORT).show();
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlUpdateAnnonce(),
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlUpdateAnnonce(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -330,7 +331,7 @@ public class Annonce {
         reqQ.add(Sreq);
     }
     public static void delAnnonce(int id, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlDelAnnonce(),
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlDelAnnonce(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -381,7 +382,7 @@ public class Annonce {
         reqQ.add(Sreq);
     }
     public static void getUserAnnonces(int id, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlAnnoncesUser(),
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlAnnoncesUser(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -466,7 +467,7 @@ public class Annonce {
         reqQ.add(Sreq);
     }
     public static void getAnnonces(JSONObject filterObj, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlAnnonces(),
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlAnnonces(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -554,7 +555,7 @@ public class Annonce {
         reqQ.add(Sreq);
     }
     public static void getAnnonce(int id, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlAnnonce(),
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlAnnonce(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

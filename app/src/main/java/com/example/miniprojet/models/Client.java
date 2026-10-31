@@ -1,5 +1,6 @@
 package com.example.miniprojet.models;
 
+import com.example.miniprojet.AuthRequest;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -89,7 +90,7 @@ public class Client {
     public static void getClient(int id, Context ctx, RequestFinished Req){
 
 
-        StringRequest req = new StringRequest(Request.Method.POST, Server.getUrlUser(),
+        StringRequest req = new AuthRequest(Request.Method.POST, Server.getUrlUser(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -159,7 +160,7 @@ public class Client {
     public static void delClient(int id, Context ctx, RequestFinished Req){
 
 
-        StringRequest req = new StringRequest(Request.Method.POST, Server.getUrlDelUser(),
+        StringRequest req = new AuthRequest(Request.Method.POST, Server.getUrlDelUser(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -221,7 +222,7 @@ public class Client {
     public static void updateClient(Client client, Context ctx, RequestFinished Req){
 
 
-        StringRequest req = new StringRequest(Request.Method.POST, Server.getUrlUpdateUser(),
+        StringRequest req = new AuthRequest(Request.Method.POST, Server.getUrlUpdateUser(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

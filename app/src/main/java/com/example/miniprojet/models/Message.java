@@ -1,5 +1,6 @@
 package com.example.miniprojet.models;
 
+import com.example.miniprojet.AuthRequest;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -73,7 +74,7 @@ public class Message {
         this.etat = etat;
     }
     public static void getChats(int id, Context ctx, RequestFinished req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlChats(),
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlChats(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

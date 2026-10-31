@@ -288,8 +288,7 @@ public class AdminPanelFragment extends Fragment {
                     public void onFinish(ArrayList args) {
                         if(Abinding == null) return;
                         prgs.dismiss();
-                        user.logout();
-                        user.userLogin(
+                        user.refreshProfile(
                                 client.getIdClient(),
                                 client.getEmail(),
                                 client.getNumTel(),
