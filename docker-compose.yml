@@ -1,0 +1,43 @@
+# Lance MySQL et le serveur : `docker compose up --build`, puis http://localhost:5000/health.
+# Les mots de passe ci-dessous sont ceux du DÉVELOPPEMENT ; le serveur en production les refuse (voir server/.env.example).
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root-dev}
+      MYSQL_DATABASE: miniprojet
+      MYSQL_USER: miniprojet
+      MYSQL_PASSWORD: ${DB_PASSWORD:-miniprojet-dev}
+    volumes:
+      - db-data:/var/lib/mysql
+      # la base se crée au premier démarrage (rejouable plus tard : npm run db:schema)
+      - ./server/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-root-dev}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    ports:
+      - "127.0.0.1:3306:3306"
+
+  server:
+    build: ./server
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # développement : sinon le serveur refuse le mot de passe ci-dessus et un secret absent
+      NODE_ENV: ${NODE_ENV:-development}
+      DB_HOST: db
+      DB_USER: miniprojet
+      DB_PASSWORD: ${DB_PASSWORD:-miniprojet-dev}
+      DB_NAME: miniprojet
+      JWT_SECRET: ${JWT_SECRET:-}
+    volumes:
+      - images:/data/images
+    ports:
+      - "5000:5000"
+
+volumes:
+  db-data:
+  images:
