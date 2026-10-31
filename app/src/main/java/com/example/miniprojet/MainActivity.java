@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
         if(user.isLoggedin())
             btn_account.setText(user.getNom());
         else{
-            btn_account.setText(R.string.title_account);
+            btn_account.setText(R.string.login);
             counter++;
             if(counter<=3){
                 updateBtnAccount(binding, counter);

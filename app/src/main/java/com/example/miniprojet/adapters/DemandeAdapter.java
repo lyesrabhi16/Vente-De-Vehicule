@@ -1,5 +1,6 @@
 package com.example.miniprojet.adapters;
 
+import com.example.miniprojet.Ui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -61,18 +62,19 @@ public class DemandeAdapter extends RecyclerView.Adapter<DemandeAdapter.ViewHold
         Demande item = list.get(position);
 
         holder.title.setText(item.getTitle());
-        holder.etat.setText(item.getEtat());
-        holder.containerPerson.Title.setText(item.getPerson().getNom() + " " + item.getPerson().getPrenom() +" ");
+        Ui.statePill(holder.etat, item.getEtat());
+        holder.containerPerson.Title.setText(item.getPerson().getPrenom() + " " + item.getPerson().getNom());
         holder.containerPerson.subTitle.setText(item.getPerson().getEmail());
-        holder.containerPerson.Avatar.setImageResource(R.drawable.ic_account_circle_48_bleu_clair);
+        holder.containerPerson.Avatar.setImageResource(R.drawable.ph_avatar);
 
-        holder.containerAnnonce.image.setImageResource(R.raw.app_logo_rounded_square);
+        holder.containerAnnonce.image.setImageResource(R.drawable.ph_car);
         holder.containerAnnonce.title.setText(item.getAnnonce().getTitle());
-        holder.containerAnnonce.type.setText(item.getAnnonce().getType());
-        holder.containerAnnonce.qte.setText(item.getAnnonce().getPrix()+"da");
+        holder.containerAnnonce.button.setVisibility(View.GONE); // la demande est déjà faite
+        Ui.typePill(holder.containerAnnonce.type, item.getAnnonce().getType());
+        holder.containerAnnonce.qte.setText(Ui.price(holder.containerAnnonce.qte.getContext(), item.getAnnonce().getPrix(), item.getAnnonce().getType()));
         holder.containerAnnonce.date.setText(item.getAnnonce().getAnnee()+"");
         holder.containerAnnonce.desc.setText(item.getAnnonce().getDesc());
-        holder.containerAnnonce.Avatar.setImageResource(R.drawable.ic_account_circle_48);
+        holder.containerAnnonce.Avatar.setImageResource(R.drawable.ph_avatar);
         holder.containerAnnonce.Title.setText(item.getAnnonce().getUserTitle());
         holder.containerAnnonce.subTitle.setText(item.getAnnonce().getUserSubTitle());
 
@@ -115,12 +117,12 @@ public class DemandeAdapter extends RecyclerView.Adapter<DemandeAdapter.ViewHold
                         holder.containerPerson.Avatar.setImageBitmap(imgAvatar);
                     }
                     else
-                        holder.containerPerson.Avatar.setImageResource(R.drawable.ic_account_circle_48_bleu_clair);
+                        holder.containerPerson.Avatar.setImageResource(R.drawable.ph_avatar);
                 }
 
                 @Override
                 public void onError(ArrayList args) {
-                    holder.containerPerson.Avatar.setImageResource(R.drawable.ic_account_circle_48_bleu_clair);
+                    holder.containerPerson.Avatar.setImageResource(R.drawable.ph_avatar);
                 }
             });
         }
@@ -187,7 +189,7 @@ public class DemandeAdapter extends RecyclerView.Adapter<DemandeAdapter.ViewHold
         for (int i = 0; i < rendezVousList.size(); i++) {
             RendezVous rendezVous = rendezVousList.get(i);
             Demande d = new Demande();
-            d.setTitle("RendezVous");
+            d.setTitle("Rendez-vous");
             d.setEtat(rendezVous.getEtatRendezVous());
             Client.getClient(rendezVous.getIdClient(), ctx, new RequestFinished() {
                 @Override
@@ -232,7 +234,7 @@ public class DemandeAdapter extends RecyclerView.Adapter<DemandeAdapter.ViewHold
         for (int i = 0; i < reservations.size(); i++) {
             Reservation reservation = reservations.get(i);
             Demande d = new Demande();
-            d.setTitle("Reservation");
+            d.setTitle("Réservation");
             d.setEtat(reservation.getEtatReservation());
             Client.getClient(reservations.get(i).getIdClient(), ctx, new RequestFinished() {
                 @Override

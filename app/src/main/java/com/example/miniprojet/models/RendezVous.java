@@ -86,7 +86,7 @@ public class RendezVous {
                     JSONObject res = new JSONObject(response);
 
                     if(res.has("error")){
-                        Toast.makeText(ctx,"failed to get RendezVous. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ctx,"Impossible de charger les rendez-vous. "+res.getString("error"), Toast.LENGTH_LONG).show();
                         ArrayList l = new ArrayList();
                         l.add(res.get("error") );
                         Req.onError(l);
@@ -97,7 +97,7 @@ public class RendezVous {
                         User user = User.getInstance(ctx);
                         ArrayList l = new ArrayList<>();
                         if(result.length() < 1){
-                            Toast.makeText(ctx, "RendezVous not found", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx, "Rendez-vous introuvable", Toast.LENGTH_SHORT).show();
                             l.add("RendezVous not found");
                             Req.onError(l);
                             return;
@@ -118,7 +118,7 @@ public class RendezVous {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(ctx,"Response Handling Error.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx,"Réponse du serveur illisible.", Toast.LENGTH_SHORT).show();
                     ArrayList l = new ArrayList<>();
                     l.add(e.getMessage());
                     Req.onError(l);
@@ -127,7 +127,7 @@ public class RendezVous {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                 ArrayList l = new ArrayList();
                 l.add(error.getMessage());
                 Req.onError(l);
@@ -153,7 +153,7 @@ public class RendezVous {
                     JSONObject res = new JSONObject(response);
 
                     if(res.has("error")){
-                        Toast.makeText(ctx,"failed to remove RendezVous. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ctx,"Échec de la suppression du rendez-vous. "+res.getString("error"), Toast.LENGTH_LONG).show();
                         ArrayList l = new ArrayList();
                         l.add(res.get("error") );
                         Req.onError(l);
@@ -166,7 +166,7 @@ public class RendezVous {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(ctx,"Response Handling Error.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx,"Réponse du serveur illisible.", Toast.LENGTH_SHORT).show();
                     ArrayList l = new ArrayList<>();
                     l.add(e.getMessage());
                     Req.onError(l);
@@ -175,7 +175,7 @@ public class RendezVous {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                 ArrayList l = new ArrayList();
                 l.add(error.getMessage());
                 Req.onError(l);
@@ -201,7 +201,7 @@ public class RendezVous {
                     JSONObject res = new JSONObject(response);
 
                     if(res.has("error")){
-                        Toast.makeText(ctx,"failed to add RendezVous. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ctx,"Échec de la demande de rendez-vous. "+res.getString("error"), Toast.LENGTH_LONG).show();
                         ArrayList l = new ArrayList();
                         l.add(res.get("error") );
                         Req.onError(l);
@@ -214,7 +214,7 @@ public class RendezVous {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(ctx,"Response Handling Error.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx,"Réponse du serveur illisible.", Toast.LENGTH_SHORT).show();
                     ArrayList l = new ArrayList<>();
                     l.add(e.getMessage());
                     Req.onError(l);
@@ -223,7 +223,7 @@ public class RendezVous {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                 ArrayList l = new ArrayList();
                 l.add(error.getMessage());
                 Req.onError(l);
@@ -253,7 +253,7 @@ public class RendezVous {
                     JSONObject res = new JSONObject(response);
 
                     if(res.has("error")){
-                        Toast.makeText(ctx,"failed to update RendezVous. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ctx,"Échec de la modification du rendez-vous. "+res.getString("error"), Toast.LENGTH_LONG).show();
                         ArrayList l = new ArrayList();
                         l.add(res.get("error") );
                         Req.onError(l);
@@ -266,7 +266,7 @@ public class RendezVous {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(ctx,"Response Handling Error.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx,"Réponse du serveur illisible.", Toast.LENGTH_SHORT).show();
                     ArrayList l = new ArrayList<>();
                     l.add(e.getMessage());
                     Req.onError(l);
@@ -275,7 +275,7 @@ public class RendezVous {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                 ArrayList l = new ArrayList();
                 l.add(error.getMessage());
                 Req.onError(l);
@@ -305,7 +305,7 @@ public class RendezVous {
                             JSONObject res = new JSONObject(response);
 
                             if(res.has("error")){
-                                Toast.makeText(ctx,"failed to get RendezVous. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx,"Impossible de charger les rendez-vous. "+res.getString("error"), Toast.LENGTH_LONG).show();
                                 ArrayList l = new ArrayList();
                                 l.add(res.get("error") );
                                 Req.onError(l);
@@ -330,7 +330,7 @@ public class RendezVous {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ctx,"Response Handling Error.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx,"Réponse du serveur illisible.", Toast.LENGTH_SHORT).show();
                             ArrayList l = new ArrayList<>();
                             l.add(e.getMessage());
                             Req.onError(l);
@@ -341,7 +341,7 @@ public class RendezVous {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                         ArrayList l = new ArrayList();
                         l.add(error.getMessage());
                         Req.onError(l);

@@ -1,62 +1,111 @@
 <resources>
     <string name="app_name">GetCars</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+
+    <!-- navigation -->
+    <string name="title_home">Accueil</string>
+    <string name="title_dashboard">Mon espace</string>
+    <string name="title_notifications">Demandes</string>
     <string name="title_messages">Messages</string>
-    <string name="title_account">Account</string>
-    <string name="welcome">Welcome</string>
-    <string name="login">Login</string>
-    <string name="logout">Logout</string>
-    <string name="register">Register</string>
+    <string name="title_account">Compte</string>
+    <string name="title_admin_annonces">Annonces</string>
+    <string name="title_admin_rendezvous">Rendez-vous</string>
+    <string name="title_admin_reservations">Réservations</string>
+    <string name="title_admin">Admin</string>
+    <string name="search_hint">Rechercher</string>
 
-    <string name="identifier">Identifier</string>
-    <string name="password">Password</string>
-    <string name="password2">Confirm Password</string>
-    <string name="email">Email</string>
-    <string name="lastname">Last Name</string>
-    <string name="firstname">First Name</string>
-    <string name="age">Age</string>
-    <string name="phonenumber">Phone Number</string>
-    <string name="title_activity_launch">LaunchActivity</string>
+    <!-- compte -->
+    <string name="welcome">Bienvenue</string>
+    <string name="welcome_back">Content de vous revoir</string>
+    <string name="welcome_subtitle">Connectez-vous pour publier, réserver et discuter avec les vendeurs.</string>
+    <string name="create_account">Créer un compte</string>
+    <string name="create_account_subtitle">Quelques informations suffisent pour commencer.</string>
+    <string name="login">Connexion</string>
+    <string name="logout">Déconnexion</string>
+    <string name="register">Inscription</string>
+    <string name="identifier">E-mail ou téléphone</string>
+    <string name="password">Mot de passe</string>
+    <string name="password2">Confirmer le mot de passe</string>
+    <string name="email">E-mail</string>
+    <string name="lastname">Nom</string>
+    <string name="firstname">Prénom</string>
+    <string name="age">Âge</string>
+    <string name="phonenumber">Téléphone</string>
+    <string name="changePassword">Changer le mot de passe</string>
+    <string name="login_button">Se connecter</string>
+    <string name="delete_account">Supprimer mon compte</string>
+    <string name="my_profile">Mon profil</string>
+    <string name="title_activity_launch">GetCars</string>
 
-    <string name="changePassword">Change Password</string>
-    <string name="login_button">login</string>
-    <string name="refresh_request">Error, Please Refresh</string>
-    <string name="no_messages">No Messages</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <!--  Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="back">back</string>
-    <string name="add_annonce">Add Annonce</string>
-    <string name="title">Title</string>
+    <!-- états vides et erreurs -->
+    <string name="refresh_request">Une erreur est survenue, réessayez.</string>
+    <string name="no_messages">Aucun message pour le moment</string>
+    <string name="no_messages_hint">Contactez un vendeur depuis une annonce pour démarrer une conversation.</string>
+    <string name="login_request">Connectez-vous pour accéder à cet espace</string>
+    <string name="no_annoncements">Aucune annonce</string>
+    <string name="no_results">Aucun résultat</string>
+    <string name="no_results_hint">Essayez avec d’autres mots-clés.</string>
+    <string name="no_requests">Aucune demande en attente</string>
+    <string name="no_requests_hint">Les demandes de réservation et de rendez-vous sur vos annonces apparaîtront ici.</string>
+
+    <!-- annonces -->
+    <string name="add_annonce">Publier une annonce</string>
+    <string name="title">Titre</string>
     <string name="type">Type</string>
-    <string name="brand">Brand</string>
-    <string name="modele">Modele</string>
+    <string name="brand">Marque</string>
+    <string name="modele">Modèle</string>
     <string name="description">Description</string>
-    <string name="transmission">Transmission</string>
-    <string name="mileage">Mileage</string>
-    <string name="price">Price</string>
+    <string name="transmission">Boîte de vitesses</string>
+    <string name="mileage">Kilométrage</string>
+    <string name="price">Prix</string>
     <string name="wilaya">Wilaya</string>
-    <string name="color">Color</string>
-    <string name="year">Year</string>
-    <string name="engine">Engine</string>
-    <string name="energy">Energy</string>
-    <string name="add">Add</string>
-    <string name="images">Images</string>
-    <string name="login_request">Please Login</string>
-    <string name="my_announcements">My Announcements</string>
-    <string name="announcements">Announcements</string>
-    <string name="send_message">Send Message</string>
-    <string name="no_annoncements">no Announcements</string>
-    <string name="save">Save</string>
+    <string name="color">Couleur</string>
+    <string name="year">Année</string>
+    <string name="engine">Moteur</string>
+    <string name="energy">Énergie</string>
+    <string name="add">Publier</string>
+    <string name="images">Photos</string>
+    <string name="my_announcements">Mes annonces</string>
+    <string name="my_rendezvous">Mes rendez-vous</string>
+    <string name="my_reservations">Mes réservations</string>
+    <string name="announcements">Annonces</string>
+    <string name="send_message">Envoyer un message</string>
+    <string name="save">Enregistrer</string>
+    <string name="seller">Vendeur</string>
+    <string name="section_info">Informations</string>
+    <string name="images_hint">Ajouter des photos depuis la galerie</string>
+    <string name="delete">Supprimer</string>
+    <string name="features">Caractéristiques</string>
+    <string name="sale">Vente</string>
+    <string name="rental">Location</string>
+    <string name="per_day">/ jour</string>
+    <string name="currency">DA</string>
+    <string name="km">km</string>
+    <string name="reserve">Réserver</string>
+    <string name="visit">Rendez-vous</string>
+    <string name="request_visit">Demander un rendez-vous</string>
+    <string name="filter_all">Tous</string>
+
+    <!-- demandes -->
     <string name="demande">Demande</string>
-    <string name="etat">etat</string>
-    <string name="etatText">etat</string>
+    <string name="etat">État</string>
+    <string name="etatText">État</string>
     <string name="date">Date</string>
     <string name="location">Lieu</string>
-    <string name="date_debut">Date Debut</string>
-    <string name="date_fin">Date Fin</string>
-    <string name="delete_account">Delete Account</string>
+    <string name="date_debut">Début</string>
+    <string name="date_fin">Fin</string>
+    <string name="state_pending">En attente</string>
+    <string name="state_accepted">Acceptée</string>
+    <string name="state_rejected">Refusée</string>
+    <string name="request_details">Détails de la demande</string>
+    <string name="confirm">Confirmer</string>
+    <string name="cancel">Annuler</string>
+    <string name="accept">Accepter</string>
+    <string name="reject">Refuser</string>
+    <string name="cancel_request">Annuler la demande</string>
+
+    <!-- messages -->
+    <string name="new_message">Écrire un message…</string>
+
+    <string name="back">Retour</string>
     <string name="id">ID</string>
 </resources>

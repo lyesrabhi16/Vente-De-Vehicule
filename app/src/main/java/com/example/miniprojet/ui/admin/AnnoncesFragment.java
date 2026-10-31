@@ -1,5 +1,6 @@
 package com.example.miniprojet.ui.admin;
 
+import com.example.miniprojet.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -63,7 +64,7 @@ public class AnnoncesFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     String selected = binding.containerHome.containerFilter.type.getText().toString();
-                    if (selected.equals("All")){
+                    if (selected.equals(getString(R.string.filter_all))){
                         filterObj.remove("typeVehicule");
                     }
                     else{
@@ -71,7 +72,7 @@ public class AnnoncesFragment extends Fragment {
                     }
                     Filter(filterObj);
                 } catch (JSONException e) {
-                    Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Erreur", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -80,7 +81,7 @@ public class AnnoncesFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     String selected = binding.containerHome.containerFilter.marque.getText().toString();
-                    if (selected.equals("All")){
+                    if (selected.equals(getString(R.string.filter_all))){
                         filterObj.remove("marqueVehicule");
                     }
                     else{
@@ -88,7 +89,7 @@ public class AnnoncesFragment extends Fragment {
                     }
                     Filter(filterObj);
                 } catch (JSONException e) {
-                    Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Erreur", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -97,7 +98,7 @@ public class AnnoncesFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     String selected = binding.containerHome.containerFilter.couleur.getText().toString();
-                    if (selected.equals("All")){
+                    if (selected.equals(getString(R.string.filter_all))){
                         filterObj.remove("couleurVehicule");
                     }
                     else{
@@ -105,7 +106,7 @@ public class AnnoncesFragment extends Fragment {
                     }
                     Filter(filterObj);
                 } catch (JSONException e) {
-                    Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Erreur", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -114,7 +115,7 @@ public class AnnoncesFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     String selected = binding.containerHome.containerFilter.transmission.getText().toString();
-                    if (selected.equals("All")){
+                    if (selected.equals(getString(R.string.filter_all))){
                         filterObj.remove("transmissionVehicule");
                     }
                     else{
@@ -122,7 +123,7 @@ public class AnnoncesFragment extends Fragment {
                     }
                     Filter(filterObj);
                 } catch (JSONException e) {
-                    Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Erreur", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -131,7 +132,7 @@ public class AnnoncesFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     String selected = binding.containerHome.containerFilter.energie.getText().toString();
-                    if (selected.equals("All")){
+                    if (selected.equals(getString(R.string.filter_all))){
                         filterObj.remove("energieVehicule");
                     }
                     else{
@@ -139,7 +140,7 @@ public class AnnoncesFragment extends Fragment {
                     }
                     Filter(filterObj);
                 } catch (JSONException e) {
-                    Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Erreur", Toast.LENGTH_SHORT).show();
                 }
             }
         });

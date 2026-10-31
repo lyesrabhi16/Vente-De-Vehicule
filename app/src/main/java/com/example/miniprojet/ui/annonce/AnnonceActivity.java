@@ -1,5 +1,6 @@
 package com.example.miniprojet.ui.annonce;
 
+import com.example.miniprojet.Ui;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
@@ -160,7 +161,7 @@ public class AnnonceActivity extends AppCompatActivity {
                     if(BAnnonce != null){
                         BAnnonce.titre.setText(annonce.getTitle());
                         BAnnonce.desc.setText(annonce.getDesc());
-                        BAnnonce.type.setText(annonce.getType());
+                        Ui.typePill(BAnnonce.type, annonce.getType());
                         BAnnonce.marque.setText(annonce.getMarque());
                         BAnnonce.modele.setText(annonce.getModele());
                         BAnnonce.couleur.setText(annonce.getCouleur());
@@ -486,7 +487,6 @@ public class AnnonceActivity extends AppCompatActivity {
                             if(clipData != null){
                                 for (int i = 0; i < clipData.getItemCount(); i++) {
                                     Uri selectedImageUri = clipData.getItemAt(i).getUri();
-                                    Toast.makeText(AnnonceActivity.this, i+ " uri : " +selectedImageUri, Toast.LENGTH_SHORT).show();
                                     try {
                                         Bitmap img = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
                                         Server.saveBitmap(getApplicationContext(), "imageAnnonce-["+idAnnonce+"]-["+i+"]", img);
@@ -500,9 +500,9 @@ public class AnnonceActivity extends AppCompatActivity {
                                         if(i == 0)
                                             BAnnonce.imageAnnonce.setImageURI(selectedImageUri);
                                     } catch (IOException e) {
-                                        Toast.makeText(getApplicationContext(), "Error : "+e, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "Erreur : "+e, Toast.LENGTH_SHORT).show();
                                     } catch (JSONException e) {
-                                        Toast.makeText(getApplicationContext(), "Error : "+e, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "Erreur : "+e, Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
@@ -519,9 +519,9 @@ public class AnnonceActivity extends AppCompatActivity {
                                     Server.sendImageToserver(o, getApplicationContext());
                                     BAnnonce.imageAnnonce.setImageURI(selectedImageUri);
                                 } catch (IOException e) {
-                                    Toast.makeText(getApplicationContext(), "Error : "+e, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Erreur : "+e, Toast.LENGTH_SHORT).show();
                                 } catch (JSONException e) {
-                                    Toast.makeText(getApplicationContext(), "Error : "+e, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Erreur : "+e, Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -543,7 +543,7 @@ public class AnnonceActivity extends AppCompatActivity {
             });
         }
         else{
-            Toast.makeText(this, "unrecognized announcement", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Annonce introuvable", Toast.LENGTH_SHORT).show();
         }
 
     }

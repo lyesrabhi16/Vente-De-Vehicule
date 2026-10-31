@@ -54,7 +54,7 @@ public class AccountRegisterFragment extends Fragment {
                 String password2 = RegBinding.edittextPassword.getText().toString().trim();
 
                 if (!password.equals(password2)){
-                    Toast.makeText(getContext(), "Please re-enter password correctly", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Les mots de passe ne correspondent pas.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 register(
@@ -73,7 +73,7 @@ public class AccountRegisterFragment extends Fragment {
 
     public void register(String nomClient, String prenomClient, String ageClient, String email, String numTel, String password) {
         ProgressDialog prgrs = new ProgressDialog(getContext());
-        prgrs.setMessage("registering...");
+        prgrs.setMessage("Création du compte…");
         prgrs.show();
 
         StringRequest str_req = new AuthRequest(Request.Method.POST, Server.getUrlRegister(), new Response.Listener<String>() {
@@ -83,7 +83,7 @@ public class AccountRegisterFragment extends Fragment {
                     JSONObject res = new JSONObject(response);
 
                     if(res.has("error")){
-                        Toast.makeText(getContext(),"registration failed. "+ res.getString("error"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),"Échec de l’inscription. "+ res.getString("error"), Toast.LENGTH_LONG).show();
                         prgrs.dismiss();
                     }
                     else {
@@ -99,20 +99,20 @@ public class AccountRegisterFragment extends Fragment {
                                 false
                         );
                         if (user.isLoggedin()){
-                            Toast.makeText(getContext(), "registration successful.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Compte créé.", Toast.LENGTH_SHORT).show();
                             prgrs.dismiss();
                             Intent i = new Intent(getContext(), MainActivity.class);
                             startActivity(i);
                             getActivity().finish();
                         }
                         else {
-                            Toast.makeText(getContext(), "registration failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Échec de l’inscription.", Toast.LENGTH_SHORT).show();
                             prgrs.dismiss();
                         }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "registration error.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Erreur lors de l’inscription.", Toast.LENGTH_SHORT).show();
                     prgrs.dismiss();
                 }
 
@@ -120,7 +120,7 @@ public class AccountRegisterFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(),"connection error.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Erreur de connexion.", Toast.LENGTH_SHORT).show();
                 prgrs.dismiss();
             }
         }){

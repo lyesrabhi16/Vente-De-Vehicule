@@ -1,82 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.messages.chat.ChatActivity"
-    >
+    tools:context=".ui.messages.chat.ChatActivity">
+
+    <!-- en-tête : retour + interlocuteur -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="64dp"
+        android:background="?attr/colorSurface"
         app:layout_constraintEnd_toEndOf="parent"
-        >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_back"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:gravity="start|center_vertical"
-            android:text="@string/back"
-            android:textAlignment="textStart"
-            app:icon="@drawable/baseline_arrow_back_24"
-            app:iconGravity="start"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:contentDescription="@string/back"
+            app:icon="@drawable/ic_arrow_back"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconSize="24dp"
+            app:iconTint="?attr/colorOnSurface"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/button_account"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_account"
+            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="@string/firstname"
-            android:textAlignment="center"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:textColor="?attr/colorOnSurface"
+            app:icon="@drawable/ic_person"
+            app:iconTint="?attr/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:icon="@drawable/ic_account_circle_48"
-            app:iconGravity="textStart"
-            android:gravity="center"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            />
+            app:layout_constraintStart_toEndOf="@id/button_back"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?attr/colorOutlineVariant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recylcer_chat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/textinputLayout_send"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header"
-        tools:listitem="@layout/chat_item"
-        />
+        tools:listitem="@layout/chat_item" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textinputLayout_send"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="12dp"
+        app:boxCornerRadiusBottomEnd="28dp"
+        app:boxCornerRadiusBottomStart="28dp"
+        app:boxCornerRadiusTopEnd="28dp"
+        app:boxCornerRadiusTopStart="28dp"
+        app:endIconDrawable="@drawable/ic_send"
         app:endIconMode="custom"
-        app:endIconDrawable="@drawable/baseline_send_24"
-        app:endIconTint="@color/bleu_clair"
-        >
+        app:endIconTint="?attr/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edittext_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="New Message..." />
+            android:hint="@string/new_message"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLines="4" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <ProgressBar
@@ -84,11 +103,10 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminateTint="@color/bleu_clair"
+        android:indeterminateTint="?attr/colorPrimary"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

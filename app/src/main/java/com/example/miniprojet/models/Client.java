@@ -97,7 +97,7 @@ public class Client {
                         try {
                             JSONObject res = new JSONObject(response);
                             if(res.has("error")){
-                                Toast.makeText(ctx,"failed to get user info. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx,"Impossible de charger le profil. "+res.getString("error"), Toast.LENGTH_LONG).show();
                                 ArrayList l = new ArrayList<>();
                                 l.add(res.get("error"));
                                 Req.onError(l);
@@ -120,7 +120,7 @@ public class Client {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ctx,"Response Handling error :  "+e, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx,"Réponse du serveur illisible : "+e, Toast.LENGTH_SHORT).show();
                             ArrayList l = new ArrayList<>();
                             l.add(e);
                             Req.onError(l);
@@ -132,7 +132,7 @@ public class Client {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ctx,"connection error."+error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx,"Erreur de connexion."+error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         ArrayList l = new ArrayList<>();
                         l.add(error);
                         Req.onError(l);
@@ -167,14 +167,14 @@ public class Client {
                         try {
                             JSONObject res = new JSONObject(response);
                             if(res.has("error")){
-                                Toast.makeText(ctx,"failed to delete user. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx,"Échec de la suppression du compte. "+res.getString("error"), Toast.LENGTH_LONG).show();
                                 ArrayList l = new ArrayList<>();
                                 l.add(res.get("error"));
                                 Req.onError(l);
                             }
 
                             else{
-                                Toast.makeText(ctx, "Deleted Successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ctx, "Compte supprimé.", Toast.LENGTH_SHORT).show();
                                 ArrayList l = new ArrayList();
                                 l.add("success");
                                 Req.onFinish(l);
@@ -182,7 +182,7 @@ public class Client {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ctx,"Response Handling error :  "+e, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx,"Réponse du serveur illisible : "+e, Toast.LENGTH_SHORT).show();
                             ArrayList l = new ArrayList<>();
                             l.add(e);
                             Req.onError(l);
@@ -194,7 +194,7 @@ public class Client {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ctx,"connection error."+error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx,"Erreur de connexion."+error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         ArrayList l = new ArrayList<>();
                         l.add(error);
                         Req.onError(l);
@@ -229,14 +229,14 @@ public class Client {
                         try {
                             JSONObject res = new JSONObject(response);
                             if(res.has("error")){
-                                Toast.makeText(ctx,"failed to update user info. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx,"Échec de la modification du profil. "+res.getString("error"), Toast.LENGTH_LONG).show();
                                 ArrayList l = new ArrayList<>();
                                 l.add(res.get("error"));
                                 Req.onError(l);
                             }
 
                             else{
-                                Toast.makeText(ctx, "Updated Successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ctx, "Modifications enregistrées.", Toast.LENGTH_SHORT).show();
                                 ArrayList l = new ArrayList();
                                 l.add("success");
                                 Req.onFinish(l);
@@ -244,7 +244,7 @@ public class Client {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ctx,"Response Handling error :  "+e, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx,"Réponse du serveur illisible : "+e, Toast.LENGTH_SHORT).show();
                             ArrayList l = new ArrayList<>();
                             l.add(e);
                             Req.onError(l);
@@ -256,7 +256,7 @@ public class Client {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ctx,"connection error."+error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx,"Erreur de connexion."+error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         ArrayList l = new ArrayList<>();
                         l.add(error);
                         Req.onError(l);

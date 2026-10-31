@@ -1,5 +1,6 @@
 package com.example.miniprojet.adapters;
 
+import com.example.miniprojet.models.User;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.miniprojet.R;
 import com.example.miniprojet.Server;
+import com.example.miniprojet.Ui;
 import com.example.miniprojet.databinding.AnnonceBinding;
 import com.example.miniprojet.interfaces.RecyclerViewInterface;
 import com.example.miniprojet.interfaces.RequestFinished;
@@ -55,15 +57,19 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull AnnonceAdapter.ViewHolder holder, int position) {
         Annonce item = list.get(position);
-        holder.img.setImageResource(R.raw.app_logo_rounded_square);
+        holder.img.setImageResource(R.drawable.ph_car);
         holder.Title.setText(item.getTitle());
-        holder.type.setText(item.getType());
-        holder.qte.setText(item.getPrix()+"da");
-        holder.date.setText(item.getAnnee()+" ");
+        Ui.typePill(holder.type, item.getType());
+        holder.qte.setText(Ui.price(ctx, item.getPrix(), item.getType()));
+        holder.date.setText(item.getAnnee());
         holder.desc.setText(item.getDesc());
-        holder.userAvatar.setImageResource(R.drawable.ic_account_circle_48);
+        holder.button.setText("Location".equals(item.getType()) ? R.string.reserve : R.string.visit);
+        // pas de demande sur sa propre annonce
+        holder.button.setVisibility(item.getIdUser() == User.getInstance(ctx).getID() ? View.GONE : View.VISIBLE);
+        holder.userAvatar.setImageResource(R.drawable.ph_avatar);
         holder.userTitle.setText(item.getUserTitle());
         holder.userSubTitle.setText(item.getUserSubTitle());
+        holder.userSubTitle.setVisibility(item.getUserSubTitle() == null || item.getUserSubTitle().isEmpty() ? View.GONE : View.VISIBLE);
 
         holder.itemView.getRootView().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,12 +98,12 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.ViewHold
                     RendezVous.AddRendezVous(rendezVous, ctx, new RequestFinished() {
                         @Override
                         public void onFinish(ArrayList args) {
-                            Toast.makeText(ctx, "Rendez-Vous Requested.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx, "Rendez-vous demandé.", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onError(ArrayList args) {
-                            Toast.makeText(ctx, "failed to request Rendez-Vous.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx, "Échec de la demande de rendez-vous.", Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else if (item.getType().equals("Location")) {
@@ -112,17 +118,17 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.ViewHold
                     Reservation.AddReservation(reservation, ctx, new RequestFinished() {
                         @Override
                         public void onFinish(ArrayList args) {
-                            Toast.makeText(ctx, "Reservation Requested.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx, "Réservation demandée.", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onError(ArrayList args) {
-                            Toast.makeText(ctx, "failed to request Reservation.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx, "Échec de la demande de réservation.", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
                 else{
-                    Toast.makeText(ctx, "Unknown Announcement Type", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx, "Type d’annonce inconnu", Toast.LENGTH_SHORT).show();
                 }*/
             }
         });

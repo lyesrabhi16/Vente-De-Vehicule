@@ -198,7 +198,7 @@ public class Annonce {
     }
 
     public static void AddAnnonce(Annonce annonce, Context ctx, RequestFinished Req){
-        Toast.makeText(ctx, "adding annonce...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ctx, "Publication de l’annonce…", Toast.LENGTH_SHORT).show();
         StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlAddAnnonce(),
                 new Response.Listener<String>() {
                     @Override
@@ -207,7 +207,7 @@ public class Annonce {
                             JSONObject res = new JSONObject(response);
 
                             if(res.has("error")){
-                                Toast.makeText(ctx,"failed to add annonce. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx,"Échec de la publication. "+res.getString("error"), Toast.LENGTH_LONG).show();
                                 ArrayList l = new ArrayList();
                                 l.add(res.get("error") );
                                 Req.onError(l);
@@ -222,7 +222,7 @@ public class Annonce {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ctx,"an error occurred.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx,"Une erreur est survenue.", Toast.LENGTH_SHORT).show();
                             ArrayList l = new ArrayList<>();
                             l.add(e.getMessage());
                             Req.onError(l);
@@ -233,7 +233,7 @@ public class Annonce {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                         ArrayList l = new ArrayList();
                         l.add(error.getMessage());
                         Req.onError(l);
@@ -264,7 +264,7 @@ public class Annonce {
         reqQ.add(Sreq);
     }
     public static void updateAnnonce(Annonce annonce, Context ctx, RequestFinished Req){
-        Toast.makeText(ctx, "updating annonce...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ctx, "Mise à jour de l’annonce…", Toast.LENGTH_SHORT).show();
         StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlUpdateAnnonce(),
                 new Response.Listener<String>() {
                     @Override
@@ -273,14 +273,14 @@ public class Annonce {
                             JSONObject res = new JSONObject(response);
 
                             if(res.has("error")){
-                                Toast.makeText(ctx,"failed to updating annonce. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx,"Échec de la modification de l’annonce. "+res.getString("error"), Toast.LENGTH_LONG).show();
                                 ArrayList l = new ArrayList();
                                 l.add(res.get("error") );
                                 Req.onError(l);
                             }
 
                             else{
-                                Toast.makeText(ctx, "Annonce updated", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ctx, "Annonce modifiée.", Toast.LENGTH_SHORT).show();
                                 ArrayList l = new ArrayList();
                                 l.add("success");
                                 Req.onFinish(l);
@@ -288,7 +288,7 @@ public class Annonce {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ctx,"an error occurred.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx,"Une erreur est survenue.", Toast.LENGTH_SHORT).show();
                             ArrayList l = new ArrayList<>();
                             l.add(e.getMessage());
                             Req.onError(l);
@@ -299,7 +299,7 @@ public class Annonce {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                         ArrayList l = new ArrayList();
                         l.add(error.getMessage());
                         Req.onError(l);
@@ -339,7 +339,7 @@ public class Annonce {
                             JSONObject res = new JSONObject(response);
 
                             if(res.has("error")){
-                                Toast.makeText(ctx,"failed to remove announcement. "+res.get("error"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx,"Échec de la suppression de l’annonce. "+res.get("error"), Toast.LENGTH_LONG).show();
                                 ArrayList l = new ArrayList();
                                 l.add(res.get("error") );
                                 Req.onError(l);
@@ -353,7 +353,7 @@ public class Annonce {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ctx,"Response Handling error.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx,"Réponse du serveur illisible.", Toast.LENGTH_SHORT).show();
                             ArrayList l = new ArrayList<>();
                             l.add(e.getMessage());
                             Req.onError(l);
@@ -363,7 +363,7 @@ public class Annonce {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                         ArrayList l = new ArrayList();
                         l.add(error.getMessage());
                         Req.onError(l);
@@ -390,7 +390,7 @@ public class Annonce {
                             JSONObject res = new JSONObject(response);
 
                             if(res.has("error")){
-                                Toast.makeText(ctx,"failed to get announcements. "+res.get("error"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx,"Impossible de charger les annonces. "+res.get("error"), Toast.LENGTH_LONG).show();
                                 ArrayList l = new ArrayList();
                                 l.add(res.get("error") );
                                 Req.onError(l);
@@ -420,7 +420,7 @@ public class Annonce {
                                         @Override
                                         public void onFinish(ArrayList args) {
                                             Client c = (Client) args.get(0);
-                                            annonce.setUserTitle(c.getNom() + " " + c.getPrenom() + " ");
+                                            annonce.setUserTitle(c.getPrenom() + " " + c.getNom());
                                             annonce.setUserSubTitle(c.getEmail());
                                             l.add(annonce);
                                             Req.onFinish(l);
@@ -437,7 +437,7 @@ public class Annonce {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ctx,"an error occurred.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx,"Une erreur est survenue.", Toast.LENGTH_SHORT).show();
                             ArrayList l = new ArrayList<>();
                             l.add(e.getMessage());
                             Req.onError(l);
@@ -448,7 +448,7 @@ public class Annonce {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                         ArrayList l = new ArrayList();
                         l.add(error.getMessage());
                         Req.onError(l);
@@ -475,7 +475,7 @@ public class Annonce {
                             JSONObject res = new JSONObject(response);
 
                             if(res.has("error")){
-                                Toast.makeText(ctx,"failed to get announcements. "+res.get("error"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx,"Impossible de charger les annonces. "+res.get("error"), Toast.LENGTH_LONG).show();
                                 ArrayList l = new ArrayList();
                                 l.add(res.get("error") );
                                 Req.onError(l);
@@ -505,7 +505,7 @@ public class Annonce {
                                         @Override
                                         public void onFinish(ArrayList args) {
                                             Client c = (Client) args.get(0);
-                                            annonce.setUserTitle(c.getNom() + " " + c.getPrenom() + " ");
+                                            annonce.setUserTitle(c.getPrenom() + " " + c.getNom());
                                             annonce.setUserSubTitle(c.getEmail());
                                             l.add(annonce);
                                             Req.onFinish(l);
@@ -523,7 +523,7 @@ public class Annonce {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ctx,"an error occurred.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx,"Une erreur est survenue.", Toast.LENGTH_SHORT).show();
                             ArrayList l = new ArrayList<>();
                             l.add(e.getMessage());
                             Req.onError(l);
@@ -534,7 +534,7 @@ public class Annonce {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                         ArrayList l = new ArrayList();
                         l.add(error.getMessage());
                         Req.onError(l);
@@ -563,7 +563,7 @@ public class Annonce {
                             JSONObject res = new JSONObject(response);
 
                             if(res.has("error")){
-                                Toast.makeText(ctx,"failed to get announcement. "+res.get("error"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx,"Impossible de charger l’annonce. "+res.get("error"), Toast.LENGTH_LONG).show();
                                 ArrayList l = new ArrayList();
                                 l.add(res.get("error") );
                                 Req.onError(l);
@@ -592,7 +592,7 @@ public class Annonce {
                                     @Override
                                     public void onFinish(ArrayList args) {
                                         Client c = (Client) args.get(0);
-                                        annonce.setUserTitle(c.getNom() + " " + c.getPrenom() + " ");
+                                        annonce.setUserTitle(c.getPrenom() + " " + c.getNom());
                                         annonce.setUserSubTitle(c.getEmail());
                                         l.add(annonce);
                                         l.add(c);
@@ -610,7 +610,7 @@ public class Annonce {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ctx,"an error occurred.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx,"Une erreur est survenue.", Toast.LENGTH_SHORT).show();
                             ArrayList l = new ArrayList<>();
                             l.add(e.getMessage());
                             Req.onError(l);
@@ -621,7 +621,7 @@ public class Annonce {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                         ArrayList l = new ArrayList();
                         l.add(error.getMessage());
                         Req.onError(l);

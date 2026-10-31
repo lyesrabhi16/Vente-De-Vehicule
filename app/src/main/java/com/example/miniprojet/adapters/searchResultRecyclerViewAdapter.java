@@ -1,5 +1,6 @@
 package com.example.miniprojet.adapters;
 
+import com.example.miniprojet.Ui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -63,9 +64,13 @@ public class searchResultRecyclerViewAdapter extends RecyclerView.Adapter<search
         if(item.getType() == searchResultItem.RESULT_PERSON){
             holder.containerAnnonce.getRoot().setVisibility(View.GONE);
             holder.containerPerson.getRoot().setVisibility(View.VISIBLE);
+            holder.containerPerson.getRoot().setBackgroundResource(R.drawable.bg_card_outline);
+            ViewGroup.MarginLayoutParams margins = (ViewGroup.MarginLayoutParams) holder.containerPerson.getRoot().getLayoutParams();
+            int side = (int) (16 * ctx.getResources().getDisplayMetrics().density);
+            margins.setMargins(side, side / 2, side, side / 2);
             holder.containerPerson.Title.setText(item.getPerson().getTitle());
             holder.containerPerson.subTitle.setText(item.getPerson().getSubTitle());
-            holder.containerPerson.Avatar.setImageResource(R.drawable.ic_account_circle_48_bleu_clair);
+            holder.containerPerson.Avatar.setImageResource(R.drawable.ph_avatar);
             Bitmap imgAvatar = Server.getBitmap(ctx, "imageClient-["+item.getPerson().getUserID()+"].jpeg");
             if(imgAvatar != null){
                 holder.containerPerson.Avatar.setImageBitmap(imgAvatar);
@@ -78,12 +83,12 @@ public class searchResultRecyclerViewAdapter extends RecyclerView.Adapter<search
                         if(imgAvatar != null)
                             holder.containerPerson.Avatar.setImageBitmap(imgAvatar);
                         else
-                            holder.containerPerson.Avatar.setImageResource(R.drawable.ic_account_circle_48_bleu_clair);
+                            holder.containerPerson.Avatar.setImageResource(R.drawable.ph_avatar);
                     }
 
                     @Override
                     public void onError(ArrayList args) {
-                        holder.containerPerson.Avatar.setImageResource(R.drawable.ic_account_circle_48_bleu_clair);
+                        holder.containerPerson.Avatar.setImageResource(R.drawable.ph_avatar);
                     }
                 });
             }
@@ -91,19 +96,19 @@ public class searchResultRecyclerViewAdapter extends RecyclerView.Adapter<search
         else{
             holder.containerAnnonce.getRoot().setVisibility(View.VISIBLE);
             holder.containerPerson.getRoot().setVisibility(View.GONE);
-            holder.containerAnnonce.image.setImageResource(R.raw.app_logo_rounded_square);
+            holder.containerAnnonce.image.setImageResource(R.drawable.ph_car);
             holder.containerAnnonce.title.setText(item.getAnnonce().getTitle());
-            holder.containerAnnonce.type.setText(item.getAnnonce().getType());
-            holder.containerAnnonce.qte.setText(item.getAnnonce().getPrix()+"da");
+            Ui.typePill(holder.containerAnnonce.type, item.getAnnonce().getType());
+            holder.containerAnnonce.qte.setText(Ui.price(holder.containerAnnonce.qte.getContext(), item.getAnnonce().getPrix(), item.getAnnonce().getType()));
             holder.containerAnnonce.date.setText(item.getAnnonce().getAnnee()+"");
             holder.containerAnnonce.desc.setText(item.getAnnonce().getDesc());
-            holder.containerAnnonce.Avatar.setImageResource(R.drawable.ic_account_circle_48);
+            holder.containerAnnonce.Avatar.setImageResource(R.drawable.ph_avatar);
             holder.containerAnnonce.Title.setText(item.getAnnonce().getUserTitle());
             holder.containerAnnonce.subTitle.setText(item.getAnnonce().getUserSubTitle());
             holder.containerAnnonce.button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(view.getContext(), "to be implemented later", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), "Bientôt disponible.", Toast.LENGTH_SHORT).show();
                 }
             });
             Bitmap imgAnnonce = Server.getBitmap(ctx, "imageAnnonce-["+item.getAnnonce().getIdAnnonce()+"].jpeg");

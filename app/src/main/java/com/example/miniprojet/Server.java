@@ -336,13 +336,13 @@ public class Server {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(ctx, "image uploaded.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx, "Photo envoyée.", Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ctx, "error : "+error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx, "Erreur : "+error, Toast.LENGTH_SHORT).show();
                     }
                 }){
             @Nullable
@@ -358,7 +358,7 @@ public class Server {
                         Params.put("index", img.optString("index", "0"));
                     }
                 } catch (JSONException e) {
-                    Toast.makeText(ctx, "Error Sending Image", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx, "Échec de l’envoi de la photo", Toast.LENGTH_SHORT).show();
                 }
                 return Params;
             }
@@ -376,7 +376,7 @@ public class Server {
                         try {
                             JSONObject res = new JSONObject(response);
                             if(res.has("error")){
-                                //Toast.makeText(ctx, "Error: "+res.getString("error"), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(ctx, "Erreur : "+res.getString("error"), Toast.LENGTH_SHORT).show();
                                 ArrayList l = new ArrayList();
                                 l.add(res.get("error"));
                                 Req.onError(l);
@@ -388,7 +388,7 @@ public class Server {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ctx, "Response Handling Error : "+e, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx, "Réponse du serveur illisible : "+e, Toast.LENGTH_SHORT).show();
                             ArrayList l = new ArrayList();
                             l.add(e);
                             Req.onError(l);

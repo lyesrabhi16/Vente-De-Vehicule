@@ -61,7 +61,7 @@ public class AccountSignInFragment extends Fragment {
 
         String finalEmail = email;
         ProgressDialog prgrs = new ProgressDialog(getContext());
-        prgrs.setMessage("login in progress...");
+        prgrs.setMessage("Connexion…");
         prgrs.show();
         String finalNumTel = numTel;
         StringRequest req = new AuthRequest(Request.Method.POST, dbc.getUrlLogin(),
@@ -71,7 +71,7 @@ public class AccountSignInFragment extends Fragment {
                         try {
                             JSONObject res = new JSONObject(response);
                             if(res.has("error")){
-                                Toast.makeText(getContext(),"login failed. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(),"Échec de la connexion. "+res.getString("error"), Toast.LENGTH_LONG).show();
                                 prgrs.dismiss();
                                 return;
                             }
@@ -89,7 +89,7 @@ public class AccountSignInFragment extends Fragment {
                                             true
                                     );
                                     if(user.isLoggedin()) {
-                                        Toast.makeText(getContext(), "login successful.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), "Connexion réussie.", Toast.LENGTH_SHORT).show();
                                         prgrs.dismiss();
                                         Intent i = new Intent(getContext(), MainActivity.class);
                                         MainActivity.setKeepConnected(true);
@@ -98,7 +98,7 @@ public class AccountSignInFragment extends Fragment {
 
                                     }
                                     else{
-                                        Toast.makeText(getContext(),"login failed, try again.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getContext(),"Échec de la connexion, réessayez.", Toast.LENGTH_LONG).show();
                                         prgrs.dismiss();
 
                                     }
@@ -118,7 +118,7 @@ public class AccountSignInFragment extends Fragment {
                                         false
                                 );
                                 if(user.isLoggedin()) {
-                                    Toast.makeText(getContext(), "login successful.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Connexion réussie.", Toast.LENGTH_SHORT).show();
                                     prgrs.dismiss();
                                     Intent i = new Intent(getContext(), MainActivity.class);
                                     MainActivity.setKeepConnected(true);
@@ -127,7 +127,7 @@ public class AccountSignInFragment extends Fragment {
 
                                 }
                                 else{
-                                    Toast.makeText(getContext(),"login failed, try again.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext(),"Échec de la connexion, réessayez.", Toast.LENGTH_LONG).show();
                                     prgrs.dismiss();
 
                                 }
@@ -135,7 +135,7 @@ public class AccountSignInFragment extends Fragment {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getContext(),"an error occurred. "+e, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(),"Une erreur est survenue. "+e, Toast.LENGTH_SHORT).show();
                             prgrs.dismiss();
 
                         }
@@ -145,7 +145,7 @@ public class AccountSignInFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getContext(),"connection error.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),"Erreur de connexion.", Toast.LENGTH_SHORT).show();
                         prgrs.dismiss();
                     }
                 }){

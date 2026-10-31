@@ -82,7 +82,7 @@ public class Message {
                             JSONObject res = new JSONObject(response);
 
                             if(res.has("error")){
-                                Toast.makeText(ctx,"failed to get messages. "+res.getString("message"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx,"Impossible de charger les messages. "+res.getString("message"), Toast.LENGTH_LONG).show();
                                 ArrayList l = new ArrayList();
                                 l.add(res.get("error") );
                                 req.onError(l);
@@ -121,7 +121,7 @@ public class Message {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ctx,"an error occurred.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx,"Une erreur est survenue.", Toast.LENGTH_SHORT).show();
                             ArrayList l = new ArrayList<>();
                             l.add(e.getMessage());
                             req.onError(l);
@@ -132,7 +132,7 @@ public class Message {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                         ArrayList l = new ArrayList();
                         l.add(error.getMessage());
                         req.onError(l);

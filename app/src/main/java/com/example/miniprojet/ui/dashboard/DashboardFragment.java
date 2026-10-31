@@ -87,7 +87,7 @@ public class DashboardFragment extends Fragment {
                     }
                 });
             } catch (JSONException e) {
-                Toast.makeText(getContext(), "JSON Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Réponse du serveur illisible.", Toast.LENGTH_SHORT).show();
             }
 
             rendezVousList = new ArrayList<>();
@@ -112,7 +112,7 @@ public class DashboardFragment extends Fragment {
                     }
                 });
             } catch (JSONException e) {
-                Toast.makeText(getContext(), "JSON Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Réponse du serveur illisible.", Toast.LENGTH_SHORT).show();
             }
 
 

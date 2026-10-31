@@ -62,7 +62,7 @@ public class AccountActivity extends AppCompatActivity {
         User user = User.getInstance(getApplicationContext());
         if(accountID != -1){
             ProgressDialog prgrs = new ProgressDialog(AccountActivity.this);
-            prgrs.setMessage("Getting user info...");
+            prgrs.setMessage("Chargement du profil…");
             prgrs.show();
 
             Client.getClient(accountID, getApplicationContext(), new RequestFinished() {
@@ -216,7 +216,7 @@ public class AccountActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent chat = new Intent(getApplicationContext(), ChatActivity.class);
                     chat.putExtra("userID", client.getIdClient());
-                    chat.putExtra("accountName", client.getNom()+" "+ client.getPrenom());
+                    chat.putExtra("accountName", client.getPrenom() + " " + client.getNom());
                     startActivity(chat);
                 }
             });
@@ -246,7 +246,7 @@ public class AccountActivity extends AppCompatActivity {
                             firstname
                     );
                     ProgressDialog prgs = new ProgressDialog(AccountActivity.this);
-                    prgs.setMessage("Updating...");
+                    prgs.setMessage("Mise à jour…");
                     prgs.show();
                     Client.updateClient(client, getApplicationContext(), new RequestFinished() {
                         @Override
@@ -277,14 +277,14 @@ public class AccountActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(AccountActivity.this);
-                    alert.setMessage("Are you sure you want to delete your account ?");
+                    alert.setMessage("Voulez-vous vraiment supprimer votre compte ?");
                     alert.setTitle(R.string.delete_account);
                     alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.dismiss();
                             ProgressDialog prgrs = new ProgressDialog(AccountActivity.this);
-                            prgrs.setMessage("Deleting Account...");
+                            prgrs.setMessage("Suppression du compte…");
                             prgrs.show();
                             Client.delClient(user.getID(), getApplicationContext(), new RequestFinished() {
                                 @Override
@@ -321,7 +321,7 @@ public class AccountActivity extends AppCompatActivity {
             ABind.buttonChangePassword.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(getApplicationContext(), "to be implemented later.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Bientôt disponible.", Toast.LENGTH_SHORT).show();
                 }
             });
             ABind.buttonLogout.setOnClickListener(new View.OnClickListener() {
@@ -355,9 +355,9 @@ public class AccountActivity extends AppCompatActivity {
                                 Server.sendImageToserver(o, getApplicationContext());
                                 ABind.userAvatar.setImageURI(selectedImageUri);
                             } catch (IOException e) {
-                                Toast.makeText(getApplicationContext(), "Error : "+e, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Erreur : "+e, Toast.LENGTH_SHORT).show();
                             } catch (JSONException e) {
-                                Toast.makeText(getApplicationContext(), "Error : "+e, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Erreur : "+e, Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -398,13 +398,13 @@ public class AccountActivity extends AppCompatActivity {
     }
     public void logout(){
         ProgressDialog prgrs = new ProgressDialog(getApplicationContext());
-        prgrs.setMessage("Logout in progress...");
+        prgrs.setMessage("Déconnexion…");
         User user = User.getInstance(getApplicationContext());
         user.logout();
         if(!user.isLoggedin())
-            Toast.makeText(getApplicationContext(),"logout successful.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"Vous êtes déconnecté.", Toast.LENGTH_SHORT).show();
         else
-            Toast.makeText(getApplicationContext(),"logout failed.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Échec de la déconnexion.", Toast.LENGTH_LONG).show();
         prgrs.dismiss();
 
     }

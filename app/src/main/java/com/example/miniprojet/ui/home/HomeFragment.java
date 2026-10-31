@@ -1,5 +1,7 @@
 package com.example.miniprojet.ui.home;
 
+import androidx.recyclerview.widget.RecyclerView;
+import com.example.miniprojet.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -57,6 +59,17 @@ public class HomeFragment extends Fragment {
         });
 
         Home.recyclerHome.setAdapter(adapter);
+        // le bouton « Publier » se réduit à son icône quand on fait défiler la liste
+        Home.recyclerHome.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 4) {
+                    Home.floatingActionButton.shrink();
+                } else if (dy < -4) {
+                    Home.floatingActionButton.extend();
+                }
+            }
+        });
         filterObj = new JSONObject();
         Filter();
 
@@ -67,7 +80,7 @@ public class HomeFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     String selected = Home.containerFilter.type.getText().toString();
-                    if (selected.equals("All")){
+                    if (selected.equals(getString(R.string.filter_all))){
                         filterObj.remove("typeVehicule");
                     }
                     else{
@@ -75,7 +88,7 @@ public class HomeFragment extends Fragment {
                     }
                     Filter();
                 } catch (JSONException e) {
-                    Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Erreur", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -84,7 +97,7 @@ public class HomeFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     String selected = Home.containerFilter.marque.getText().toString();
-                    if (selected.equals("All")){
+                    if (selected.equals(getString(R.string.filter_all))){
                         filterObj.remove("marqueVehicule");
                     }
                     else{
@@ -92,7 +105,7 @@ public class HomeFragment extends Fragment {
                     }
                     Filter();
                 } catch (JSONException e) {
-                    Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Erreur", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -101,7 +114,7 @@ public class HomeFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     String selected = Home.containerFilter.couleur.getText().toString();
-                    if (selected.equals("All")){
+                    if (selected.equals(getString(R.string.filter_all))){
                         filterObj.remove("couleurVehicule");
                     }
                     else{
@@ -109,7 +122,7 @@ public class HomeFragment extends Fragment {
                     }
                     Filter();
                 } catch (JSONException e) {
-                    Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Erreur", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -118,7 +131,7 @@ public class HomeFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     String selected = Home.containerFilter.transmission.getText().toString();
-                    if (selected.equals("All")){
+                    if (selected.equals(getString(R.string.filter_all))){
                         filterObj.remove("transmissionVehicule");
                     }
                     else{
@@ -126,7 +139,7 @@ public class HomeFragment extends Fragment {
                     }
                     Filter();
                 } catch (JSONException e) {
-                    Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Erreur", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -135,7 +148,7 @@ public class HomeFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
                     String selected = Home.containerFilter.energie.getText().toString();
-                    if (selected.equals("All")){
+                    if (selected.equals(getString(R.string.filter_all))){
                         filterObj.remove("energieVehicule");
                     }
                     else{
@@ -143,7 +156,7 @@ public class HomeFragment extends Fragment {
                     }
                     Filter();
                 } catch (JSONException e) {
-                    Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Erreur", Toast.LENGTH_SHORT).show();
                 }
             }
         });

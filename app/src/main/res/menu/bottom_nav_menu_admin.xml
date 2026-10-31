@@ -3,26 +3,25 @@
     <group>
         <item
             android:id="@+id/annoncesFragment"
-            android:icon="@drawable/baseline_view_list_24"
-            android:title="Annonces" />
+            android:icon="@drawable/ic_car"
+            android:title="@string/title_admin_annonces" />
 
         <item
             android:id="@+id/messagesFragment"
-            android:icon="@drawable/ic_message_dark_24dp"
-            android:title="Messages" />
+            android:icon="@drawable/ic_chat"
+            android:title="@string/title_messages" />
 
         <item
             android:id="@+id/rendezVousFragment"
-            android:icon="@drawable/ic_dashboard_black_24dp"
-            android:title="RendezVous" />
+            android:icon="@drawable/ic_event"
+            android:title="@string/title_admin_rendezvous" />
         <item
             android:id="@+id/reservationsFragment"
-            android:icon="@drawable/ic_dashboard_black_24dp"
-            android:title="Reservation" />
+            android:icon="@drawable/ic_calendar"
+            android:title="@string/title_admin_reservations" />
         <item
             android:id="@+id/adminPanelFragment"
-            android:icon="@drawable/baseline_admin_panel_settings_24"
-            android:title="Admin" />
+            android:icon="@drawable/ic_shield"
+            android:title="@string/title_admin" />
     </group>
-
 </menu>

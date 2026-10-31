@@ -1,5 +1,6 @@
 package com.example.miniprojet.ui.notifications;
 
+import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,27 @@ public class NotificationsFragment extends Fragment {
     private FragmentNotificationsBinding binding;
     private ArrayList notifications;
     private DemandeAdapter adapter;
+    /** Réponses du serveur encore attendues (une par annonce) : l'état vide ne s'affiche qu'une fois toutes arrivées. */
+    private int pending;
+
+    private void requestDone() {
+        if (binding == null) return;
+        pending--;
+        if (pending <= 0) {
+            binding.progressBar.setVisibility(View.GONE);
+            updateEmpty();
+        }
+    }
+
+    private void updateEmpty() {
+        if (binding == null || adapter == null) return;
+        boolean empty = adapter.getItemCount() == 0 && pending <= 0;
+        binding.textMessages.setVisibility(empty ? View.VISIBLE : View.GONE);
+        if (empty) {
+            binding.textMessages.setText(R.string.no_requests);
+            binding.textMessages.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.empty_requests, 0, 0);
+        }
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -44,6 +66,17 @@ public class NotificationsFragment extends Fragment {
 
             notifications = new ArrayList();
             adapter = new DemandeAdapter(notifications, getContext());
+            adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onChanged() {
+                    updateEmpty();
+                }
+
+                @Override
+                public void onItemRangeInserted(int positionStart, int itemCount) {
+                    updateEmpty();
+                }
+            });
             binding.recyclerNotifications.setAdapter(adapter);
 
             binding.progressBar.setVisibility(View.VISIBLE);
@@ -51,6 +84,10 @@ public class NotificationsFragment extends Fragment {
                 @Override
                 public void onFinish(ArrayList args) {
                     ArrayList<Annonce> annonces = (ArrayList<Annonce>) args;
+                    pending = annonces.size();
+                    if (pending == 0) {
+                        requestDone();
+                    }
                     try {
                         for (int i = 0; i < annonces.size(); i++) {
                             Annonce a = annonces.get(i);
@@ -61,7 +98,7 @@ public class NotificationsFragment extends Fragment {
                                 Reservation.getReservations(filterObj, getContext(), new RequestFinished() {
                                     @Override
                                     public void onFinish(ArrayList args) {
-                                        binding.progressBar.setVisibility(View.GONE);
+                                        requestDone();
                                         if(args.size() < 1) return;
                                         ArrayList<Reservation> reservations = (ArrayList<Reservation>) args;
                                         adapter.addWithReservationsList(reservations);
@@ -70,8 +107,7 @@ public class NotificationsFragment extends Fragment {
 
                                     @Override
                                     public void onError(ArrayList args) {
-                                        binding.progressBar.setVisibility(View.GONE);
-
+                                        requestDone();
                                     }
                                 });
 
@@ -81,7 +117,7 @@ public class NotificationsFragment extends Fragment {
                                     @Override
                                     public void onFinish(ArrayList args) {
                                         if(binding==null)return;
-                                        binding.progressBar.setVisibility(View.GONE);
+                                        requestDone();
                                         if(args.size() < 1) return;
                                         ArrayList<RendezVous> rendezVous = (ArrayList<RendezVous>) args;
                                         adapter.addWithRendezVousList(rendezVous);
@@ -90,8 +126,7 @@ public class NotificationsFragment extends Fragment {
 
                                     @Override
                                     public void onError(ArrayList args) {
-                                        binding.progressBar.setVisibility(View.GONE);
-
+                                        requestDone();
                                     }
                                 });
                             }
@@ -99,13 +134,14 @@ public class NotificationsFragment extends Fragment {
                         }
                     }
                     catch (JSONException e) {
-                        Toast.makeText(getContext(), "JSON Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Réponse du serveur illisible.", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onError(ArrayList args) {
-
+                    pending = 0;
+                    requestDone();
                 }
             });
 

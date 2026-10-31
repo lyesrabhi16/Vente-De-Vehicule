@@ -1,109 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Filtres de la liste d'annonces : cinq listes déroulantes compactes, qui défilent horizontalement. -->
 <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:foregroundTint="@color/bleu_clair"
-    android:padding="10dp"
-    android:scrollbarThumbHorizontal="?attr/colorPrimary"
+    android:layout_height="wrap_content"
+    android:clipToPadding="false"
+    android:paddingStart="12dp"
+    android:paddingTop="4dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="4dp"
+    android:scrollbars="none">
 
-
-    >
     <LinearLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        >
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/typeLayout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:layout_margin="5dp"
-            android:hint="@string/type"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/type">
 
-            >
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                android:minWidth="120dp"
-                app:simpleItems="@array/types_actionsFiltre"
-                />
+                android:minWidth="128dp"
+                app:simpleItems="@array/types_actionsFiltre" />
         </com.google.android.material.textfield.TextInputLayout>
-
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/marqueLayout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:layout_margin="5dp"
-            android:hint="@string/brand"
-            >
+            android:layout_marginEnd="8dp"
+            android:hint="@string/brand">
+
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/marque"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="120dp"
                 android:inputType="none"
-                app:simpleItems="@array/marqueFiltre"
-                />
+                android:minWidth="148dp"
+                app:simpleItems="@array/marqueFiltre" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/couleurLayout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:layout_margin="5dp"
-            android:hint="@string/color"
-            >
+            android:layout_marginEnd="8dp"
+            android:hint="@string/color">
+
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/couleur"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="120dp"
                 android:inputType="none"
-                app:simpleItems="@array/couleurFiltre"
-                />
+                android:minWidth="148dp"
+                app:simpleItems="@array/couleurFiltre" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/transmissionLayout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:layout_margin="5dp"
-            android:hint="@string/transmission"
-            >
+            android:layout_marginEnd="8dp"
+            android:hint="@string/transmission">
+
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/transmission"
                 android:layout_width="wrap_content"
-                android:minWidth="170dp"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                app:simpleItems="@array/boiteFiltre"
-                />
+                android:minWidth="176dp"
+                app:simpleItems="@array/boiteFiltre" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/energieLayout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:layout_margin="5dp"
-            android:hint="@string/energy"
-            >
+            android:hint="@string/energy">
+
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/energie"
                 android:layout_width="wrap_content"
-                android:minWidth="170dp"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                app:simpleItems="@array/energieFiltre"
-                />
+                android:minWidth="148dp"
+                app:simpleItems="@array/energieFiltre" />
         </com.google.android.material.textfield.TextInputLayout>
-
     </LinearLayout>
 </HorizontalScrollView>
