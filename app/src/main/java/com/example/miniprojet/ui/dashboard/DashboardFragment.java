@@ -87,7 +87,7 @@ public class DashboardFragment extends Fragment {
                     }
                 });
             } catch (JSONException e) {
-                Toast.makeText(getContext(), "JSON Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Réponse du serveur illisible.", Toast.LENGTH_SHORT).show();
             }
 
             rendezVousList = new ArrayList<>();
@@ -112,7 +112,7 @@ public class DashboardFragment extends Fragment {
                     }
                 });
             } catch (JSONException e) {
-                Toast.makeText(getContext(), "JSON Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Réponse du serveur illisible.", Toast.LENGTH_SHORT).show();
             }
 
 
@@ -163,6 +163,18 @@ public class DashboardFragment extends Fragment {
         /*final TextView textView = binding.textDashboard;
         dashboardViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);*/
         return root;
+    }
+
+    private boolean resumedOnce;
+
+    /** Au retour d'une demande ou d'une annonce modifiée, la liste se recharge. */
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (resumedOnce && User.getInstance(getContext()).isLoggedin()) {
+            getParentFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        }
+        resumedOnce = true;
     }
 
     @Override

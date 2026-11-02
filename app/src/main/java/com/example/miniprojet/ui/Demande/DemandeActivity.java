@@ -1,5 +1,7 @@
 package com.example.miniprojet.ui.Demande;
 
+import com.example.miniprojet.Server;
+import com.example.miniprojet.Ui;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -51,6 +53,8 @@ public class DemandeActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         DBind = ActivityDemandeBinding.inflate(getLayoutInflater());
         setContentView(DBind.getRoot());
+        // l’état s’affiche en pastille ; la liste brute n’est utile qu’à l’administrateur
+        DBind.etatLayout.setVisibility(User.getInstance(getApplicationContext()).isAdmin() ? View.VISIBLE : View.GONE);
 
 
         User user = User.getInstance(getApplicationContext());
@@ -62,12 +66,28 @@ public class DemandeActivity extends AppCompatActivity {
 
 
         int idAnnonce = getIntent().getIntExtra("idAnnonce", -1);
+        // le demandeur : moi, ou — quand le vendeur ouvre une demande reçue — la personne qui l'a faite
+        final int requesterId = getIntent().getIntExtra("idClient", user.getID());
         Type = getIntent().getIntExtra("TYPE", -1);
+        if (idAnnonce != -1) {
+            Server.getImage("imageAnnonce-[" + idAnnonce + "].jpeg", getApplicationContext(), new RequestFinished() {
+                @Override
+                public void onFinish(ArrayList args) {
+                    if (DBind != null && args.get(0) != null) {
+                        DBind.imageAnnonce.setImageBitmap((android.graphics.Bitmap) args.get(0));
+                    }
+                }
+
+                @Override
+                public void onError(ArrayList args) {
+                }
+            });
+        }
         if (user.isLoggedin()) {
 
             if (idAnnonce == -1) {
                 if(!user.isAdmin()){
-                    Toast.makeText(this, "Unrecognized Announcement", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Annonce introuvable", Toast.LENGTH_SHORT).show();
                     onBackPressed();
                 }
                 else{
@@ -78,11 +98,11 @@ public class DemandeActivity extends AppCompatActivity {
                         switch (Type){
                             case TYPE_RENDEZVOUS:
                                 demande.setTitle("RendezVous");
-                                DBind.demandeType.setText("RendezVous");
+                                DBind.demandeType.setText("Rendez-vous");
                                 break;
                             case TYPE_RESERVATION:
                                 demande.setTitle("Reservation");
-                                DBind.demandeType.setText("Reservation");
+                                DBind.demandeType.setText("Réservation");
                                 DBind.dateLayout2.setEnabled(true);
                                 break;
                         }
@@ -103,7 +123,7 @@ public class DemandeActivity extends AppCompatActivity {
 
 
                 ProgressDialog prgrs = new ProgressDialog(DemandeActivity.this);
-                prgrs.setMessage("Getting Details...");
+                prgrs.setMessage("Chargement…");
                 prgrs.show();
                 Annonce.getAnnonce(idAnnonce, getApplicationContext(), new RequestFinished() {
                     @Override
@@ -125,11 +145,11 @@ public class DemandeActivity extends AppCompatActivity {
                             DBind.dateLayout.setHint(getResources().getText(R.string.date_debut));
                             DBind.dateLayout2.setVisibility(View.VISIBLE);
                             DBind.dateLayout2.setEnabled(true);
-                            DBind.demandeType.setText("Reservation");
+                            DBind.demandeType.setText("Réservation");
                             Type = TYPE_RESERVATION;
-                            reservation.setIdClient(user.getID());
+                            reservation.setIdClient(requesterId);
                             reservation.setIdAnnonce(annonce.getIdAnnonce());
-                            Reservation.getReservation(annonce.getIdAnnonce(), user.getID(), getApplicationContext(), new RequestFinished() {
+                            Reservation.getReservation(annonce.getIdAnnonce(), requesterId, getApplicationContext(), new RequestFinished() {
                                 @Override
                                 public void onFinish(ArrayList args) {
                                     reservation = (Reservation) args.get(0);
@@ -139,7 +159,7 @@ public class DemandeActivity extends AppCompatActivity {
                                     DBind.dateText2.setText(reservation.getDateFin());
                                     lieu = reservation.getLieuReservation().split(" ");
                                     if(lieu.length >= 2 )
-                                        DBind.lieuText.setText("longitude : " + lieu[0] + " \nlatitude : " + lieu[1]);
+                                        DBind.lieuText.setText("Longitude : " + lieu[0] + " \nLatitude : " + lieu[1]);
                                     DBind.lieuLayout.setEnabled(true);
 
 
@@ -157,6 +177,12 @@ public class DemandeActivity extends AppCompatActivity {
                                         public void onFinish(ArrayList args) {
                                             demendeur = (Client) args.get(0);
                                             demande.setPerson(demendeur);
+                                            if (recepteur != null && user.getID() == recepteur.getIdClient()) {
+                                                // le vendeur voit qui a fait la demande
+                                                DBind.labelPerson.setText(R.string.requester);
+                                                DBind.containerPerson.Title.setText(demendeur.getPrenom() + " " + demendeur.getNom());
+                                                DBind.containerPerson.subTitle.setText(demendeur.getEmail());
+                                            }
                                         }
 
                                         @Override
@@ -174,11 +200,11 @@ public class DemandeActivity extends AppCompatActivity {
 
                         }
                         else{
-                            DBind.demandeType.setText("RendezVous");
+                            DBind.demandeType.setText("Rendez-vous");
                             Type = TYPE_RENDEZVOUS;
-                            rendezVous.setIdClient(user.getID());
+                            rendezVous.setIdClient(requesterId);
                             rendezVous.setIdAnnonce(annonce.getIdAnnonce());
-                            RendezVous.getRendezVous(annonce.getIdAnnonce(), user.getID(), getApplicationContext(), new RequestFinished() {
+                            RendezVous.getRendezVous(annonce.getIdAnnonce(), requesterId, getApplicationContext(), new RequestFinished() {
                                 @Override
                                 public void onFinish(ArrayList args) {
                                     rendezVous = (RendezVous) args.get(0);
@@ -187,7 +213,7 @@ public class DemandeActivity extends AppCompatActivity {
                                     DBind.dateText.setText(rendezVous.getDateRendezVous());
                                     lieu = rendezVous.getLieuRendezVous().split(" ");
                                     if(lieu.length >= 2 )
-                                        DBind.lieuText.setText("longitude : " + lieu[0] + " \nlatitude : " + lieu[1]);
+                                        DBind.lieuText.setText("Longitude : " + lieu[0] + " \nLatitude : " + lieu[1]);
 
                                     DBind.lieuLayout.setEnabled(true);
 
@@ -203,6 +229,12 @@ public class DemandeActivity extends AppCompatActivity {
                                         public void onFinish(ArrayList args) {
                                             demendeur = (Client) args.get(0);
                                             demande.setPerson(demendeur);
+                                            if (recepteur != null && user.getID() == recepteur.getIdClient()) {
+                                                // le vendeur voit qui a fait la demande
+                                                DBind.labelPerson.setText(R.string.requester);
+                                                DBind.containerPerson.Title.setText(demendeur.getPrenom() + " " + demendeur.getNom());
+                                                DBind.containerPerson.subTitle.setText(demendeur.getEmail());
+                                            }
                                         }
 
                                         @Override
@@ -251,7 +283,7 @@ public class DemandeActivity extends AppCompatActivity {
 
         }
         else {
-            Toast.makeText(this, "Please Log in", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Connectez-vous d’abord.", Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -275,7 +307,7 @@ public class DemandeActivity extends AppCompatActivity {
                         Annonce a = (Annonce) args.get(0);
                         Client c = (Client) args.get(1);
                         if(a.getType().equals("Location")) {
-                            Toast.makeText(DemandeActivity.this, "Annonce is not of type Vente!!!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DemandeActivity.this, "Cette annonce n’est pas à vendre.", Toast.LENGTH_SHORT).show();
                         }
                         demande.setAnnonce(a);
                         demande.setPerson(c);
@@ -283,7 +315,7 @@ public class DemandeActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ArrayList args) {
-                        Toast.makeText(DemandeActivity.this, "failed to find annonce", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DemandeActivity.this, "Annonce introuvable", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -302,6 +334,7 @@ public class DemandeActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 demande.setEtat(editable.toString());
+                Ui.statePill(DBind.etatPill, editable.toString());
             }
         });
 
@@ -311,9 +344,9 @@ public class DemandeActivity extends AppCompatActivity {
                 if (demande == null )return;
                 if (Type == TYPE_RENDEZVOUS){
                     demande.setTitle("RendezVous");
-                    DBind.demandeType.setText("RendezVous");
+                    DBind.demandeType.setText("Rendez-vous");
                     MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                            .setTitleText("Select Rendez-Vous Date")
+                            .setTitleText("Date du rendez-vous")
                             .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
                             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                             .build();
@@ -326,15 +359,15 @@ public class DemandeActivity extends AppCompatActivity {
                             Calendar c = Calendar.getInstance();
                             c.setTimeInMillis(selection);
                             rendezVous.setDateRendezVous(ChatActivity.getDate("yyyy-MM-dd HH:mm:ss", c.getTime()));
-                            DBind.dateText.setText(c.getTime().toString());
+                            DBind.dateText.setText(ChatActivity.getDate("yyyy-MM-dd HH:mm:ss", c.getTime()));
                         }
                     });
 
                 } else if (Type == TYPE_RESERVATION) {
                     demande.setTitle("Reservation");
-                    DBind.demandeType.setText("Reservation");
+                    DBind.demandeType.setText("Réservation");
                     MaterialDatePicker<Pair<Long, Long>> datePicker = MaterialDatePicker.Builder.dateRangePicker()
-                            .setTitleText("Select Reservation Date Range")
+                            .setTitleText("Dates de la réservation")
                             .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
                             .setSelection(Pair.create(MaterialDatePicker.todayInUtcMilliseconds(), MaterialDatePicker.todayInUtcMilliseconds()))
                             .build();
@@ -345,11 +378,11 @@ public class DemandeActivity extends AppCompatActivity {
                             Calendar c1 = Calendar.getInstance();
                             c1.setTimeInMillis(selection.first);
                             reservation.setDateDebut(ChatActivity.getDate("yyyy-MM-dd HH:mm:ss", c1.getTime()));
-                            DBind.dateText.setText(c1.getTime().toString());
+                            DBind.dateText.setText(ChatActivity.getDate("yyyy-MM-dd HH:mm:ss", c1.getTime()));
                             Calendar c2 = Calendar.getInstance();
                             c2.setTimeInMillis(selection.second);
                             reservation.setDateFin(ChatActivity.getDate("yyyy-MM-dd HH:mm:ss", c2.getTime()));
-                            DBind.dateText2.setText(c2.getTime().toString());
+                            DBind.dateText2.setText(ChatActivity.getDate("yyyy-MM-dd HH:mm:ss", c2.getTime()));
                         }
                     });
                 }
@@ -363,9 +396,9 @@ public class DemandeActivity extends AppCompatActivity {
                 DBind.etat.setText("Pending");
                 if (demande.getAnnonce().getType().equals("Vente")){
                     demande.setTitle("RendezVous");
-                    DBind.demandeType.setText("RendezVous");
+                    DBind.demandeType.setText("Rendez-vous");
                     MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                            .setTitleText("Select Rendez-Vous Date")
+                            .setTitleText("Date du rendez-vous")
                             .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
                             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                             .build();
@@ -378,15 +411,15 @@ public class DemandeActivity extends AppCompatActivity {
                             Calendar c = Calendar.getInstance();
                             c.setTimeInMillis(selection);
                             rendezVous.setDateRendezVous(ChatActivity.getDate("yyyy-MM-dd HH:mm:ss", c.getTime()));
-                            DBind.dateText.setText(c.getTime().toString());
+                            DBind.dateText.setText(ChatActivity.getDate("yyyy-MM-dd HH:mm:ss", c.getTime()));
                         }
                     });
 
                 } else if (demande.getAnnonce().getType().equals("Location")) {
                     demande.setTitle("Reservation");
-                    DBind.demandeType.setText("Reservation");
+                    DBind.demandeType.setText("Réservation");
                     MaterialDatePicker<Pair<Long, Long>> datePicker = MaterialDatePicker.Builder.dateRangePicker()
-                            .setTitleText("Select Reservation Date Range")
+                            .setTitleText("Dates de la réservation")
                             .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
                             .setSelection(Pair.create(MaterialDatePicker.todayInUtcMilliseconds(), MaterialDatePicker.todayInUtcMilliseconds()))
                             .build();
@@ -397,11 +430,11 @@ public class DemandeActivity extends AppCompatActivity {
                             Calendar c1 = Calendar.getInstance();
                             c1.setTimeInMillis(selection.first);
                             reservation.setDateDebut(ChatActivity.getDate("yyyy-MM-dd HH:mm:ss", c1.getTime()));
-                            DBind.dateText.setText(c1.getTime().toString());
+                            DBind.dateText.setText(ChatActivity.getDate("yyyy-MM-dd HH:mm:ss", c1.getTime()));
                             Calendar c2 = Calendar.getInstance();
                             c2.setTimeInMillis(selection.second);
                             reservation.setDateFin(ChatActivity.getDate("yyyy-MM-dd HH:mm:ss", c2.getTime()));
-                            DBind.dateText2.setText(c2.getTime().toString());
+                            DBind.dateText2.setText(ChatActivity.getDate("yyyy-MM-dd HH:mm:ss", c2.getTime()));
                         }
                     });
                 }
@@ -468,13 +501,13 @@ public class DemandeActivity extends AppCompatActivity {
                         RendezVous.AddRendezVous(rendezVous, getApplicationContext(), new RequestFinished() {
                             @Override
                             public void onFinish(ArrayList args) {
-                                Toast.makeText(DemandeActivity.this, "Rendez-Vous Requested", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(DemandeActivity.this, "Rendez-vous demandé.", Toast.LENGTH_SHORT).show();
                                 finish();
                             }
 
                             @Override
                             public void onError(ArrayList args) {
-                                Toast.makeText(DemandeActivity.this, "failed to request Rendez-Vous", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(DemandeActivity.this, "Échec de la demande de rendez-vous.", Toast.LENGTH_SHORT).show();
 
                             }
                         });
@@ -486,13 +519,13 @@ public class DemandeActivity extends AppCompatActivity {
                     Reservation.AddReservation(reservation, getApplicationContext(), new RequestFinished() {
                         @Override
                         public void onFinish(ArrayList args) {
-                            Toast.makeText(DemandeActivity.this, "Reservation Requested", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DemandeActivity.this, "Réservation demandée.", Toast.LENGTH_SHORT).show();
                             finish();
                         }
 
                         @Override
                         public void onError(ArrayList args) {
-                            Toast.makeText(DemandeActivity.this, "failed to request Reservation", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DemandeActivity.this, "Échec de la demande de réservation.", Toast.LENGTH_SHORT).show();
 
                         }
                     });
@@ -505,7 +538,7 @@ public class DemandeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(Type == -1) return;
                 ProgressDialog prgrs = new ProgressDialog(DemandeActivity.this);
-                prgrs.setMessage("Deleting...");
+                prgrs.setMessage("Suppression…");
                 prgrs.show();
 
                 if(Type == TYPE_RESERVATION){
@@ -620,7 +653,7 @@ public class DemandeActivity extends AppCompatActivity {
         else if (activity_code == ACTIVITY_RESUME) {
             String longitude = getIntent().getStringExtra("longitude");
             String latitude = getIntent().getStringExtra("latitude");
-            DBind.lieuText.setText("longitude : " + longitude + " \nlatitude : " + latitude);
+            DBind.lieuText.setText("Longitude : " + longitude + " \nLatitude : " + latitude);
 
             if(Type == -1) return;
             else if (Type == TYPE_RENDEZVOUS) {

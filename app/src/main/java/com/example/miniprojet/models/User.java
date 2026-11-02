@@ -16,10 +16,11 @@ public final class User {
     private static final String KEY_AGE = "ageClient";
     private static final String KEY_IMAGE = "imageClient";
     private static final String KEY_ADMIN = "ADMIN";
+    private static final String KEY_TOKEN = "token";
 
 
     private User(Context context){
-        Ctx = context;
+        Ctx = context.getApplicationContext(); // jamais une activité : le singleton lui survivrait
     }
 
     public static synchronized User getInstance(Context context){
@@ -46,12 +47,31 @@ public final class User {
 
     }
 
+    /** Réenregistre le profil (après une modification) sans perdre la session. */
+    public boolean refreshProfile(int id,String email, String numTel, String nom, String prenom, int age, Boolean admin){
+        String token = getToken();
+        logout();
+        setToken(token);
+        return userLogin(id, email, numTel, nom, prenom, age, admin);
+    }
+
+    /** Le jeton de connexion rendu par le serveur ; il part dans l'en-tête Authorization de chaque requête. */
+    public void setToken(String token){
+        SharedPreferences sharedprefs = Ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedprefs.edit();
+        editor.putString(KEY_TOKEN, token);
+        editor.apply();
+    }
+
+    public String getToken(){
+        SharedPreferences sharedprefs = Ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedprefs.getString(KEY_TOKEN, null);
+    }
+
+    /** Connecté = un profil et un jeton (une session d'avant les jetons n'en a pas : il faut se reconnecter). */
     public boolean isLoggedin(){
         SharedPreferences sharedprefs = Ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        if(sharedprefs.getInt(KEY_ID, -1) != -1){
-            return true;
-        }
-        return false;
+        return sharedprefs.getInt(KEY_ID, -1) != -1 && sharedprefs.getString(KEY_TOKEN, null) != null;
     }
 
     public boolean logout(){

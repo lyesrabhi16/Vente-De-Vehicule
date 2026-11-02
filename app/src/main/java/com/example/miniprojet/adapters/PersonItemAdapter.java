@@ -1,5 +1,6 @@
 package com.example.miniprojet.adapters;
 
+import com.example.miniprojet.Ui;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -51,7 +52,7 @@ public class PersonItemAdapter extends RecyclerView.Adapter<PersonItemAdapter.Vi
         PersonItem item = list.get(position);
         holder.Title.setText(item.getTitle());
         holder.subTitle.setText(item.getSubTitle());
-        holder.avatar.setImageResource(R.drawable.ic_account_circle_48_bleu_clair);
+        holder.avatar.setImageResource(R.drawable.ph_avatar);
 
 
         Bitmap imgAvatar = Server.getBitmap(ctx, "imageClient-["+item.getUserID()+"].jpeg");
@@ -66,12 +67,12 @@ public class PersonItemAdapter extends RecyclerView.Adapter<PersonItemAdapter.Vi
                     if(imgAvatar!=null)
                         holder.avatar.setImageBitmap(imgAvatar);
                     else
-                        holder.avatar.setImageResource(R.drawable.ic_account_circle_48_bleu_clair);
+                        holder.avatar.setImageResource(R.drawable.ph_avatar);
                 }
 
                 @Override
                 public void onError(ArrayList args) {
-                    holder.avatar.setImageResource(R.drawable.ic_account_circle_48_bleu_clair);
+                    holder.avatar.setImageResource(R.drawable.ph_avatar);
 
                 }
             });

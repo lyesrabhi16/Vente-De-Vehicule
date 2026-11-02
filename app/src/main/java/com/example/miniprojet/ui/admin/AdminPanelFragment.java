@@ -129,9 +129,9 @@ public class AdminPanelFragment extends Fragment {
                             Server.sendImageToserver(o, getContext());
                             Abinding.userAvatar.setImageURI(selectedImageUri);
                         } catch (IOException e) {
-                            Toast.makeText(getContext(), "Error : "+e, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Erreur : "+e, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
-                            Toast.makeText(getContext(), "Error : "+e, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Erreur : "+e, Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -281,15 +281,14 @@ public class AdminPanelFragment extends Fragment {
                         firstname
                 );
                 ProgressDialog prgs = new ProgressDialog(getActivity());
-                prgs.setMessage("Updating...");
+                prgs.setMessage("Mise à jour…");
                 prgs.show();
                 Client.updateClient(client, getContext(), new RequestFinished() {
                     @Override
                     public void onFinish(ArrayList args) {
                         if(Abinding == null) return;
                         prgs.dismiss();
-                        user.logout();
-                        user.userLogin(
+                        user.refreshProfile(
                                 client.getIdClient(),
                                 client.getEmail(),
                                 client.getNumTel(),
@@ -313,21 +312,21 @@ public class AdminPanelFragment extends Fragment {
         Abinding.buttonChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "to be implemented later.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Bientôt disponible.", Toast.LENGTH_SHORT).show();
             }
         });
         Abinding.buttonDeleteAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setMessage("Are you sure you want to delete your account ?");
+                alert.setMessage("Voulez-vous vraiment supprimer votre compte ?");
                 alert.setTitle(R.string.delete_account);
                 alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
                         ProgressDialog prgrs = new ProgressDialog(getActivity());
-                        prgrs.setMessage("Deleting Account...");
+                        prgrs.setMessage("Suppression du compte…");
                         prgrs.show();
                         Client.delClient(user.getID(), getContext(), new RequestFinished() {
                             @Override
@@ -374,13 +373,13 @@ public class AdminPanelFragment extends Fragment {
 
     public void logout(){
         ProgressDialog prgrs = new ProgressDialog(getContext());
-        prgrs.setMessage("Logout in progress...");
+        prgrs.setMessage("Déconnexion…");
         User user = User.getInstance(getContext());
         user.logout();
         if(!user.isLoggedin())
-            Toast.makeText(getContext(),"logout successful.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"Vous êtes déconnecté.", Toast.LENGTH_SHORT).show();
         else
-            Toast.makeText(getContext(),"logout failed.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),"Échec de la déconnexion.", Toast.LENGTH_LONG).show();
         prgrs.dismiss();
 
     }

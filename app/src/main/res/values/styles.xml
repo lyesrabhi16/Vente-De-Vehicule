@@ -9,4 +9,59 @@
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
 
+    <!-- Formes -->
+    <style name="ShapeAppearance.GetCars.Medium" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <!-- Carte : surface, fin contour, pas d'ombre -->
+    <style name="Widget.GetCars.Card" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardBackgroundColor">?attr/colorSurface</item>
+        <item name="strokeColor">?attr/colorOutlineVariant</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">16dp</item>
+    </style>
+
+    <!-- Barre de navigation du bas -->
+    <style name="Widget.GetCars.BottomNavigation" parent="Widget.Material3.BottomNavigationView">
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="backgroundTint">?attr/colorSurface</item>
+        <item name="itemActiveIndicatorStyle">@style/Widget.GetCars.BottomNavigation.Indicator</item>
+        <item name="itemIconTint">@color/nav_item</item>
+        <item name="itemTextColor">@color/nav_item</item>
+        <item name="elevation">0dp</item>
+    </style>
+    <style name="Widget.GetCars.BottomNavigation.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">?attr/colorPrimaryContainer</item>
+    </style>
+
+    <!-- Textes -->
+    <style name="TextAppearance.GetCars.Price" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+    <style name="TextAppearance.GetCars.Overline" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="android:letterSpacing">0.06</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <!-- Pastilles (type d'annonce, état d'une demande) -->
+    <style name="Widget.GetCars.Pill" parent="">
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:textAppearance">?attr/textAppearanceLabelLarge</item>
+        <item name="android:background">@drawable/bg_pill_neutral</item>
+        <item name="android:textColor">?attr/colorOnPrimaryContainer</item>
+    </style>
+
+    <!-- Une rubrique d'un écran de formulaire ou de détail -->
+    <style name="Widget.GetCars.SectionTitle" parent="">
+        <item name="android:textAppearance">?attr/textAppearanceTitleMedium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

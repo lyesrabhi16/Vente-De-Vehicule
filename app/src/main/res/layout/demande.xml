@@ -1,89 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Une demande (réservation ou rendez-vous) : son type et son état, la personne qui l'a faite, l'annonce concernée. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="2dp"
-    android:layout_margin="10dp"
     android:orientation="vertical"
-    android:background="?attr/colorPrimary"
-    >
+    android:paddingTop="10dp"
+    android:paddingBottom="6dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="?attr/colorOnPrimary"
-        android:padding="20dp"
-        >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/demande"
-                android:textSize="20sp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="8dp">
 
-                />
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:text="@string/title"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:textColor="?attr/colorPrimary"
-                android:layout_weight="0.8"
-
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/etatText"
-                android:textSize="18sp"
-                android:layout_weight="0.1"
-                />
-            <TextView
-                android:id="@+id/etat"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:text="@string/etat"
-                android:textSize="18sp"
-                android:textColor="?attr/colorPrimary"
-                android:gravity="end"
-                android:layout_weight="0.6"
-                />
-        </LinearLayout>
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            app:dividerColor="?attr/colorPrimary"
-            android:layout_marginTop="10dp"
-            />
+            android:layout_weight="1"
+            android:text="@string/demande"
+            android:textAppearance="@style/TextAppearance.GetCars.Overline" />
+
+        <TextView
+            android:id="@+id/etat"
+            style="@style/Widget.GetCars.Pill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/state_pending" />
+    </LinearLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="6dp">
 
         <include
             android:id="@+id/container_person"
             layout="@layout/person_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+    </com.google.android.material.card.MaterialCardView>
 
-        <include
-            android:id="@id/container_annonce"
-            layout="@layout/annonce"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-
-
+    <include
+        android:id="@+id/container_annonce"
+        layout="@layout/annonce"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

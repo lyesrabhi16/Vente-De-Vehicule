@@ -1,0 +1,19 @@
+# La base des tests du serveur (cd server && npm test) : `docker compose -f docker-compose.test.yml up -d`.
+# Elle écoute sur le port 33306 et vit en mémoire.
+services:
+  db-test:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root-test
+      MYSQL_DATABASE: miniprojet_test
+      MYSQL_USER: miniprojet
+      MYSQL_PASSWORD: miniprojet-dev
+    tmpfs:
+      - /var/lib/mysql
+    ports:
+      - "127.0.0.1:33306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot-test"]
+      interval: 3s
+      timeout: 3s
+      retries: 30

@@ -67,7 +67,7 @@ public class AddAnnonceActivity extends AppCompatActivity {
                     Annonce.AddAnnonce(annonce, getApplicationContext(), new RequestFinished() {
                         @Override
                         public void onFinish(ArrayList args) {
-                            Toast.makeText(AddAnnonceActivity.this, "Annonce Added.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddAnnonceActivity.this, "Annonce publiée.", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override

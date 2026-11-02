@@ -15,3 +15,7 @@
 local.properties
 /server/node_modules
 /server/images/
+/server/dist
+/server/.env
+/.env
+/.idea

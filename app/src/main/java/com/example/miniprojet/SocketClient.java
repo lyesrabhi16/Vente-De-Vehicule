@@ -1,5 +1,9 @@
 package com.example.miniprojet;
 
+import com.example.miniprojet.models.User;
+
+import java.util.Collections;
+
 import io.socket.client.IO;
 import io.socket.client.Socket;
 
@@ -16,7 +20,13 @@ public class SocketClient {
 
     public static Socket connectSocket(){
         try {
-            socket = IO.socket(Server.getUrlServer());
+            String token = User.getInstance(MiniProjetApp.context()).getToken();
+            if (token == null) {
+                return null; // le serveur n'accepte que les connexions authentifiées
+            }
+            IO.Options options = new IO.Options();
+            options.auth = Collections.singletonMap("token", token);
+            socket = IO.socket(Server.getUrlServer(), options);
             socket.connect();
             socket.emit("client-message", "hello from client");
 

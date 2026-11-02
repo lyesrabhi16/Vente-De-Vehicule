@@ -1,5 +1,7 @@
 package com.example.miniprojet.ui.messages.chat;
 
+import com.example.miniprojet.Ui;
+import com.example.miniprojet.AuthRequest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -104,7 +106,7 @@ public class ChatActivity extends AppCompatActivity {
                     CBind.edittextMessage.setText("");
 
                 } catch (JSONException e) {
-                    Toast.makeText(CBind.getRoot().getContext(), "failed to send message", Toast.LENGTH_SHORT);
+                    Toast.makeText(CBind.getRoot().getContext(), "Échec de l’envoi du message", Toast.LENGTH_SHORT);
                 }
 
             }
@@ -139,17 +141,16 @@ public class ChatActivity extends AppCompatActivity {
 
                             User user = User.getInstance(getApplicationContext());
                             ChatItem item = new ChatItem();
-                            Toast.makeText(ChatActivity.this, ""+msg.getInt("idClient_sender") + " "+ user.getID(), Toast.LENGTH_SHORT).show();
                             if(msg.getInt("idClient_sender") == user.getID() ){
                                 item.setUserID(user.getID());
-                                item.setHeader(user.getNom()+" "+user.getPrenom()+" ");
+                                item.setHeader(user.getPrenom() + " " + user.getNom());
                             }
                             else{
                                 item.setUserID(R_userID);
                                 item.setHeader(R_userName);
                             }
                             item.setMessage(msg.getString("contenuMessage"));
-                            item.setFooter(msg.getString("etatMessage"));
+                            item.setFooter(Ui.messageFooter(msg));
                             /*String[] d = item.getFooter().split(" ");
                             String date = d[0];
                             if(date.equals(getDate("dd-MM-yyyy"))){
@@ -171,7 +172,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
                         } catch (JSONException e) {
-                            Toast.makeText(getApplicationContext(), "failed to receive message", Toast.LENGTH_SHORT);
+                            Toast.makeText(getApplicationContext(), "Message non reçu", Toast.LENGTH_SHORT);
                         }
                     }
                 });
@@ -190,7 +191,7 @@ public class ChatActivity extends AppCompatActivity {
                             User user = User.getInstance(getApplicationContext());
                             if(msg.getInt("idClient_sender") == user.getID() ){
                                 item.setUserID(user.getID());
-                                item.setHeader(user.getNom()+" "+user.getPrenom()+" ");
+                                item.setHeader(user.getPrenom() + " " + user.getNom());
                             }
                             else{
                                 item.setUserID(R_userID);
@@ -219,7 +220,7 @@ public class ChatActivity extends AppCompatActivity {
 
         CBind.progressBar2.setVisibility(View.VISIBLE);
 
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlMessages(), new Response.Listener<String>() {
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlMessages(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 CBind.progressBar2.setVisibility(View.GONE);
@@ -227,7 +228,7 @@ public class ChatActivity extends AppCompatActivity {
                     JSONObject res = new JSONObject(response);
 
                     if(res.has("error")){
-                        Toast.makeText(getApplicationContext(), "error: "+ res.get("error"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Erreur : "+ res.get("error"), Toast.LENGTH_LONG).show();
                     }
                     else{
                         chatItemsList = new ArrayList<ChatItem>();
@@ -239,14 +240,14 @@ public class ChatActivity extends AppCompatActivity {
                             ChatItem item = new ChatItem();
                             if(r.getInt("idClient_sender") == user.getID() ){
                                 item.setUserID(user.getID());
-                                item.setHeader(user.getNom()+" "+user.getPrenom()+" ");
+                                item.setHeader(user.getPrenom() + " " + user.getNom());
                             }
                             else{
                                 item.setUserID(R_userID);
                                 item.setHeader(R_userName);
                             }
                             item.setMessage(r.getString("contenuMessage"));
-                            item.setFooter(r.getString("etatMessage"));
+                            item.setFooter(Ui.messageFooter(r));
                             /*String[] d = item.getFooter().split(" ");
                             String date = d[0];
                             if(date.equals(getDate("dd-MM-yyyy"))){
@@ -269,14 +270,14 @@ public class ChatActivity extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Response error: "+ e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Erreur du serveur : "+ e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 CBind.progressBar2.setVisibility(View.GONE);
-                Toast.makeText(getApplicationContext(), "Connection error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Erreur de connexion : " + error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }){
             @Override
@@ -293,7 +294,7 @@ public class ChatActivity extends AppCompatActivity {
     }
     public static String getDate(String format, Date d){
         String date;
-        date = new SimpleDateFormat(format, Locale.getDefault()).format(d);
+        date = new SimpleDateFormat(format, Locale.US).format(d);
         return date;
     }
 }

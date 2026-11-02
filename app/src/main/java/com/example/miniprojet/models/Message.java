@@ -1,5 +1,6 @@
 package com.example.miniprojet.models;
 
+import com.example.miniprojet.AuthRequest;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -73,7 +74,7 @@ public class Message {
         this.etat = etat;
     }
     public static void getChats(int id, Context ctx, RequestFinished req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlChats(),
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlChats(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -81,7 +82,7 @@ public class Message {
                             JSONObject res = new JSONObject(response);
 
                             if(res.has("error")){
-                                Toast.makeText(ctx,"failed to get messages. "+res.getString("message"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx,"Impossible de charger les messages. "+res.getString("message"), Toast.LENGTH_LONG).show();
                                 ArrayList l = new ArrayList();
                                 l.add(res.get("error") );
                                 req.onError(l);
@@ -103,10 +104,10 @@ public class Message {
 
                                             PersonItem item = new PersonItem();
                                             item.setUserID(r.getInt("idClient"));
-                                            item.setTitle(r.getString("nomClient")+" "+r.getString("prenomClient")+" ");
+                                            item.setTitle(r.getString("prenomClient") + " " + r.getString("nomClient"));
                                             item.setSubTitle("");
                                             if (user.getID() == r.getInt("idClient_sender")) {
-                                                item.setSubTitle("You: ");
+                                                item.setSubTitle("Vous : ");
                                             }
                                             item.setSubTitle(item.getSubTitle() + "" + r.getString("contenuMessage"));
                                             item.setData(r.getString("date"));
@@ -120,7 +121,7 @@ public class Message {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ctx,"an error occurred.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx,"Une erreur est survenue.", Toast.LENGTH_SHORT).show();
                             ArrayList l = new ArrayList<>();
                             l.add(e.getMessage());
                             req.onError(l);
@@ -131,7 +132,7 @@ public class Message {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                         ArrayList l = new ArrayList();
                         l.add(error.getMessage());
                         req.onError(l);

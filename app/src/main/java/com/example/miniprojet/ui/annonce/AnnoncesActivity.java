@@ -33,7 +33,6 @@ public class AnnoncesActivity extends AppCompatActivity {
         adapter = new AnnonceAdapter(annonces, getApplicationContext(), new RecyclerViewInterface() {
             @Override
             public void onItemClick(int position) {
-                Toast.makeText(AnnoncesActivity.this, "item clicked", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -73,7 +72,7 @@ public class AnnoncesActivity extends AppCompatActivity {
 
         }
         else{
-            Toast.makeText(this, "user not recognized", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Utilisateur inconnu", Toast.LENGTH_SHORT).show();
         }
         binding.buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override

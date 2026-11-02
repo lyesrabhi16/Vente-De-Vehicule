@@ -1,5 +1,6 @@
 package com.example.miniprojet.models;
 
+import com.example.miniprojet.AuthRequest;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -89,14 +90,14 @@ public class Reservation {
 
 
     public static void getReservation(int idAnnonce, int idClient, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlReservation(), new Response.Listener<String>() {
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlReservation(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject res = new JSONObject(response);
 
                     if(res.has("error")){
-                        Toast.makeText(ctx,"failed to get reservation. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ctx,"Impossible de charger la réservation. "+res.getString("error"), Toast.LENGTH_LONG).show();
                         ArrayList l = new ArrayList();
                         l.add(res.get("error") );
                         Req.onError(l);
@@ -107,7 +108,7 @@ public class Reservation {
                         User user = User.getInstance(ctx);
                         ArrayList l = new ArrayList<>();
                         if(result.length() < 1){
-                            Toast.makeText(ctx, "Reservation not found", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx, "Réservation introuvable", Toast.LENGTH_SHORT).show();
                             l.add("reservation not found");
                             Req.onError(l);
                             return;
@@ -129,7 +130,7 @@ public class Reservation {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(ctx,"Response Handling Error.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx,"Réponse du serveur illisible.", Toast.LENGTH_SHORT).show();
                     ArrayList l = new ArrayList<>();
                     l.add(e.getMessage());
                     Req.onError(l);
@@ -138,7 +139,7 @@ public class Reservation {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                 ArrayList l = new ArrayList();
                 l.add(error.getMessage());
                 Req.onError(l);
@@ -157,14 +158,14 @@ public class Reservation {
         reqQ.add(Sreq);
     }
     public static void RemoveReservation(int idAnnonce, int idClient, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlDelReservation(), new Response.Listener<String>() {
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlDelReservation(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject res = new JSONObject(response);
 
                     if(res.has("error")){
-                        Toast.makeText(ctx,"failed to remove reservation. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ctx,"Échec de la suppression de la réservation. "+res.getString("error"), Toast.LENGTH_LONG).show();
                         ArrayList l = new ArrayList();
                         l.add(res.get("error") );
                         Req.onError(l);
@@ -177,7 +178,7 @@ public class Reservation {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(ctx,"Response Handling Error.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx,"Réponse du serveur illisible.", Toast.LENGTH_SHORT).show();
                     ArrayList l = new ArrayList<>();
                     l.add(e.getMessage());
                     Req.onError(l);
@@ -186,7 +187,7 @@ public class Reservation {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                 ArrayList l = new ArrayList();
                 l.add(error.getMessage());
                 Req.onError(l);
@@ -205,14 +206,14 @@ public class Reservation {
         reqQ.add(Sreq);
     }
     public static void AddReservation(Reservation reservation, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlAddReservation(), new Response.Listener<String>() {
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlAddReservation(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject res = new JSONObject(response);
 
                     if(res.has("error")){
-                        Toast.makeText(ctx,"failed to add reservation. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ctx,"Échec de la demande de réservation. "+res.getString("error"), Toast.LENGTH_LONG).show();
                         ArrayList l = new ArrayList();
                         l.add(res.get("error") );
                         Req.onError(l);
@@ -225,7 +226,7 @@ public class Reservation {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(ctx,"Response Handling Error.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx,"Réponse du serveur illisible.", Toast.LENGTH_SHORT).show();
                     ArrayList l = new ArrayList<>();
                     l.add(e.getMessage());
                     Req.onError(l);
@@ -234,7 +235,7 @@ public class Reservation {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                 ArrayList l = new ArrayList();
                 l.add(error.getMessage());
                 Req.onError(l);
@@ -258,14 +259,14 @@ public class Reservation {
     }
 
     public static void updateReservation(Reservation reservation, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlUpdateReservation(), new Response.Listener<String>() {
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlUpdateReservation(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject res = new JSONObject(response);
 
                     if(res.has("error")){
-                        Toast.makeText(ctx,"failed to update reservation. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ctx,"Échec de la modification de la réservation. "+res.getString("error"), Toast.LENGTH_LONG).show();
                         ArrayList l = new ArrayList();
                         l.add(res.get("error") );
                         Req.onError(l);
@@ -278,7 +279,7 @@ public class Reservation {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(ctx,"Response Handling Error.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx,"Réponse du serveur illisible.", Toast.LENGTH_SHORT).show();
                     ArrayList l = new ArrayList<>();
                     l.add(e.getMessage());
                     Req.onError(l);
@@ -287,7 +288,7 @@ public class Reservation {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                 ArrayList l = new ArrayList();
                 l.add(error.getMessage());
                 Req.onError(l);
@@ -310,7 +311,7 @@ public class Reservation {
         reqQ.add(Sreq);
     }
     public static void getReservations(JSONObject filterObj, Context ctx, RequestFinished Req){
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlReservations(),
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlReservations(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -318,7 +319,7 @@ public class Reservation {
                             JSONObject res = new JSONObject(response);
 
                             if(res.has("error")){
-                                Toast.makeText(ctx,"failed to get reservations. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(ctx,"Impossible de charger les réservations. "+res.getString("error"), Toast.LENGTH_LONG).show();
                                 ArrayList l = new ArrayList();
                                 l.add(res.get("error") );
                                 Req.onError(l);
@@ -344,7 +345,7 @@ public class Reservation {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ctx,"Response Handling Error.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx,"Réponse du serveur illisible.", Toast.LENGTH_SHORT).show();
                             ArrayList l = new ArrayList<>();
                             l.add(e.getMessage());
                             Req.onError(l);
@@ -355,7 +356,7 @@ public class Reservation {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ctx,"Connection Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx,"Erreur de connexion", Toast.LENGTH_SHORT).show();
                         ArrayList l = new ArrayList();
                         l.add(error.getMessage());
                         Req.onError(l);

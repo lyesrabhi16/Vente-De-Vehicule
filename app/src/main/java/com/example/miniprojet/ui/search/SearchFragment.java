@@ -1,5 +1,6 @@
 package com.example.miniprojet.ui.search;
 
+import com.example.miniprojet.AuthRequest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -167,16 +168,22 @@ public class SearchFragment extends Fragment {
     }
     public static void  search(String table, String cols, Context ctx, RequestFinished Req){
 
+            // chercher des personnes demande un compte : sans compte, on ne cherche que des annonces
+            if ("client".equals(table) && !User.getInstance(ctx).isLoggedin()) {
+                Req.onFinish(new ArrayList());
+                return;
+            }
+
             List<searchResultItem> list = new ArrayList<>();
 
 
-            StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlSearch(), new Response.Listener<String>() {
+            StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlSearch(), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
                         JSONObject res = new JSONObject(response);
                         if (res.has("error")){
-                            Toast.makeText(ctx, "search failed. "+res.get("error"), Toast.LENGTH_LONG).show();
+                            Toast.makeText(ctx, "La recherche a échoué. "+res.get("error"), Toast.LENGTH_LONG).show();
                             ArrayList l = new ArrayList();
                             l.add(res.get("error"));
                             Req.onError(l);
@@ -211,7 +218,7 @@ public class SearchFragment extends Fragment {
                                         @Override
                                         public void onFinish(ArrayList args) {
                                             Client c = (Client) args.get(0);
-                                            annonce.setUserTitle(c.getNom()+" "+c.getPrenom()+" ");
+                                            annonce.setUserTitle(c.getPrenom() + " " + c.getNom());
                                             annonce.setUserSubTitle(c.getEmail());
                                             item.setAnnonce(annonce);
                                             item.setType(searchResultItem.RESULT_ANNONCE);
@@ -227,7 +234,7 @@ public class SearchFragment extends Fragment {
                                 }
                                 else{
                                     PersonItem p = new PersonItem();
-                                    p.setTitle(obj.getString("nomClient") +" "+ obj.getString("prenomClient") +" ");
+                                    p.setTitle(obj.getString("prenomClient") + " " + obj.getString("nomClient"));
                                     p.setSubTitle(obj.getString("email") );
                                     p.setUserID(obj.getInt("idClient"));
                                     item.setPerson(p);
@@ -240,7 +247,7 @@ public class SearchFragment extends Fragment {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(ctx, "search error.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ctx, "Erreur de recherche.", Toast.LENGTH_LONG).show();
                         ArrayList l = new ArrayList();
                         l.add(e);
                         Req.onError(l);

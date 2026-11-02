@@ -30,8 +30,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Server {
-    private static String IP = "192.168.137.1";
-    private static String urlServer   = "http://"+IP+":5000";//chemin du serveur
+    // L'adresse du serveur vient du build (-PserverUrl=… ou local.properties), voir le README.
+    private static String urlServer   = BuildConfig.SERVER_URL.replaceAll("/+$", "");
     private static String urlLogin = urlServer + "/signin";
     private static  String urlRegister = urlServer + "/signup";
     private static String urlUser = urlServer + "/user";
@@ -63,6 +63,8 @@ public class Server {
     private static String urlUploadImage = urlUpload+"/image";
     private static String urlDownload = urlServer+"/download";
     private static String urlDownloadImage = urlDownload+"/image";
+
+    private static final int MAX_IMAGE_SIDE = 1600;
 
     public static final String TYPE_IMAGE_AVATAR = "AVATAR";
     public static final String TYPE_IMAGE_ANNONCE = "ANNONCE";
@@ -301,10 +303,16 @@ public class Server {
         return bitmap;
     }
     public static String ImageToBase64(Bitmap img, Context ctx){
+        // Le serveur limite la taille d'une image : on réduit les photos trop grandes avant l'envoi.
+        int longest = Math.max(img.getWidth(), img.getHeight());
+        if (longest > MAX_IMAGE_SIDE) {
+            float ratio = (float) MAX_IMAGE_SIDE / longest;
+            img = Bitmap.createScaledBitmap(img, Math.round(img.getWidth() * ratio), Math.round(img.getHeight() * ratio), true);
+        }
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        img.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        img.compress(Bitmap.CompressFormat.JPEG, 85, stream);
         byte[] imgBytes = stream.toByteArray();
-        return Base64.encodeToString(imgBytes, Base64.DEFAULT);
+        return Base64.encodeToString(imgBytes, Base64.NO_WRAP);
     }
     public static Bitmap ImageFromBase64(String imgB64, Context ctx){
         byte[] decodedString = Base64.decode(imgB64, Base64.DEFAULT);
@@ -324,17 +332,17 @@ public class Server {
 
 
 
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlUploadImage(),
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlUploadImage(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(ctx, "image uploaded.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx, "Photo envoyée.", Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ctx, "error : "+error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx, "Erreur : "+error, Toast.LENGTH_SHORT).show();
                     }
                 }){
             @Nullable
@@ -346,11 +354,11 @@ public class Server {
                     Params.put("userID", img.getString("id")+"");
                     Params.put("format", img.getString("format"));
                     Params.put("type", img.getString("type"));
-                    if(img.getString("type")=="ANNONCE"){
-                        Params.put("index", img.getString("index"));
+                    if("ANNONCE".equals(img.getString("type"))){
+                        Params.put("index", img.optString("index", "0"));
                     }
                 } catch (JSONException e) {
-                    Toast.makeText(ctx, "Error Sending Image", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx, "Échec de l’envoi de la photo", Toast.LENGTH_SHORT).show();
                 }
                 return Params;
             }
@@ -361,14 +369,14 @@ public class Server {
     public static void getImage(String imgName, Context ctx, RequestFinished Req ){
 
 
-        StringRequest Sreq = new StringRequest(Request.Method.POST, Server.getUrlDownloadImage(),
+        StringRequest Sreq = new AuthRequest(Request.Method.POST, Server.getUrlDownloadImage(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject res = new JSONObject(response);
                             if(res.has("error")){
-                                //Toast.makeText(ctx, "Error: "+res.getString("error"), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(ctx, "Erreur : "+res.getString("error"), Toast.LENGTH_SHORT).show();
                                 ArrayList l = new ArrayList();
                                 l.add(res.get("error"));
                                 Req.onError(l);
@@ -380,7 +388,7 @@ public class Server {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(ctx, "Response Handling Error : "+e, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx, "Réponse du serveur illisible : "+e, Toast.LENGTH_SHORT).show();
                             ArrayList l = new ArrayList();
                             l.add(e);
                             Req.onError(l);

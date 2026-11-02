@@ -1,5 +1,6 @@
 package com.example.miniprojet.ui.account;
 
+import com.example.miniprojet.AuthRequest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -60,22 +61,24 @@ public class AccountSignInFragment extends Fragment {
 
         String finalEmail = email;
         ProgressDialog prgrs = new ProgressDialog(getContext());
-        prgrs.setMessage("login in progress...");
+        prgrs.setMessage("Connexion…");
         prgrs.show();
         String finalNumTel = numTel;
-        StringRequest req = new StringRequest(Request.Method.POST, dbc.getUrlLogin(),
+        StringRequest req = new AuthRequest(Request.Method.POST, dbc.getUrlLogin(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject res = new JSONObject(response);
                             if(res.has("error")){
-                                Toast.makeText(getContext(),"login failed. "+res.getString("error"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(),"Échec de la connexion. "+res.getString("error"), Toast.LENGTH_LONG).show();
                                 prgrs.dismiss();
+                                return;
                             }
                             if(res.has("ADMIN")){
                                 if(res.getBoolean("ADMIN")){
                                     User user = User.getInstance(getContext());
+                                    user.setToken(res.optString("token", null));
                                     user.userLogin(
                                             res.getInt("idClient"),
                                             res.getString("email").toLowerCase(),
@@ -86,7 +89,7 @@ public class AccountSignInFragment extends Fragment {
                                             true
                                     );
                                     if(user.isLoggedin()) {
-                                        Toast.makeText(getContext(), "login successful.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), "Connexion réussie.", Toast.LENGTH_SHORT).show();
                                         prgrs.dismiss();
                                         Intent i = new Intent(getContext(), MainActivity.class);
                                         MainActivity.setKeepConnected(true);
@@ -95,7 +98,7 @@ public class AccountSignInFragment extends Fragment {
 
                                     }
                                     else{
-                                        Toast.makeText(getContext(),"login failed, try again.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getContext(),"Échec de la connexion, réessayez.", Toast.LENGTH_LONG).show();
                                         prgrs.dismiss();
 
                                     }
@@ -104,6 +107,7 @@ public class AccountSignInFragment extends Fragment {
                             }
                             else{
                                 User user = User.getInstance(getContext());
+                                user.setToken(res.optString("token", null));
                                 user.userLogin(
                                         res.getInt("idClient"),
                                         res.getString("email").toLowerCase(),
@@ -114,7 +118,7 @@ public class AccountSignInFragment extends Fragment {
                                         false
                                 );
                                 if(user.isLoggedin()) {
-                                    Toast.makeText(getContext(), "login successful.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Connexion réussie.", Toast.LENGTH_SHORT).show();
                                     prgrs.dismiss();
                                     Intent i = new Intent(getContext(), MainActivity.class);
                                     MainActivity.setKeepConnected(true);
@@ -123,7 +127,7 @@ public class AccountSignInFragment extends Fragment {
 
                                 }
                                 else{
-                                    Toast.makeText(getContext(),"login failed, try again.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext(),"Échec de la connexion, réessayez.", Toast.LENGTH_LONG).show();
                                     prgrs.dismiss();
 
                                 }
@@ -131,7 +135,7 @@ public class AccountSignInFragment extends Fragment {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getContext(),"an error occurred. "+e, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(),"Une erreur est survenue. "+e, Toast.LENGTH_SHORT).show();
                             prgrs.dismiss();
 
                         }
@@ -141,7 +145,7 @@ public class AccountSignInFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getContext(),"connection error.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),"Erreur de connexion.", Toast.LENGTH_SHORT).show();
                         prgrs.dismiss();
                     }
                 }){

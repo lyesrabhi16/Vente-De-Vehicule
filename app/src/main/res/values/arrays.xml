@@ -6,21 +6,31 @@
         <item>Audi</item>
         <item>Porsche</item>
         <item>Hyundai</item>
+        <item>Volkswagen</item>
+        <item>Toyota</item>
+        <item>Tesla</item>
+        <item>Peugeot</item>
+        <item>Renault</item>
     </string-array>
     <string-array name="marqueFiltre">
-        <item>All</item>
+        <item>@string/filter_all</item>
         <item>Mercedes</item>
         <item>BMW</item>
         <item>Audi</item>
         <item>Porsche</item>
         <item>Hyundai</item>
+        <item>Volkswagen</item>
+        <item>Toyota</item>
+        <item>Tesla</item>
+        <item>Peugeot</item>
+        <item>Renault</item>
     </string-array>
     <string-array name="types_actions">
         <item>Vente</item>
         <item>Location</item>
     </string-array>
     <string-array name="types_actionsFiltre">
-        <item>All</item>
+        <item>@string/filter_all</item>
         <item>Vente</item>
         <item>Location</item>
     </string-array>
@@ -29,30 +39,42 @@
         <item>Bejaia</item>
     </string-array>
     <string-array name="wilayaFiltre">
-        <item>All</item>
+        <item>@string/filter_all</item>
         <item>Alger</item>
         <item>Bejaia</item>
     </string-array>
     <string-array name="boite">
         <item>Automatique</item>
-        <item>Manual</item>
+        <item>Manuelle</item>
     </string-array>
     <string-array name="boiteFiltre">
-        <item>All</item>
+        <item>@string/filter_all</item>
         <item>Automatique</item>
-        <item>Manual</item>
+        <item>Manuelle</item>
     </string-array>
     <string-array name="couleurFiltre">
-        <item>All</item>
+        <item>@string/filter_all</item>
         <item>rouge</item>
         <item>noire</item>
+        <item>blanche</item>
+        <item>grise</item>
+        <item>bleue</item>
+        <item>jaune</item>
+        <item>verte</item>
+        <item>beige</item>
     </string-array>
     <string-array name="couleur">
         <item>rouge</item>
         <item>noire</item>
+        <item>blanche</item>
+        <item>grise</item>
+        <item>bleue</item>
+        <item>jaune</item>
+        <item>verte</item>
+        <item>beige</item>
     </string-array>
     <string-array name="energieFiltre">
-        <item>All</item>
+        <item>@string/filter_all</item>
         <item>diesel</item>
         <item>essence</item>
         <item>electrique</item>

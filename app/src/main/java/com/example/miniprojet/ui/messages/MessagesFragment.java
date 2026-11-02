@@ -1,5 +1,6 @@
 package com.example.miniprojet.ui.messages;
 
+import com.google.android.material.divider.MaterialDividerItemDecoration;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -55,6 +56,10 @@ public class MessagesFragment extends Fragment {
             });
 
             binding.recyclerChats.setAdapter(adapter);
+            MaterialDividerItemDecoration divider = new MaterialDividerItemDecoration(requireContext(), MaterialDividerItemDecoration.VERTICAL);
+            divider.setDividerInsetStart((int) (78 * getResources().getDisplayMetrics().density));
+            divider.setLastItemDecorated(false);
+            binding.recyclerChats.addItemDecoration(divider);
             binding.progressBar.setVisibility(View.VISIBLE);
             Message.getChats(user.getID(), getContext(), new RequestFinished() {
                 @Override
@@ -89,7 +94,7 @@ public class MessagesFragment extends Fragment {
             binding.progressBar.setVisibility(View.GONE);
             binding.recyclerChats.setVisibility(View.GONE);
             binding.textMessages.setVisibility(View.VISIBLE);
-            binding.textMessages.setText("please login");
+            binding.textMessages.setText("Connectez-vous pour voir vos conversations");
         }
 
 
