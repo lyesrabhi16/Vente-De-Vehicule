@@ -97,7 +97,7 @@ Ouvrir le dossier dans Android Studio (JDK 17), ou en ligne de commande :
 ./gradlew :app:assembleDebug     # app/build/outputs/apk/debug/app-debug.apk
 ```
 
-Deux réglages, dans `local.properties` (non versionné) ou en `-P` :
+Deux réglages, dans `local.properties` (non versionné ; modèle : `local.properties.example`) ou en `-P` :
 
 | Réglage | Défaut | Rôle |
 |---|---|---|

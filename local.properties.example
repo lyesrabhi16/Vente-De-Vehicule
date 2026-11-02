@@ -1,0 +1,13 @@
+# Copiez ce fichier en local.properties (non versionné) et adaptez les valeurs.
+# Chaque réglage peut aussi être passé en ligne de commande : ./gradlew -PmapboxToken=pk.… :app:assembleDebug
+
+# Adresse du serveur. 10.0.2.2 : la machine hôte, vue depuis l'émulateur Android.
+# Sur un vrai téléphone, mettez l'adresse IP de la machine, par exemple http://192.168.1.20:5000
+serverUrl=http://10.0.2.2:5000
+
+# Jeton public Mapbox (commence par pk.), à créer sur https://account.mapbox.com
+# Sans lui, l'application fonctionne mais la carte reste vide.
+mapboxToken=pk.votre-jeton
+
+# Chemin du SDK Android : Android Studio l'ajoute tout seul, sinon décommentez et adaptez.
+# sdk.dir=/home/vous/Android/Sdk
