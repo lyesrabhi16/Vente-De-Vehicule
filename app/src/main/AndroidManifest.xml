@@ -25,10 +25,6 @@
             android:name=".ui.map.MapActivityKotlin"
             android:exported="false" />
 
-        <meta-data
-            android:name="com.tomtom.online.sdk.maps.API_KEY"
-            android:value="@string/API_KEY_TOMTOM" />
-
         <activity
             android:name=".ui.Demande.DemandeActivity"
             android:exported="false" />

@@ -26,8 +26,8 @@ android {
 
         // émulateur Android -> serveur lancé sur la machine hôte
         buildConfigField "String", "SERVER_URL", "\"${setting('serverUrl', 'http://10.0.2.2:5000')}\""
-        // clé TomTom (https://developer.tomtom.com) : sans elle, l'application fonctionne mais la carte reste vide
-        resValue "string", "API_KEY_TOMTOM", setting('tomtomKey', '')
+        // jeton public Mapbox (pk.…, https://account.mapbox.com) : sans lui, l'application fonctionne mais la carte reste vide
+        resValue "string", "mapbox_access_token", setting('mapboxToken', '')
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -75,9 +75,8 @@ dependencies {
     }
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    //tomtom map
-    implementation "com.tomtom.sdk.maps:map-display:0.12.0"
-    implementation "com.tomtom.sdk.location:provider-android:0.12.0"
+    // carte Mapbox
+    implementation "com.mapbox.maps:android:11.4.1"
 
 
 }

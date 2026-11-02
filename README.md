@@ -17,7 +17,7 @@ Mini-projet de fin de cycle de Licence : une application Android pour publier de
 - Comptes : inscription, connexion par e-mail ou téléphone, profil, avatar, rôle administrateur
 - Réservations (du … au …) et rendez-vous : le client les demande, le vendeur les accepte ou les refuse
 - Messagerie en temps réel (Socket.IO) entre acheteur et vendeur
-- Carte (TomTom) pour situer un rendez-vous
+- Carte (Mapbox) pour situer un rendez-vous
 
 ## Captures
 
@@ -58,7 +58,7 @@ Toutes les pages de l'application, dans l'ordre d'un parcours. Les données vien
 ## Architecture
 
 ```
-app/      Application Android (Java, Volley, Socket.IO client, TomTom)
+app/      Application Android (Java, Volley, Socket.IO client, Mapbox)
 server/   API REST + Socket.IO (Express 4, TypeScript, mysql2, zod)
   db/schema.sql   le schéma MySQL (idempotent)
   src/            config, auth, routes, temps réel
@@ -102,11 +102,11 @@ Deux réglages, dans `local.properties` (non versionné) ou en `-P` :
 | Réglage | Défaut | Rôle |
 |---|---|---|
 | `serverUrl` | `http://10.0.2.2:5000` | adresse du serveur (`10.0.2.2` : la machine hôte, vue depuis l'émulateur) |
-| `tomtomKey` | vide | clé de l'API TomTom ; sans elle, tout fonctionne sauf la carte |
+| `mapboxToken` | vide | jeton public Mapbox (`pk.…`, https://account.mapbox.com) ; sans lui, tout fonctionne sauf la carte |
 
 ```properties
 serverUrl=http://192.168.1.20:5000
-tomtomKey=ma-cle
+mapboxToken=pk.mon-jeton
 ```
 
 Le trafic en clair (HTTP) n'est autorisé que par le build debug ; une version release exige HTTPS.
@@ -146,10 +146,10 @@ La première version du projet fonctionnait mais n'était pas sûre. La réécri
 | Images écrites au chemin envoyé par le client | Noms fermés, format vérifié sur les premiers octets, taille limitée |
 | Identité Socket.IO annoncée par le client (`init`) | Identité tirée du jeton ; expéditeur d'un message toujours celui du jeton ; débit limité |
 | Pas de limite de tentatives | Limiteur sur la connexion (échecs), l'inscription et le total |
-| Serveur lancé avec `root` et sans mot de passe ; clé TomTom et adresse IP dans le dépôt | Configuration validée au démarrage ; clé et adresse hors du dépôt |
+| Serveur lancé avec `root` et sans mot de passe ; clé de carte (TomTom) et adresse IP dans le dépôt | Configuration validée au démarrage ; jeton de carte (Mapbox) et adresse hors du dépôt |
 | Pas de schéma SQL, pas de tests, pas de CI | `db/schema.sql`, 75 tests, CI, Docker |
 
-> **Clé TomTom.** L'ancienne clé a été commitée : elle reste dans l'historique git. Elle doit être **révoquée** sur le portail TomTom et remplacée par une nouvelle (`tomtomKey`).
+> **Ancienne clé TomTom.** La carte est passée de TomTom à Mapbox, mais l'ancienne clé TomTom a été commitée : elle reste dans l'historique git et doit être **révoquée** sur le portail TomTom.
 
 ### Règles d'accès
 

@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Choisir un lieu sur la carte (TomTom : la clé se règle dans local.properties, voir le README). -->
+<!-- Choisir un lieu sur la carte (Mapbox : le jeton se règle dans local.properties, voir le README). -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tomtom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.map.MapActivityKotlin">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/map_fragment"
-        android:name="com.tomtom.sdk.map.display.ui.MapFragment"
+    <com.mapbox.maps.MapView
+        android:id="@+id/map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:visibility="visible"
-        tomtom:layout_constraintBottom_toBottomOf="parent"
-        tomtom:layout_constraintEnd_toEndOf="parent"
-        tomtom:layout_constraintStart_toStartOf="parent"
-        tomtom:layout_constraintTop_toTopOf="parent"
-        tomtom:mapKey="@string/API_KEY_TOMTOM" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_back"

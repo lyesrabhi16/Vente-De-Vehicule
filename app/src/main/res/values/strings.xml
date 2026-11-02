@@ -108,5 +108,6 @@
     <string name="new_message">Écrire un message…</string>
 
     <string name="back">Retour</string>
+    <string name="map_choose_place">Touchez la carte pour choisir un lieu</string>
     <string name="id">ID</string>
 </resources>
