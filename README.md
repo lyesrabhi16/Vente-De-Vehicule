@@ -17,7 +17,7 @@ Mini-projet de fin de cycle de Licence : une application Android pour publier de
 - Comptes : inscription, connexion par e-mail ou téléphone, profil, avatar, rôle administrateur
 - Réservations (du … au …) et rendez-vous : le client les demande, le vendeur les accepte ou les refuse
 - Messagerie en temps réel (Socket.IO) entre acheteur et vendeur
-- Carte (Mapbox) pour situer un rendez-vous
+- Carte (Mapbox) pour choisir et consulter le lieu d'un rendez-vous (satellite, repère à déplacer du doigt)
 
 ## Captures
 
@@ -41,6 +41,12 @@ Toutes les pages de l'application, dans l'ordre d'un parcours. Les données vien
 
 <table>
 <tr><td align="center"><img src="docs/screenshots/19-demandes.png" width="170"><br><sub>Demandes reçues</sub></td><td align="center"><img src="docs/screenshots/20-demande-recue.png" width="170"><br><sub>Une demande reçue</sub></td><td align="center"><img src="docs/screenshots/21-aucune-demande.png" width="170"><br><sub>Rien en attente</sub></td></tr>
+</table>
+
+**Carte** (Mapbox) : le lieu d'un rendez-vous. Le vendeur touche la carte pour placer le repère puis enregistre ; l'acheteur le voit en lecture seule, sans bouton d'enregistrement. Le lieu se retrouve dans la demande (`longitude latitude`). Il faut un jeton `mapboxToken` (voir plus bas).
+
+<table>
+<tr><td align="center"><img src="docs/screenshots/30-carte-lecture.jpg" width="170"><br><sub>Acheteur : lecture seule</sub></td><td align="center"><img src="docs/screenshots/31-carte-ecriture.jpg" width="170"><br><sub>Vendeur : repère déplacé</sub></td></tr>
 </table>
 
 **Administrateur** : toutes les annonces, tous les rendez-vous et toutes les locations.
