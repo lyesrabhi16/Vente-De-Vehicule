@@ -1,6 +1,6 @@
 <p align="center"><img src="docs/logo.png" alt="GetCars" width="120"></p>
 
-# GetCars — vente et location de véhicules
+# GetCars: vente et location de véhicules
 
 Mini-projet de fin de cycle de Licence : une application Android pour publier des annonces de véhicules, les parcourir sans compte, réserver une location ou demander un rendez-vous, et discuter en temps réel avec le vendeur. Elle parle à un serveur Express / TypeScript / MySQL.
 
@@ -21,7 +21,7 @@ Mini-projet de fin de cycle de Licence : une application Android pour publier de
 
 ## Captures
 
-Toutes les pages de l'application, dans l'ordre d'un parcours. Les données viennent de `npm run seed:demo` (voir plus bas) ; les voitures sont des illustrations générées, pas des photos.
+Toutes les pages de l'application, dans l'ordre d'un parcours. Les données viennent de `npm run seed:demo` (voir plus bas) ; les voitures sont des dessins faits par un script (ImageMagick), pas des photos.
 
 **Sans compte** : on parcourt et on cherche, on ne fait rien d'autre.
 
@@ -188,4 +188,4 @@ Socket.IO : connexion avec `auth: { token }` ; l'application émet `message`, re
 
 ## Licence
 
-MIT — voir [LICENSE](LICENSE).
+MIT - voir [LICENSE](LICENSE).
