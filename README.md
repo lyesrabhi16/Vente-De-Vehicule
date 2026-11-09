@@ -21,7 +21,7 @@ Mini-projet de fin de cycle de Licence : une application Android pour publier de
 
 ## Captures
 
-Toutes les pages de l'application, dans l'ordre d'un parcours. Les données viennent de `npm run seed:demo` (voir plus bas) ; les voitures sont des dessins faits par un script (ImageMagick), pas des photos.
+Toutes les pages de l'application, dans l'ordre d'un parcours. Les données viennent de `npm run seed:demo` (voir plus bas) . Les voitures sont des dessins faits par un script (ImageMagick), pas des photos.
 
 **Sans compte** : on parcourt et on cherche, on ne fait rien d'autre.
 
@@ -43,7 +43,7 @@ Toutes les pages de l'application, dans l'ordre d'un parcours. Les données vien
 <tr><td align="center"><img src="docs/screenshots/19-demandes.png" width="170"><br><sub>Demandes reçues</sub></td><td align="center"><img src="docs/screenshots/20-demande-recue.png" width="170"><br><sub>Une demande reçue</sub></td><td align="center"><img src="docs/screenshots/21-aucune-demande.png" width="170"><br><sub>Rien en attente</sub></td></tr>
 </table>
 
-**Carte** (Mapbox) : le lieu d'un rendez-vous. Le vendeur touche la carte pour placer le repère puis enregistre ; l'acheteur le voit en lecture seule, sans bouton d'enregistrement. Le lieu se retrouve dans la demande (`longitude latitude`). Il faut un jeton `mapboxToken` (voir plus bas).
+**Carte** (Mapbox) : le lieu d'un rendez-vous. Le vendeur touche la carte pour placer le repère puis enregistre . L'acheteur le voit en lecture seule, sans bouton d'enregistrement. Le lieu se retrouve dans la demande (`longitude latitude`). Il faut un jeton `mapboxToken` (voir plus bas).
 
 <table>
 <tr><td align="center"><img src="docs/screenshots/30-carte-lecture.jpg" width="170"><br><sub>Acheteur : lecture seule</sub></td><td align="center"><img src="docs/screenshots/31-carte-ecriture.jpg" width="170"><br><sub>Vendeur : repère déplacé</sub></td></tr>
@@ -72,7 +72,7 @@ server/   API REST + Socket.IO (Express 4, TypeScript, mysql2, zod)
   demo/           illustrations et `npm run seed:demo` (données de démonstration)
 ```
 
-L'application parle à l'API en `POST` avec des formulaires (c'est ce que fait Volley) ; les erreurs « métier » (champ manquant, identifiants invalides, e-mail déjà pris…) restent des réponses HTTP 200 `{ "error": "…" }`. Ce qui touche à la sécurité a son vrai code : 401, 403, 429, 413.
+L'application parle à l'API en `POST` avec des formulaires (c'est ce que fait Volley) . Les erreurs « métier » (champ manquant, identifiants invalides, e-mail déjà pris…) restent des réponses HTTP 200 `{ "error": "…" }`. Ce qui touche à la sécurité a son vrai code : 401, 403, 429, 413.
 
 ## Lancer le serveur
 
@@ -83,7 +83,7 @@ docker compose up --build        # MySQL + serveur sur http://localhost:5000
 curl localhost:5000/health       # {"status":"ok"}
 ```
 
-Sans Docker : `cd server && cp .env.example .env && npm ci && npm run db:schema && npm run dev` (Node 22, MySQL 8 ; voir `.env.example`).
+Sans Docker : `cd server && cp .env.example .env && npm ci && npm run db:schema && npm run dev` (Node 22, MySQL 8 , voir `.env.example`).
 
 Donner le rôle administrateur à un compte (créé d'abord depuis l'application) :
 
@@ -103,19 +103,19 @@ Ouvrir le dossier dans Android Studio (JDK 17), ou en ligne de commande :
 ./gradlew :app:assembleDebug     # app/build/outputs/apk/debug/app-debug.apk
 ```
 
-Deux réglages, dans `local.properties` (non versionné ; modèle : `local.properties.example`) ou en `-P` :
+Deux réglages, dans `local.properties` (non versionné , modèle : `local.properties.example`) ou en `-P` :
 
 | Réglage | Défaut | Rôle |
 |---|---|---|
 | `serverUrl` | `http://10.0.2.2:5000` | adresse du serveur (`10.0.2.2` : la machine hôte, vue depuis l'émulateur) |
-| `mapboxToken` | vide | jeton public Mapbox (`pk.…`, https://account.mapbox.com) ; sans lui, tout fonctionne sauf la carte |
+| `mapboxToken` | vide | jeton public Mapbox (`pk.…`, https://account.mapbox.com) , sans lui, tout fonctionne sauf la carte |
 
 ```properties
 serverUrl=http://192.168.1.20:5000
 mapboxToken=pk.mon-jeton
 ```
 
-Le trafic en clair (HTTP) n'est autorisé que par le build debug ; une version release exige HTTPS.
+Le trafic en clair (HTTP) n'est autorisé que par le build debug . Une version release exige HTTPS.
 
 ### Données de démonstration
 
@@ -125,7 +125,7 @@ Pour remplir un serveur en marche (comptes, annonces avec photos, réservations,
 cd server && npm run seed:demo
 ```
 
-Les comptes `admin@getcars.dz` (administrateur), `karim@getcars.dz`, `lina@getcars.dz`, `yanis@getcars.dz` (vendeurs) et `sara@getcars.dz` (acheteuse) ont tous le mot de passe `demo1234`. La commande est rejouable ; à ne pas lancer sur un serveur de production.
+Les comptes `admin@getcars.dz` (administrateur), `karim@getcars.dz`, `lina@getcars.dz`, `yanis@getcars.dz` (vendeurs) et `sara@getcars.dz` (acheteuse) ont tous le mot de passe `demo1234`. La commande est rejouable . À ne pas lancer sur un serveur de production.
 
 ## Tests
 
@@ -138,7 +138,7 @@ Ils couvrent la configuration, l'authentification, les autorisations (qui peut l
 
 ## Design
 
-L'interface a été entièrement reprise (Material 3, clair et sombre) : palette GetCars plus contrastée, cartes d'annonce avec photo, type, année et prix en DA, pastilles d'état (En attente, Acceptée, Refusée), conversation en bulles, états vides, formulaires en deux colonnes, navigation du bas avec indicateur. L'application est en français ; les libellés sont dans `app/src/main/res/values/strings.xml`.
+L'interface a été entièrement reprise (Material 3, clair et sombre) : palette GetCars plus contrastée, cartes d'annonce avec photo, type, année et prix en DA, pastilles d'état (En attente, Acceptée, Refusée), conversation en bulles, états vides, formulaires en deux colonnes, navigation du bas avec indicateur. L'application est en français . Les libellés sont dans `app/src/main/res/values/strings.xml`.
 
 ## Ce qui a changé
 
@@ -146,13 +146,13 @@ La première version du projet fonctionnait mais n'était pas sûre. La réécri
 
 | Avant | Maintenant |
 |---|---|
-| Requêtes SQL construites par concaténation (injection possible sur la connexion, la recherche, les conversations, les filtres) | Requêtes paramétrées ; tables et colonnes cherchables sur liste blanche |
-| Aucune authentification : n'importe qui lisait, modifiait ou supprimait les données d'un autre | Jetons JWT ; le vendeur, le client et l'administrateur ne touchent qu'à ce qui les concerne |
-| Mots de passe en clair dans la base | argon2id ; même réponse et même durée pour un compte inconnu ou un mauvais mot de passe |
+| Requêtes SQL construites par concaténation (injection possible sur la connexion, la recherche, les conversations, les filtres) | Requêtes paramétrées , tables et colonnes cherchables sur liste blanche |
+| Aucune authentification : n'importe qui lisait, modifiait ou supprimait les données d'un autre | Jetons JWT , le vendeur, le client et l'administrateur ne touchent qu'à ce qui les concerne |
+| Mots de passe en clair dans la base | argon2id , même réponse et même durée pour un compte inconnu ou un mauvais mot de passe |
 | Images écrites au chemin envoyé par le client | Noms fermés, format vérifié sur les premiers octets, taille limitée |
-| Identité Socket.IO annoncée par le client (`init`) | Identité tirée du jeton ; expéditeur d'un message toujours celui du jeton ; débit limité |
+| Identité Socket.IO annoncée par le client (`init`) | Identité tirée du jeton , expéditeur d'un message toujours celui du jeton , débit limité |
 | Pas de limite de tentatives | Limiteur sur la connexion (échecs), l'inscription et le total |
-| Serveur lancé avec `root` et sans mot de passe ; clé de carte (TomTom) et adresse IP dans le dépôt | Configuration validée au démarrage ; jeton de carte (Mapbox) et adresse hors du dépôt |
+| Serveur lancé avec `root` et sans mot de passe , clé de carte (TomTom) et adresse IP dans le dépôt | Configuration validée au démarrage , jeton de carte (Mapbox) et adresse hors du dépôt |
 | Pas de schéma SQL, pas de tests, pas de CI | `db/schema.sql`, 75 tests, CI, Docker |
 
 > **Ancienne clé TomTom.** La carte est passée de TomTom à Mapbox, mais l'ancienne clé TomTom a été commitée : elle reste dans l'historique git et doit être **révoquée** sur le portail TomTom.
@@ -162,8 +162,8 @@ La première version du projet fonctionnait mais n'était pas sûre. La réécri
 | Ressource | Lecture | Écriture |
 |---|---|---|
 | Annonces | tout le monde | le vendeur (ou un administrateur) |
-| Profil | nom : tout le monde ; coordonnées : comptes connectés ; âge : le titulaire | le titulaire (ou un administrateur) |
-| Réservations, rendez-vous | le client, le vendeur de l'annonce, un administrateur | le client change date et lieu, le vendeur change l'état (`Pending`, `Accepted`, `Rejected`) ; une demande naît toujours `Pending` |
+| Profil | nom : tout le monde , coordonnées : comptes connectés , âge : le titulaire | le titulaire (ou un administrateur) |
+| Réservations, rendez-vous | le client, le vendeur de l'annonce, un administrateur | le client change date et lieu, le vendeur change l'état (`Pending`, `Accepted`, `Rejected`) , une demande naît toujours `Pending` |
 | Messages | les deux participants | l'expéditeur, qui est toujours le titulaire du jeton |
 | Images d'annonces | tout le monde | le vendeur |
 | Avatars | comptes connectés | le titulaire |
@@ -184,7 +184,7 @@ Toutes les routes sont en `POST`, sauf `GET /` et `GET /health`. Les routes marq
 | 🔒 `/chats`, `/messages`, `/messages/add` | conversations |
 | 🔒 `/upload/image`, `/download/image` | images (les avatars demandent un compte) |
 
-Socket.IO : connexion avec `auth: { token }` ; l'application émet `message`, reçoit `message-sent` (accusé), `message` (reçu) et `message-error`.
+Socket.IO : connexion avec `auth: { token }` . L'application émet `message`, reçoit `message-sent` (accusé), `message` (reçu) et `message-error`.
 
 ## Licence
 
